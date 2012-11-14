@@ -59,7 +59,6 @@
 - (void)scanSource:(NSString *)dirPath
 {
 	mCurrentMovieNdx = -1;
-//mSourcePath = dirPath;
 	mMovies = [[NSMutableArray alloc] init];
 	
 	[self findMissingMovies];
@@ -87,22 +86,6 @@
 	[mMovies setArray:[mMovies sortedArrayUsingComparator:^ NSComparisonResult (id obj1, id obj2) {
 		return [(NSString *)obj1 compare:obj2];
 	}]];
-	
-	/*
-	NSFileManager *fileManager = [[NSFileManager alloc] init];
-	
-	if (FALSE == [fileManager fileExistsAtPath:mSourcePath]) {
-		NSLog(@"Directory does not exist!");
-		return;
-	}
-	
-	NSArray *files = [fileManager contentsOfDirectoryAtPath:mSourcePath error:nil];
-	
-	[files enumerateObjectsUsingBlock:^ (id file, NSUInteger fileNdx, BOOL *fileStop) {
-		[mMovies addObject:[mSourcePath stringByAppendingPathComponent:file]];
-	}];
-	*/
-	
 }
 
 /**
