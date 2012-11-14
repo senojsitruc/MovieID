@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'MovieServer' target in the 'MovieServer' project
+//
+
+#ifdef __OBJC__
+	#import <Cocoa/Cocoa.h>
+#endif

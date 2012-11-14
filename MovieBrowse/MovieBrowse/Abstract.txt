@@ -1,0 +1,26 @@
+Sources
+
+Movies
+	File Path
+	Title
+	Year
+	Plot
+	Rating
+	Poster
+	File Mod Time
+	File Size
+	Actors[]
+	Keywords[]
+	Genres[]
+
+TV Shows
+	Title
+	Poster
+
+People
+	First Name
+	Middle Name
+	Last Name
+	Birthdate
+	Movies[]
+

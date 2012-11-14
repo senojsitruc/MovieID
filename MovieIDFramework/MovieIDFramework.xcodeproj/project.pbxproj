@@ -1,0 +1,666 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F93211D616322FF10093E619 /* IDSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = F93211D416322FF10093E619 /* IDSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93211D716322FF10093E619 /* IDSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211D516322FF10093E619 /* IDSearch.m */; };
+		F93211DB163230350093E619 /* IDPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = F93211D9163230350093E619 /* IDPerson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93211DC163230350093E619 /* IDPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211DA163230350093E619 /* IDPerson.m */; };
+		F93211DF1632303E0093E619 /* IDMovie.h in Headers */ = {isa = PBXBuildFile; fileRef = F93211DD1632303E0093E619 /* IDMovie.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93211E01632303E0093E619 /* IDMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211DE1632303E0093E619 /* IDMovie.m */; };
+		F93211E31632457B0093E619 /* IDTmdbMovie.h in Headers */ = {isa = PBXBuildFile; fileRef = F93211E11632457B0093E619 /* IDTmdbMovie.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93211E41632457B0093E619 /* IDTmdbMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211E21632457B0093E619 /* IDTmdbMovie.m */; };
+		F93211E716324C660093E619 /* IDTmdbPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = F93211E516324C660093E619 /* IDTmdbPerson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93211E816324C660093E619 /* IDTmdbPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211E616324C660093E619 /* IDTmdbPerson.m */; };
+		F93212031634B4F80093E619 /* IDRTMovie.h in Headers */ = {isa = PBXBuildFile; fileRef = F93212011634B4F80093E619 /* IDRTMovie.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93212041634B4F80093E619 /* IDRTMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212021634B4F80093E619 /* IDRTMovie.m */; };
+		F93212071634B5090093E619 /* IDRTPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = F93212051634B5090093E619 /* IDRTPerson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93212081634B5090093E619 /* IDRTPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212061634B5090093E619 /* IDRTPerson.m */; };
+		F932120B1634B52D0093E619 /* IDIMDbMovie.h in Headers */ = {isa = PBXBuildFile; fileRef = F93212091634B52D0093E619 /* IDIMDbMovie.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F932120C1634B52D0093E619 /* IDIMDbMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = F932120A1634B52D0093E619 /* IDIMDbMovie.m */; };
+		F932120F1634B5420093E619 /* IDIMDbPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = F932120D1634B5420093E619 /* IDIMDbPerson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F93212101634B5420093E619 /* IDIMDbPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F932120E1634B5420093E619 /* IDIMDbPerson.m */; };
+		F97BF38F15F9E5ED00444926 /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = F97BF38D15F9E5ED00444926 /* NSData+Base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F97BF39015F9E5ED00444926 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF38E15F9E5ED00444926 /* NSData+Base64.m */; };
+		F97BF39315F9E61000444926 /* libcommonCrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F97BF39215F9E61000444926 /* libcommonCrypto.dylib */; };
+		F9B9018D15F75E990089BB17 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9018C15F75E990089BB17 /* Cocoa.framework */; };
+		F9B9019715F75E990089BB17 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9B9019515F75E990089BB17 /* InfoPlist.strings */; };
+		F9B901FE15F761140089BB17 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B901FD15F761140089BB17 /* QTKit.framework */; };
+		F9B9020115F763A10089BB17 /* IDMediaInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B901FF15F763A10089BB17 /* IDMediaInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9020215F763A10089BB17 /* IDMediaInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9020015F763A10089BB17 /* IDMediaInfo.m */; };
+		F9B9020515F767B80089BB17 /* IDTimecode.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9020315F767B80089BB17 /* IDTimecode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9020615F767B80089BB17 /* IDTimecode.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9020415F767B80089BB17 /* IDTimecode.m */; };
+		F9B9021315F770CB0089BB17 /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9021115F770CB0089BB17 /* RegexKitLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9021415F770CB0089BB17 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9021215F770CB0089BB17 /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F9B9021815F778D20089BB17 /* MovieID.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9019915F75E990089BB17 /* MovieID.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9021A15F779550089BB17 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9021915F779550089BB17 /* libicucore.dylib */; };
+		F9B9022D15F7831C0089BB17 /* APLevelDB.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9021C15F7831C0089BB17 /* APLevelDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9022E15F7831C0089BB17 /* APLevelDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = F9B9021D15F7831C0089BB17 /* APLevelDB.mm */; };
+		F9B9022F15F7831C0089BB17 /* c.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9021F15F7831C0089BB17 /* c.h */; };
+		F9B9023015F7831C0089BB17 /* cache.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022015F7831C0089BB17 /* cache.h */; };
+		F9B9023115F7831C0089BB17 /* comparator.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022115F7831C0089BB17 /* comparator.h */; };
+		F9B9023215F7831C0089BB17 /* db.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022215F7831C0089BB17 /* db.h */; };
+		F9B9023315F7831C0089BB17 /* env.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022315F7831C0089BB17 /* env.h */; };
+		F9B9023415F7831C0089BB17 /* filter_policy.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022415F7831C0089BB17 /* filter_policy.h */; };
+		F9B9023515F7831C0089BB17 /* iterator.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022515F7831C0089BB17 /* iterator.h */; };
+		F9B9023615F7831C0089BB17 /* options.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022615F7831C0089BB17 /* options.h */; };
+		F9B9023715F7831C0089BB17 /* slice.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022715F7831C0089BB17 /* slice.h */; };
+		F9B9023815F7831C0089BB17 /* status.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022815F7831C0089BB17 /* status.h */; };
+		F9B9023915F7831C0089BB17 /* table.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022915F7831C0089BB17 /* table.h */; };
+		F9B9023A15F7831C0089BB17 /* table_builder.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022A15F7831C0089BB17 /* table_builder.h */; };
+		F9B9023B15F7831C0089BB17 /* write_batch.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022B15F7831C0089BB17 /* write_batch.h */; };
+		F9B9023C15F7831C0089BB17 /* libleveldb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9022C15F7831C0089BB17 /* libleveldb.a */; };
+		F9B9025715F789000089BB17 /* NSObject+SBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9023E15F789000089BB17 /* NSObject+SBJson.h */; };
+		F9B9025815F789000089BB17 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9023F15F789000089BB17 /* NSObject+SBJson.m */; };
+		F9B9025915F789000089BB17 /* SBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024015F789000089BB17 /* SBJson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9025A15F789000089BB17 /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024115F789000089BB17 /* SBJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9025B15F789000089BB17 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9024215F789000089BB17 /* SBJsonParser.m */; };
+		F9B9025C15F789000089BB17 /* SBJsonStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024315F789000089BB17 /* SBJsonStreamParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9025D15F789000089BB17 /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9024415F789000089BB17 /* SBJsonStreamParser.m */; };
+		F9B9025E15F789000089BB17 /* SBJsonStreamParserAccumulator.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024515F789000089BB17 /* SBJsonStreamParserAccumulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9025F15F789000089BB17 /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9024615F789000089BB17 /* SBJsonStreamParserAccumulator.m */; };
+		F9B9026015F789000089BB17 /* SBJsonStreamParserAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024715F789000089BB17 /* SBJsonStreamParserAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026115F789000089BB17 /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9024815F789000089BB17 /* SBJsonStreamParserAdapter.m */; };
+		F9B9026215F789000089BB17 /* SBJsonStreamParserState.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024915F789000089BB17 /* SBJsonStreamParserState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026315F789000089BB17 /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9024A15F789000089BB17 /* SBJsonStreamParserState.m */; };
+		F9B9026415F789000089BB17 /* SBJsonStreamWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024B15F789000089BB17 /* SBJsonStreamWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026515F789000089BB17 /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9024C15F789000089BB17 /* SBJsonStreamWriter.m */; };
+		F9B9026615F789000089BB17 /* SBJsonStreamWriterAccumulator.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024D15F789000089BB17 /* SBJsonStreamWriterAccumulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026715F789000089BB17 /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9024E15F789000089BB17 /* SBJsonStreamWriterAccumulator.m */; };
+		F9B9026815F789000089BB17 /* SBJsonStreamWriterState.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024F15F789000089BB17 /* SBJsonStreamWriterState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026915F789000089BB17 /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9025015F789000089BB17 /* SBJsonStreamWriterState.m */; };
+		F9B9026A15F789000089BB17 /* SBJsonTokeniser.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9025115F789000089BB17 /* SBJsonTokeniser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026B15F789000089BB17 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9025215F789000089BB17 /* SBJsonTokeniser.m */; };
+		F9B9026C15F789000089BB17 /* SBJsonUTF8Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9025315F789000089BB17 /* SBJsonUTF8Stream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026D15F789000089BB17 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9025415F789000089BB17 /* SBJsonUTF8Stream.m */; };
+		F9B9026E15F789000089BB17 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9025515F789000089BB17 /* SBJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B9026F15F789000089BB17 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9025615F789000089BB17 /* SBJsonWriter.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F93211D416322FF10093E619 /* IDSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDSearch.h; sourceTree = "<group>"; };
+		F93211D516322FF10093E619 /* IDSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDSearch.m; sourceTree = "<group>"; };
+		F93211D9163230350093E619 /* IDPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDPerson.h; sourceTree = "<group>"; };
+		F93211DA163230350093E619 /* IDPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDPerson.m; sourceTree = "<group>"; };
+		F93211DD1632303E0093E619 /* IDMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMovie.h; sourceTree = "<group>"; };
+		F93211DE1632303E0093E619 /* IDMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMovie.m; sourceTree = "<group>"; };
+		F93211E11632457B0093E619 /* IDTmdbMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDTmdbMovie.h; sourceTree = "<group>"; };
+		F93211E21632457B0093E619 /* IDTmdbMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDTmdbMovie.m; sourceTree = "<group>"; };
+		F93211E516324C660093E619 /* IDTmdbPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDTmdbPerson.h; sourceTree = "<group>"; };
+		F93211E616324C660093E619 /* IDTmdbPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDTmdbPerson.m; sourceTree = "<group>"; };
+		F93212011634B4F80093E619 /* IDRTMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDRTMovie.h; sourceTree = "<group>"; };
+		F93212021634B4F80093E619 /* IDRTMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDRTMovie.m; sourceTree = "<group>"; };
+		F93212051634B5090093E619 /* IDRTPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDRTPerson.h; sourceTree = "<group>"; };
+		F93212061634B5090093E619 /* IDRTPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDRTPerson.m; sourceTree = "<group>"; };
+		F93212091634B52D0093E619 /* IDIMDbMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDIMDbMovie.h; sourceTree = "<group>"; };
+		F932120A1634B52D0093E619 /* IDIMDbMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDIMDbMovie.m; sourceTree = "<group>"; };
+		F932120D1634B5420093E619 /* IDIMDbPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDIMDbPerson.h; sourceTree = "<group>"; };
+		F932120E1634B5420093E619 /* IDIMDbPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDIMDbPerson.m; sourceTree = "<group>"; };
+		F97BF38D15F9E5ED00444926 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		F97BF38E15F9E5ED00444926 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		F97BF39215F9E61000444926 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
+		F9B9018915F75E990089BB17 /* MovieID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MovieID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9B9018C15F75E990089BB17 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		F9B9018F15F75E990089BB17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		F9B9019015F75E990089BB17 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F9B9019115F75E990089BB17 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F9B9019415F75E990089BB17 /* MovieIDFramework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MovieIDFramework-Info.plist"; sourceTree = "<group>"; };
+		F9B9019615F75E990089BB17 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F9B9019815F75E990089BB17 /* MovieIDFramework-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MovieIDFramework-Prefix.pch"; sourceTree = "<group>"; };
+		F9B9019915F75E990089BB17 /* MovieID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieID.h; sourceTree = "<group>"; };
+		F9B9019A15F75E990089BB17 /* MovieID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MovieID.m; sourceTree = "<group>"; };
+		F9B901FD15F761140089BB17 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
+		F9B901FF15F763A10089BB17 /* IDMediaInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMediaInfo.h; sourceTree = "<group>"; };
+		F9B9020015F763A10089BB17 /* IDMediaInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMediaInfo.m; sourceTree = "<group>"; };
+		F9B9020315F767B80089BB17 /* IDTimecode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDTimecode.h; sourceTree = "<group>"; };
+		F9B9020415F767B80089BB17 /* IDTimecode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDTimecode.m; sourceTree = "<group>"; };
+		F9B9021115F770CB0089BB17 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		F9B9021215F770CB0089BB17 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		F9B9021915F779550089BB17 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		F9B9021C15F7831C0089BB17 /* APLevelDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLevelDB.h; sourceTree = "<group>"; };
+		F9B9021D15F7831C0089BB17 /* APLevelDB.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = APLevelDB.mm; sourceTree = "<group>"; };
+		F9B9021F15F7831C0089BB17 /* c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = c.h; sourceTree = "<group>"; };
+		F9B9022015F7831C0089BB17 /* cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cache.h; sourceTree = "<group>"; };
+		F9B9022115F7831C0089BB17 /* comparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = comparator.h; sourceTree = "<group>"; };
+		F9B9022215F7831C0089BB17 /* db.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = db.h; sourceTree = "<group>"; };
+		F9B9022315F7831C0089BB17 /* env.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = env.h; sourceTree = "<group>"; };
+		F9B9022415F7831C0089BB17 /* filter_policy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filter_policy.h; sourceTree = "<group>"; };
+		F9B9022515F7831C0089BB17 /* iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iterator.h; sourceTree = "<group>"; };
+		F9B9022615F7831C0089BB17 /* options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = options.h; sourceTree = "<group>"; };
+		F9B9022715F7831C0089BB17 /* slice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slice.h; sourceTree = "<group>"; };
+		F9B9022815F7831C0089BB17 /* status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = status.h; sourceTree = "<group>"; };
+		F9B9022915F7831C0089BB17 /* table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = table.h; sourceTree = "<group>"; };
+		F9B9022A15F7831C0089BB17 /* table_builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = table_builder.h; sourceTree = "<group>"; };
+		F9B9022B15F7831C0089BB17 /* write_batch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = write_batch.h; sourceTree = "<group>"; };
+		F9B9022C15F7831C0089BB17 /* libleveldb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libleveldb.a; sourceTree = "<group>"; };
+		F9B9023E15F789000089BB17 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
+		F9B9023F15F789000089BB17 /* NSObject+SBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJson.m"; sourceTree = "<group>"; };
+		F9B9024015F789000089BB17 /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
+		F9B9024115F789000089BB17 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		F9B9024215F789000089BB17 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		F9B9024315F789000089BB17 /* SBJsonStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParser.h; sourceTree = "<group>"; };
+		F9B9024415F789000089BB17 /* SBJsonStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParser.m; sourceTree = "<group>"; };
+		F9B9024515F789000089BB17 /* SBJsonStreamParserAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAccumulator.h; sourceTree = "<group>"; };
+		F9B9024615F789000089BB17 /* SBJsonStreamParserAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAccumulator.m; sourceTree = "<group>"; };
+		F9B9024715F789000089BB17 /* SBJsonStreamParserAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAdapter.h; sourceTree = "<group>"; };
+		F9B9024815F789000089BB17 /* SBJsonStreamParserAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAdapter.m; sourceTree = "<group>"; };
+		F9B9024915F789000089BB17 /* SBJsonStreamParserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserState.h; sourceTree = "<group>"; };
+		F9B9024A15F789000089BB17 /* SBJsonStreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserState.m; sourceTree = "<group>"; };
+		F9B9024B15F789000089BB17 /* SBJsonStreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriter.h; sourceTree = "<group>"; };
+		F9B9024C15F789000089BB17 /* SBJsonStreamWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriter.m; sourceTree = "<group>"; };
+		F9B9024D15F789000089BB17 /* SBJsonStreamWriterAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterAccumulator.h; sourceTree = "<group>"; };
+		F9B9024E15F789000089BB17 /* SBJsonStreamWriterAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterAccumulator.m; sourceTree = "<group>"; };
+		F9B9024F15F789000089BB17 /* SBJsonStreamWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterState.h; sourceTree = "<group>"; };
+		F9B9025015F789000089BB17 /* SBJsonStreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterState.m; sourceTree = "<group>"; };
+		F9B9025115F789000089BB17 /* SBJsonTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonTokeniser.h; sourceTree = "<group>"; };
+		F9B9025215F789000089BB17 /* SBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonTokeniser.m; sourceTree = "<group>"; };
+		F9B9025315F789000089BB17 /* SBJsonUTF8Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonUTF8Stream.h; sourceTree = "<group>"; };
+		F9B9025415F789000089BB17 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
+		F9B9025515F789000089BB17 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		F9B9025615F789000089BB17 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F9B9018515F75E990089BB17 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F97BF39315F9E61000444926 /* libcommonCrypto.dylib in Frameworks */,
+				F9B9021A15F779550089BB17 /* libicucore.dylib in Frameworks */,
+				F9B901FE15F761140089BB17 /* QTKit.framework in Frameworks */,
+				F9B9018D15F75E990089BB17 /* Cocoa.framework in Frameworks */,
+				F9B9023C15F7831C0089BB17 /* libleveldb.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F93211FC1634B37E0093E619 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				F97BF38D15F9E5ED00444926 /* NSData+Base64.h */,
+				F97BF38E15F9E5ED00444926 /* NSData+Base64.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		F93211FD1634B3860093E619 /* TMDb */ = {
+			isa = PBXGroup;
+			children = (
+				F93211E11632457B0093E619 /* IDTmdbMovie.h */,
+				F93211E21632457B0093E619 /* IDTmdbMovie.m */,
+				F93211E516324C660093E619 /* IDTmdbPerson.h */,
+				F93211E616324C660093E619 /* IDTmdbPerson.m */,
+			);
+			name = TMDb;
+			sourceTree = "<group>";
+		};
+		F93211FE1634B38C0093E619 /* IMDb */ = {
+			isa = PBXGroup;
+			children = (
+				F93212091634B52D0093E619 /* IDIMDbMovie.h */,
+				F932120A1634B52D0093E619 /* IDIMDbMovie.m */,
+				F932120D1634B5420093E619 /* IDIMDbPerson.h */,
+				F932120E1634B5420093E619 /* IDIMDbPerson.m */,
+			);
+			name = IMDb;
+			sourceTree = "<group>";
+		};
+		F93211FF1634B3930093E619 /* RT */ = {
+			isa = PBXGroup;
+			children = (
+				F93212011634B4F80093E619 /* IDRTMovie.h */,
+				F93212021634B4F80093E619 /* IDRTMovie.m */,
+				F93212051634B5090093E619 /* IDRTPerson.h */,
+				F93212061634B5090093E619 /* IDRTPerson.m */,
+			);
+			name = RT;
+			sourceTree = "<group>";
+		};
+		F93212001634B3FA0093E619 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F93211D9163230350093E619 /* IDPerson.h */,
+				F93211DA163230350093E619 /* IDPerson.m */,
+				F93211DD1632303E0093E619 /* IDMovie.h */,
+				F93211DE1632303E0093E619 /* IDMovie.m */,
+				F93211FE1634B38C0093E619 /* IMDb */,
+				F93211FF1634B3930093E619 /* RT */,
+				F93211FD1634B3860093E619 /* TMDb */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		F9B9017D15F75E990089BB17 = {
+			isa = PBXGroup;
+			children = (
+				F9B9019215F75E990089BB17 /* MovieIDFramework */,
+				F9B9018B15F75E990089BB17 /* Frameworks */,
+				F9B9018A15F75E990089BB17 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F9B9018A15F75E990089BB17 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F9B9018915F75E990089BB17 /* MovieID.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F9B9018B15F75E990089BB17 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F97BF39215F9E61000444926 /* libcommonCrypto.dylib */,
+				F9B9021915F779550089BB17 /* libicucore.dylib */,
+				F9B901FD15F761140089BB17 /* QTKit.framework */,
+				F9B9018F15F75E990089BB17 /* AppKit.framework */,
+				F9B9019015F75E990089BB17 /* CoreData.framework */,
+				F9B9019115F75E990089BB17 /* Foundation.framework */,
+				F9B9018C15F75E990089BB17 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F9B9019215F75E990089BB17 /* MovieIDFramework */ = {
+			isa = PBXGroup;
+			children = (
+				F93211FC1634B37E0093E619 /* Categories */,
+				F9B9020F15F770CB0089BB17 /* Extern */,
+				F93212001634B3FA0093E619 /* Model */,
+				F9B901FF15F763A10089BB17 /* IDMediaInfo.h */,
+				F9B9020015F763A10089BB17 /* IDMediaInfo.m */,
+				F9B9020315F767B80089BB17 /* IDTimecode.h */,
+				F9B9020415F767B80089BB17 /* IDTimecode.m */,
+				F93211D416322FF10093E619 /* IDSearch.h */,
+				F93211D516322FF10093E619 /* IDSearch.m */,
+				F9B9019315F75E990089BB17 /* Supporting Files */,
+			);
+			path = MovieIDFramework;
+			sourceTree = "<group>";
+		};
+		F9B9019315F75E990089BB17 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F9B9019915F75E990089BB17 /* MovieID.h */,
+				F9B9019A15F75E990089BB17 /* MovieID.m */,
+				F9B9019415F75E990089BB17 /* MovieIDFramework-Info.plist */,
+				F9B9019515F75E990089BB17 /* InfoPlist.strings */,
+				F9B9019815F75E990089BB17 /* MovieIDFramework-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F9B9020F15F770CB0089BB17 /* Extern */ = {
+			isa = PBXGroup;
+			children = (
+				F9B9023D15F789000089BB17 /* SBJson */,
+				F9B9021B15F7831C0089BB17 /* LevelDB */,
+				F9B9021015F770CB0089BB17 /* RegexKitLite */,
+			);
+			path = Extern;
+			sourceTree = "<group>";
+		};
+		F9B9021015F770CB0089BB17 /* RegexKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				F9B9021115F770CB0089BB17 /* RegexKitLite.h */,
+				F9B9021215F770CB0089BB17 /* RegexKitLite.m */,
+			);
+			path = RegexKitLite;
+			sourceTree = "<group>";
+		};
+		F9B9021B15F7831C0089BB17 /* LevelDB */ = {
+			isa = PBXGroup;
+			children = (
+				F9B9021C15F7831C0089BB17 /* APLevelDB.h */,
+				F9B9021D15F7831C0089BB17 /* APLevelDB.mm */,
+				F9B9021E15F7831C0089BB17 /* leveldb */,
+				F9B9022C15F7831C0089BB17 /* libleveldb.a */,
+			);
+			path = LevelDB;
+			sourceTree = "<group>";
+		};
+		F9B9021E15F7831C0089BB17 /* leveldb */ = {
+			isa = PBXGroup;
+			children = (
+				F9B9021F15F7831C0089BB17 /* c.h */,
+				F9B9022015F7831C0089BB17 /* cache.h */,
+				F9B9022115F7831C0089BB17 /* comparator.h */,
+				F9B9022215F7831C0089BB17 /* db.h */,
+				F9B9022315F7831C0089BB17 /* env.h */,
+				F9B9022415F7831C0089BB17 /* filter_policy.h */,
+				F9B9022515F7831C0089BB17 /* iterator.h */,
+				F9B9022615F7831C0089BB17 /* options.h */,
+				F9B9022715F7831C0089BB17 /* slice.h */,
+				F9B9022815F7831C0089BB17 /* status.h */,
+				F9B9022915F7831C0089BB17 /* table.h */,
+				F9B9022A15F7831C0089BB17 /* table_builder.h */,
+				F9B9022B15F7831C0089BB17 /* write_batch.h */,
+			);
+			path = leveldb;
+			sourceTree = "<group>";
+		};
+		F9B9023D15F789000089BB17 /* SBJson */ = {
+			isa = PBXGroup;
+			children = (
+				F9B9023E15F789000089BB17 /* NSObject+SBJson.h */,
+				F9B9023F15F789000089BB17 /* NSObject+SBJson.m */,
+				F9B9024015F789000089BB17 /* SBJson.h */,
+				F9B9024115F789000089BB17 /* SBJsonParser.h */,
+				F9B9024215F789000089BB17 /* SBJsonParser.m */,
+				F9B9024315F789000089BB17 /* SBJsonStreamParser.h */,
+				F9B9024415F789000089BB17 /* SBJsonStreamParser.m */,
+				F9B9024515F789000089BB17 /* SBJsonStreamParserAccumulator.h */,
+				F9B9024615F789000089BB17 /* SBJsonStreamParserAccumulator.m */,
+				F9B9024715F789000089BB17 /* SBJsonStreamParserAdapter.h */,
+				F9B9024815F789000089BB17 /* SBJsonStreamParserAdapter.m */,
+				F9B9024915F789000089BB17 /* SBJsonStreamParserState.h */,
+				F9B9024A15F789000089BB17 /* SBJsonStreamParserState.m */,
+				F9B9024B15F789000089BB17 /* SBJsonStreamWriter.h */,
+				F9B9024C15F789000089BB17 /* SBJsonStreamWriter.m */,
+				F9B9024D15F789000089BB17 /* SBJsonStreamWriterAccumulator.h */,
+				F9B9024E15F789000089BB17 /* SBJsonStreamWriterAccumulator.m */,
+				F9B9024F15F789000089BB17 /* SBJsonStreamWriterState.h */,
+				F9B9025015F789000089BB17 /* SBJsonStreamWriterState.m */,
+				F9B9025115F789000089BB17 /* SBJsonTokeniser.h */,
+				F9B9025215F789000089BB17 /* SBJsonTokeniser.m */,
+				F9B9025315F789000089BB17 /* SBJsonUTF8Stream.h */,
+				F9B9025415F789000089BB17 /* SBJsonUTF8Stream.m */,
+				F9B9025515F789000089BB17 /* SBJsonWriter.h */,
+				F9B9025615F789000089BB17 /* SBJsonWriter.m */,
+			);
+			path = SBJson;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F9B9018615F75E990089BB17 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F9B9020115F763A10089BB17 /* IDMediaInfo.h in Headers */,
+				F9B9020515F767B80089BB17 /* IDTimecode.h in Headers */,
+				F9B9021815F778D20089BB17 /* MovieID.h in Headers */,
+				F9B9021315F770CB0089BB17 /* RegexKitLite.h in Headers */,
+				F9B9022D15F7831C0089BB17 /* APLevelDB.h in Headers */,
+				F97BF38F15F9E5ED00444926 /* NSData+Base64.h in Headers */,
+				F93211D616322FF10093E619 /* IDSearch.h in Headers */,
+				F93211DB163230350093E619 /* IDPerson.h in Headers */,
+				F93211DF1632303E0093E619 /* IDMovie.h in Headers */,
+				F93211E31632457B0093E619 /* IDTmdbMovie.h in Headers */,
+				F93211E716324C660093E619 /* IDTmdbPerson.h in Headers */,
+				F93212031634B4F80093E619 /* IDRTMovie.h in Headers */,
+				F93212071634B5090093E619 /* IDRTPerson.h in Headers */,
+				F932120B1634B52D0093E619 /* IDIMDbMovie.h in Headers */,
+				F932120F1634B5420093E619 /* IDIMDbPerson.h in Headers */,
+				F9B9025915F789000089BB17 /* SBJson.h in Headers */,
+				F9B9025A15F789000089BB17 /* SBJsonParser.h in Headers */,
+				F9B9025C15F789000089BB17 /* SBJsonStreamParser.h in Headers */,
+				F9B9025E15F789000089BB17 /* SBJsonStreamParserAccumulator.h in Headers */,
+				F9B9026015F789000089BB17 /* SBJsonStreamParserAdapter.h in Headers */,
+				F9B9026215F789000089BB17 /* SBJsonStreamParserState.h in Headers */,
+				F9B9026415F789000089BB17 /* SBJsonStreamWriter.h in Headers */,
+				F9B9026615F789000089BB17 /* SBJsonStreamWriterAccumulator.h in Headers */,
+				F9B9026815F789000089BB17 /* SBJsonStreamWriterState.h in Headers */,
+				F9B9026A15F789000089BB17 /* SBJsonTokeniser.h in Headers */,
+				F9B9026C15F789000089BB17 /* SBJsonUTF8Stream.h in Headers */,
+				F9B9026E15F789000089BB17 /* SBJsonWriter.h in Headers */,
+				F9B9022F15F7831C0089BB17 /* c.h in Headers */,
+				F9B9023015F7831C0089BB17 /* cache.h in Headers */,
+				F9B9023115F7831C0089BB17 /* comparator.h in Headers */,
+				F9B9023215F7831C0089BB17 /* db.h in Headers */,
+				F9B9023315F7831C0089BB17 /* env.h in Headers */,
+				F9B9023415F7831C0089BB17 /* filter_policy.h in Headers */,
+				F9B9023515F7831C0089BB17 /* iterator.h in Headers */,
+				F9B9023615F7831C0089BB17 /* options.h in Headers */,
+				F9B9023715F7831C0089BB17 /* slice.h in Headers */,
+				F9B9023815F7831C0089BB17 /* status.h in Headers */,
+				F9B9023915F7831C0089BB17 /* table.h in Headers */,
+				F9B9023A15F7831C0089BB17 /* table_builder.h in Headers */,
+				F9B9023B15F7831C0089BB17 /* write_batch.h in Headers */,
+				F9B9025715F789000089BB17 /* NSObject+SBJson.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		F9B9018815F75E990089BB17 /* MovieID */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F9B9019E15F75E990089BB17 /* Build configuration list for PBXNativeTarget "MovieID" */;
+			buildPhases = (
+				F9B9018415F75E990089BB17 /* Sources */,
+				F9B9018515F75E990089BB17 /* Frameworks */,
+				F9B9018615F75E990089BB17 /* Headers */,
+				F9B9018715F75E990089BB17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MovieID;
+			productName = MovieIDFramework;
+			productReference = F9B9018915F75E990089BB17 /* MovieID.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F9B9017F15F75E990089BB17 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Curtis Jones";
+			};
+			buildConfigurationList = F9B9018215F75E990089BB17 /* Build configuration list for PBXProject "MovieIDFramework" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F9B9017D15F75E990089BB17;
+			productRefGroup = F9B9018A15F75E990089BB17 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F9B9018815F75E990089BB17 /* MovieID */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F9B9018715F75E990089BB17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F9B9019715F75E990089BB17 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F9B9018415F75E990089BB17 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F9B9020215F763A10089BB17 /* IDMediaInfo.m in Sources */,
+				F9B9020615F767B80089BB17 /* IDTimecode.m in Sources */,
+				F9B9021415F770CB0089BB17 /* RegexKitLite.m in Sources */,
+				F9B9022E15F7831C0089BB17 /* APLevelDB.mm in Sources */,
+				F9B9025815F789000089BB17 /* NSObject+SBJson.m in Sources */,
+				F9B9025B15F789000089BB17 /* SBJsonParser.m in Sources */,
+				F9B9025D15F789000089BB17 /* SBJsonStreamParser.m in Sources */,
+				F9B9025F15F789000089BB17 /* SBJsonStreamParserAccumulator.m in Sources */,
+				F9B9026115F789000089BB17 /* SBJsonStreamParserAdapter.m in Sources */,
+				F9B9026315F789000089BB17 /* SBJsonStreamParserState.m in Sources */,
+				F9B9026515F789000089BB17 /* SBJsonStreamWriter.m in Sources */,
+				F9B9026715F789000089BB17 /* SBJsonStreamWriterAccumulator.m in Sources */,
+				F9B9026915F789000089BB17 /* SBJsonStreamWriterState.m in Sources */,
+				F9B9026B15F789000089BB17 /* SBJsonTokeniser.m in Sources */,
+				F9B9026D15F789000089BB17 /* SBJsonUTF8Stream.m in Sources */,
+				F9B9026F15F789000089BB17 /* SBJsonWriter.m in Sources */,
+				F97BF39015F9E5ED00444926 /* NSData+Base64.m in Sources */,
+				F93211D716322FF10093E619 /* IDSearch.m in Sources */,
+				F93211DC163230350093E619 /* IDPerson.m in Sources */,
+				F93211E01632303E0093E619 /* IDMovie.m in Sources */,
+				F93211E41632457B0093E619 /* IDTmdbMovie.m in Sources */,
+				F93211E816324C660093E619 /* IDTmdbPerson.m in Sources */,
+				F93212041634B4F80093E619 /* IDRTMovie.m in Sources */,
+				F93212081634B5090093E619 /* IDRTPerson.m in Sources */,
+				F932120C1634B52D0093E619 /* IDIMDbMovie.m in Sources */,
+				F93212101634B5420093E619 /* IDIMDbPerson.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F9B9019515F75E990089BB17 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F9B9019615F75E990089BB17 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F9B9019C15F75E990089BB17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		F9B9019D15F75E990089BB17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		F9B9019F15F75E990089BB17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MovieIDFramework/MovieIDFramework-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/MovieIDFramework/Extern/LevelDB\"";
+				INFOPLIST_FILE = "MovieIDFramework/MovieIDFramework-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/MovieIDFramework/Extern/LevelDB\"",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		F9B901A015F75E990089BB17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MovieIDFramework/MovieIDFramework-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/MovieIDFramework/Extern/LevelDB\"";
+				INFOPLIST_FILE = "MovieIDFramework/MovieIDFramework-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/MovieIDFramework/Extern/LevelDB\"",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F9B9018215F75E990089BB17 /* Build configuration list for PBXProject "MovieIDFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F9B9019C15F75E990089BB17 /* Debug */,
+				F9B9019D15F75E990089BB17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F9B9019E15F75E990089BB17 /* Build configuration list for PBXNativeTarget "MovieID" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F9B9019F15F75E990089BB17 /* Debug */,
+				F9B901A015F75E990089BB17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F9B9017F15F75E990089BB17 /* Project object */;
+}

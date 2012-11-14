@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:MovieBrowse/MovieBrowse.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:MovieIDFramework/MovieIDFramework.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:MovieServer/MovieServer.xcodeproj">
+   </FileRef>
+</Workspace>
