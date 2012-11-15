@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914FC6115FCF11400B960D0 /* MBMovieView.m */; };
+		F91FD3131653E85E0060E4FC /* MovieID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91FD3121653E85E0060E4FC /* MovieID.framework */; };
 		F93211EC16327D2C0093E619 /* MBActorMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211EB16327D2C0093E619 /* MBActorMovieView.m */; };
 		F93211FB163310AB0093E619 /* MBActorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211FA163310AB0093E619 /* MBActorCellView.m */; };
 		F93212161635A2B30093E619 /* MBTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212151635A2B30093E619 /* MBTableHeaderView.m */; };
@@ -30,14 +31,12 @@
 		F998F2C4162F8E40008AF52D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F998F2C3162F8E40008AF52D /* QuartzCore.framework */; };
 		F998F2CE162FBDD4008AF52D /* MBImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F2CD162FBDD3008AF52D /* MBImageCache.m */; };
 		F998F2D116305B2A008AF52D /* MBStuff.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F2D016305B28008AF52D /* MBStuff.m */; };
-		F998F2D416306629008AF52D /* MovieID.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F998F2D316306628008AF52D /* MovieID.framework */; };
 		F9B9028015F791320089BB17 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9027F15F791320089BB17 /* Cocoa.framework */; };
 		F9B9028A15F791320089BB17 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9B9028815F791320089BB17 /* InfoPlist.strings */; };
 		F9B9028C15F791320089BB17 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9028B15F791320089BB17 /* main.m */; };
 		F9B9029015F791320089BB17 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = F9B9028E15F791320089BB17 /* Credits.rtf */; };
 		F9B9029315F791320089BB17 /* MBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9029215F791320089BB17 /* MBAppDelegate.m */; };
 		F9B9029615F791320089BB17 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9B9029415F791320089BB17 /* MainMenu.xib */; };
-		F9B9029D15F791440089BB17 /* MovieID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9029C15F791440089BB17 /* MovieID.framework */; };
 		F9B9029F15F7914B0089BB17 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9029E15F7914B0089BB17 /* QTKit.framework */; };
 		F9B902A115F7915E0089BB17 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B902A015F7915E0089BB17 /* libicucore.dylib */; };
 		F9B902A515F795B50089BB17 /* MBDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902A415F795B50089BB17 /* MBDataManager.m */; };
@@ -55,7 +54,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F998F2D416306629008AF52D /* MovieID.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,6 +63,7 @@
 /* Begin PBXFileReference section */
 		F914FC6015FCF11400B960D0 /* MBMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieView.h; sourceTree = "<group>"; };
 		F914FC6115FCF11400B960D0 /* MBMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieView.m; sourceTree = "<group>"; };
+		F91FD3121653E85E0060E4FC /* MovieID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MovieID.framework; path = "/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug/MovieID.framework"; sourceTree = "<absolute>"; };
 		F93211EA16327D2C0093E619 /* MBActorMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorMovieView.h; sourceTree = "<group>"; };
 		F93211EB16327D2C0093E619 /* MBActorMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorMovieView.m; sourceTree = "<group>"; };
 		F93211F9163310AB0093E619 /* MBActorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorCellView.h; sourceTree = "<group>"; };
@@ -103,7 +102,6 @@
 		F998F2CD162FBDD3008AF52D /* MBImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImageCache.m; sourceTree = "<group>"; };
 		F998F2CF16305B27008AF52D /* MBStuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBStuff.h; sourceTree = "<group>"; };
 		F998F2D016305B28008AF52D /* MBStuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBStuff.m; sourceTree = "<group>"; };
-		F998F2D316306628008AF52D /* MovieID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = MovieID.framework; path = "/Volumes/DasRamDisk/Xcode/MovieID-dejbaihqqhbdppeqozalpjlcemrs/Build/Products/Debug/MovieID.framework"; sourceTree = "<absolute>"; };
 		F9B9027B15F791320089BB17 /* MovieBrowse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieBrowse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9B9027F15F791320089BB17 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F9B9028215F791320089BB17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -117,7 +115,6 @@
 		F9B9029115F791320089BB17 /* MBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBAppDelegate.h; sourceTree = "<group>"; };
 		F9B9029215F791320089BB17 /* MBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBAppDelegate.m; sourceTree = "<group>"; };
 		F9B9029515F791320089BB17 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		F9B9029C15F791440089BB17 /* MovieID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MovieID.framework; path = "../../../../../DasRamDisk/Xcode/MovieID-dejbaihqqhbdppeqozalpjlcemrs/Build/Products/Debug/MovieID.framework"; sourceTree = "<group>"; };
 		F9B9029E15F7914B0089BB17 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		F9B902A015F7915E0089BB17 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		F9B902A215F792FE0089BB17 /* Abstract.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Abstract.txt; sourceTree = "<group>"; };
@@ -142,8 +139,8 @@
 			files = (
 				F998F2C4162F8E40008AF52D /* QuartzCore.framework in Frameworks */,
 				F9B902A115F7915E0089BB17 /* libicucore.dylib in Frameworks */,
+				F91FD3131653E85E0060E4FC /* MovieID.framework in Frameworks */,
 				F9B9029F15F7914B0089BB17 /* QTKit.framework in Frameworks */,
-				F9B9029D15F791440089BB17 /* MovieID.framework in Frameworks */,
 				F9B9028015F791320089BB17 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,14 +240,13 @@
 		F9B9027E15F791320089BB17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F998F2D316306628008AF52D /* MovieID.framework */,
+				F91FD3121653E85E0060E4FC /* MovieID.framework */,
 				F998F2C3162F8E40008AF52D /* QuartzCore.framework */,
 				F9B9028215F791320089BB17 /* AppKit.framework */,
 				F9B9028315F791320089BB17 /* CoreData.framework */,
 				F9B9028415F791320089BB17 /* Foundation.framework */,
 				F9B902A015F7915E0089BB17 /* libicucore.dylib */,
 				F9B9029E15F7914B0089BB17 /* QTKit.framework */,
-				F9B9029C15F791440089BB17 /* MovieID.framework */,
 				F9B9027F15F791320089BB17 /* Cocoa.framework */,
 			);
 			name = Frameworks;
@@ -519,6 +515,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../DasRamDisk/Xcode/MovieID-dejbaihqqhbdppeqozalpjlcemrs/Build/Products/Debug\"",
+					"\"/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MovieBrowse/MovieBrowse-Prefix.pch";
@@ -537,6 +534,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../DasRamDisk/Xcode/MovieID-dejbaihqqhbdppeqozalpjlcemrs/Build/Products/Debug\"",
+					"\"/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MovieBrowse/MovieBrowse-Prefix.pch";

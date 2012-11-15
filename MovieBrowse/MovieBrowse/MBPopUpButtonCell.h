@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MBPopUpButtonCell : NSCell /*NSPopUpButtonCell*/
+@interface MBPopUpButtonCell : NSCell
 
 @property (readwrite, strong) NSMenu *menu;
 @property (readwrite, strong) NSString *label;

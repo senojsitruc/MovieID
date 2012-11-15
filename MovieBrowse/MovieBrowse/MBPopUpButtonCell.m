@@ -10,6 +10,10 @@
 
 @implementation MBPopUpButtonCell
 
+/**
+ *
+ *
+ */
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
 	[[NSColor whiteColor] setFill];
@@ -35,6 +39,10 @@
 	[image drawAtPoint:NSMakePoint(cellFrame.origin.x+5+textSize.width+5, cellFrame.origin.y+9) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
 }
 
+/**
+ *
+ *
+ */
 - (void)performClickWithFrame:(NSRect)frame inView:(NSView *)controlView
 {
 	NSEvent *event = [NSEvent mouseEventWithType:NSLeftMouseUp

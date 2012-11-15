@@ -108,6 +108,14 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSWindow *importWindow;
 @property (assign) IBOutlet MBImportViewController *importController;
 
+/**
+ * Find
+ */
+@property (assign) IBOutlet NSWindow *findWindow;
+@property (assign) IBOutlet NSPopUpButton *findTypeBtn;
+@property (assign) IBOutlet NSTextField *findTxt;
+@property (assign) IBOutlet NSButton *findBtn;
+
 + (MBAppDelegate *)sharedInstance;
 
 - (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view;

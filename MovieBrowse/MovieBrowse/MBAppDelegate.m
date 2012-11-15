@@ -1255,10 +1255,7 @@ static MBAppDelegate *gAppDelegate;
 	self.searchBtn.stringValue = @"Cancel";
 	
 	[NSThread performBlockInBackground:^{
-		
 		NSArray *results = [IDSearch tmdbSearchMovie:title andYear:year];
-		
-		
 		[[NSThread mainThread] performBlock:^{
 			self.searchBtn.stringValue = @"Search";
 		}];
@@ -1304,6 +1301,42 @@ static MBAppDelegate *gAppDelegate;
 	[stream open];
 	[stream write:(const uint8_t *)output.UTF8String maxLength:output.UTF8Length];
 	[stream close];
+}
+
+
+
+
+
+#pragma mark - Find
+
+/**
+ *
+ *
+ */
+- (IBAction)doActionFindShow:(id)sender
+{
+	[NSApp beginSheet:self.findWindow modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+}
+
+/**
+ *
+ *
+ */
+- (IBAction)doActionFindHide:(id)sender
+{
+	[NSApp endSheet:self.findWindow];
+	[self.findWindow orderOut:sender];
+}
+
+/**
+ *
+ *
+ */
+- (IBAction)doActionFind:(id)sender
+{
+	[self doActionFindHide:sender];
+	
+	
 }
 
 
