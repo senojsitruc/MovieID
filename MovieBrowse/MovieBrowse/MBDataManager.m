@@ -88,12 +88,20 @@
 		mMovieDb = [APLevelDB levelDBWithPath:path error:nil];
 	else
 		mMovieDb = [APLevelDB levelDBWithPath:[desktop stringByAppendingPathComponent:@"MovieBrowse-Movies.db"] error:nil];
-	
+}
+
+/**
+ *
+ *
+ */
+- (void)closeDb
+{
 #ifdef DEBUG
 	NSLog(@"%s.. compacting...", __PRETTY_FUNCTION__);
 	[mMovieDb compact];
 	[mGenreDb compact];
 	[mActorDb compact];
+	NSLog(@"%s.. compacting...done", __PRETTY_FUNCTION__);
 #endif
 }
 
@@ -944,6 +952,10 @@
 	[self addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:latest];
 }
 
+/**
+ *
+ *
+ */
 - (void)addMovie:(IDMovie *)idmovie withDirPath:(NSString *)dirPath duration:(NSNumber *)duration filesize:(NSNumber *)filesize width:(NSNumber *)width height:(NSNumber *)height bitrate:(NSNumber *)bitrate mtime:(NSDate *)mtime
 {
 	if (!idmovie)

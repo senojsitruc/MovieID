@@ -497,8 +497,11 @@ static MBAppDelegate *gAppDelegate;
 		/*
 		[[mDataManager findMissingFiles] enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
 			MBMovie *mbmovie = (MBMovie *)movie;
-			NSLog(@"%@", mbmovie.dirpath);
-			//[mDataManager deleteMovie:mbmovie];
+			
+			if ([mbmovie.dirpath rangeOfString:@"Varg "].location == NSNotFound) {
+				NSLog(@"%@", mbmovie.dirpath);
+				[mDataManager deleteMovie:mbmovie];
+			}
 		}];
 		*/
 		
@@ -511,9 +514,9 @@ static MBAppDelegate *gAppDelegate;
  *
  *
  */
-- (void)dealloc
+- (void)applicationWillTerminate:(NSNotification *)aNotification
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[mDataManager closeDb];
 }
 
 /**
@@ -1157,12 +1160,8 @@ static MBAppDelegate *gAppDelegate;
 
 - (void)tmdbSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-	//MBMovie *mbmovie = (__bridge MBMovie *)contextInfo;
-	
 	if (!returnCode)
 		return;
-	
-	//[mDataManager handleFileWithName:mbmovie.idinfo.title path:mbmovie.idinfo.dirPath];
 }
 
 - (IBAction)doActionLinkToCancel:(id)sender
@@ -1591,12 +1590,18 @@ static MBAppDelegate *gAppDelegate;
 		NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
 		NSMutableString *infoTxt = [[NSMutableString alloc] init];
 		__block NSUInteger duration = 0;
+		__block NSUInteger filesize = 0;
 		
 		[arrangedObjects enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
 			duration += ((MBMovie *)movie).duration.integerValue;
+			filesize += ((MBMovie *)movie).filesize.integerValue;
 		}];
 		
+		[infoTxt appendString:@(arrangedObjects.count).stringValue];
+		[infoTxt appendString:@" movies, "];
 		[infoTxt appendString:[MBStuff humanReadableDuration:duration]];
+		[infoTxt appendString:@", "];
+		[infoTxt appendString:[MBStuff humanReadableFileSize:filesize]];
 		
 		self.movieInfoTxt.stringValue = infoTxt;
 	}
