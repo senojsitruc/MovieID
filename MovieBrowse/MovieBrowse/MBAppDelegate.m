@@ -1334,9 +1334,84 @@ static MBAppDelegate *gAppDelegate;
  */
 - (IBAction)doActionFind:(id)sender
 {
-	[self doActionFindHide:sender];
+	NSString *findType = _findTypeBtn.titleOfSelectedItem;
+	NSString *queryTxt = self.findTxt.stringValue.lowercaseString;
 	
+	// close the find window if the search query is zero-length
+	if (!queryTxt.length) {
+		[self doActionFindHide:sender];
+		return;
+	}
 	
+	//
+	// movie search
+	//
+	if ([findType isEqualToString:@"Movies"]) {
+		NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
+		__block MBMovie *mbmovie = nil;
+		__block NSUInteger index = NSNotFound;
+		
+		[arrangedObjects enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
+			if ([((MBMovie *)movie).title.lowercaseString hasPrefix:queryTxt]) {
+				mbmovie = movie;
+				index = movieNdx;
+				*movieStop = TRUE;
+			}
+		}];
+		
+		if (!mbmovie) {
+			[arrangedObjects enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
+				if (NSNotFound != [((MBMovie *)movie).title.lowercaseString rangeOfString:queryTxt].location) {
+					mbmovie = movie;
+					index = movieNdx;
+					*movieStop = TRUE;
+				}
+			}];
+		}
+		
+		if (!mbmovie) {
+			NSBeep();
+			return;
+		}
+		
+		[self doActionFindHide:sender];
+		[_movieTable scrollRowToVisible:index];
+	}
+	
+	//
+	// actor search
+	//
+	else if ([findType isEqualToString:@"Actors"]) {
+		NSArray *arrangedObjects = self.actorsArrayController.arrangedObjects;
+		__block MBPerson *mbperson = nil;
+		__block NSUInteger index = NSNotFound;
+		
+		[arrangedObjects enumerateObjectsUsingBlock:^ (id actor, NSUInteger actorNdx, BOOL *actorStop) {
+			if ([((MBPerson *)actor).name.lowercaseString hasPrefix:queryTxt]) {
+				mbperson = actor;
+				index = actorNdx;
+				*actorStop = TRUE;
+			}
+		}];
+		
+		if (!mbperson) {
+			[arrangedObjects enumerateObjectsUsingBlock:^ (id actor, NSUInteger actorNdx, BOOL *actorStop) {
+				if (NSNotFound != [((MBPerson *)actor).name.lowercaseString rangeOfString:queryTxt].location) {
+					mbperson = actor;
+					index = actorNdx;
+					*actorStop = TRUE;
+				}
+			}];
+		}
+		
+		if (!mbperson) {
+			NSBeep();
+			return;
+		}
+		
+		[self doActionFindHide:sender];
+		[_actorTable scrollRowToVisible:index];
+	}
 }
 
 
