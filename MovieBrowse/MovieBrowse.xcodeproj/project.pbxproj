@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914FC6115FCF11400B960D0 /* MBMovieView.m */; };
-		F91FD3131653E85E0060E4FC /* MovieID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91FD3121653E85E0060E4FC /* MovieID.framework */; };
 		F93211EC16327D2C0093E619 /* MBActorMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211EB16327D2C0093E619 /* MBActorMovieView.m */; };
 		F93211FB163310AB0093E619 /* MBActorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211FA163310AB0093E619 /* MBActorCellView.m */; };
 		F93212161635A2B30093E619 /* MBTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212151635A2B30093E619 /* MBTableHeaderView.m */; };
@@ -25,6 +24,8 @@
 		F97BF37A15F91FF400444926 /* MBActorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37915F91FF400444926 /* MBActorView.m */; };
 		F97BF37D15F9C20200444926 /* MBGenre.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37C15F9C20200444926 /* MBGenre.m */; };
 		F97BF38015F9C41800444926 /* MBGenreView.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37F15F9C41800444926 /* MBGenreView.m */; };
+		F98A50D1166BE76400749333 /* MovieID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
+		F98A50D2166BE76A00749333 /* MovieID.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
 		F998F27B162F6FEF008AF52D /* MissingMovie.png in Resources */ = {isa = PBXBuildFile; fileRef = F998F27A162F6FEF008AF52D /* MissingMovie.png */; };
 		F998F27E162F7335008AF52D /* MBMovieCastView.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F27D162F7335008AF52D /* MBMovieCastView.m */; };
 		F998F2C2162F85EF008AF52D /* MBMovieCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F2C1162F85EF008AF52D /* MBMovieCellView.m */; };
@@ -47,6 +48,16 @@
 		F9F30CF916306E25006C4F17 /* MBImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F30CF816306E25006C4F17 /* MBImageView.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F98A50CF166BE75300749333 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F9B9018915F75E990089BB17;
+			remoteInfo = MovieID;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		F998F2D216306613008AF52D /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -54,6 +65,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F98A50D2166BE76A00749333 /* MovieID.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,6 +104,7 @@
 		F97BF37C15F9C20200444926 /* MBGenre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenre.m; sourceTree = "<group>"; };
 		F97BF37E15F9C41800444926 /* MBGenreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreView.h; sourceTree = "<group>"; };
 		F97BF37F15F9C41800444926 /* MBGenreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreView.m; sourceTree = "<group>"; };
+		F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MovieIDFramework.xcodeproj; path = ../MovieIDFramework/MovieIDFramework.xcodeproj; sourceTree = "<group>"; };
 		F998F27A162F6FEF008AF52D /* MissingMovie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingMovie.png; sourceTree = "<group>"; };
 		F998F27C162F7335008AF52D /* MBMovieCastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieCastView.h; sourceTree = "<group>"; };
 		F998F27D162F7335008AF52D /* MBMovieCastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieCastView.m; sourceTree = "<group>"; };
@@ -137,9 +150,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F98A50D1166BE76400749333 /* MovieID.framework in Frameworks */,
 				F998F2C4162F8E40008AF52D /* QuartzCore.framework in Frameworks */,
 				F9B902A115F7915E0089BB17 /* libicucore.dylib in Frameworks */,
-				F91FD3131653E85E0060E4FC /* MovieID.framework in Frameworks */,
 				F9B9029F15F7914B0089BB17 /* QTKit.framework in Frameworks */,
 				F9B9028015F791320089BB17 /* Cocoa.framework in Frameworks */,
 			);
@@ -208,6 +221,14 @@
 			name = Genre;
 			sourceTree = "<group>";
 		};
+		F98A50CC166BE75200749333 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F98A50D0166BE75300749333 /* MovieID.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F998F279162F6FEF008AF52D /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +261,7 @@
 		F9B9027E15F791320089BB17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */,
 				F91FD3121653E85E0060E4FC /* MovieID.framework */,
 				F998F2C3162F8E40008AF52D /* QuartzCore.framework */,
 				F9B9028215F791320089BB17 /* AppKit.framework */,
@@ -368,12 +390,28 @@
 			mainGroup = F9B9027015F7912E0089BB17;
 			productRefGroup = F9B9027C15F791320089BB17 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F98A50CC166BE75200749333 /* Products */;
+					ProjectRef = F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F9B9027A15F791320089BB17 /* MovieBrowse */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F98A50D0166BE75300749333 /* MovieID.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MovieID.framework;
+			remoteRef = F98A50CF166BE75300749333 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F9B9027915F791320089BB17 /* Resources */ = {

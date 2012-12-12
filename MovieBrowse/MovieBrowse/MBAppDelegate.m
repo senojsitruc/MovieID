@@ -498,11 +498,12 @@ static MBAppDelegate *gAppDelegate;
 		[[mDataManager findMissingFiles] enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
 			MBMovie *mbmovie = (MBMovie *)movie;
 			NSLog(@"%@", mbmovie.dirpath);
-			[mDataManager deleteMovie:mbmovie];
+			//[mDataManager deleteMovie:mbmovie];
 		}];
 		*/
 		
 		//[mDataManager updateFileStats];
+		
 	}];
 }
 

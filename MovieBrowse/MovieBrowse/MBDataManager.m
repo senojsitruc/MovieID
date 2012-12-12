@@ -90,6 +90,7 @@
 		mMovieDb = [APLevelDB levelDBWithPath:[desktop stringByAppendingPathComponent:@"MovieBrowse-Movies.db"] error:nil];
 	
 #ifdef DEBUG
+	NSLog(@"%s.. compacting...", __PRETTY_FUNCTION__);
 	[mMovieDb compact];
 	[mGenreDb compact];
 	[mActorDb compact];
