@@ -350,13 +350,8 @@
  */
 - (IBAction)doActionApply:(id)sender
 {
-	NSArray *selectedObjects = self.resultsController.selectedObjects;
+	IDMovie *idmovie = _resultsArray[_searchResultTbl.selectedRow];
 	
-	if (!selectedObjects.count)
-		return;
-	
-	IDMovie *idmovie = selectedObjects[0];
-	MBDataManager *dataManager = [MBAppDelegate sharedInstance].dataManager;
 	NSString *dirPath = mDirPath;
 	NSNumber *runtime = mRuntime;
 	NSNumber *filesize = mFilesize;
@@ -366,7 +361,7 @@
 	NSDate *modtime = mModtime;
 	
 	dispatch_async(mImportQueue, ^{
-		[dataManager addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:modtime];
+		[[MBAppDelegate sharedInstance].dataManager addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:modtime];
 	});
 }
 

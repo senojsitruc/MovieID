@@ -1387,6 +1387,30 @@ static MBAppDelegate *gAppDelegate;
  *
  *
  */
+- (IBAction)doActionFindType:(id)sender
+{
+	NSString *findType = [_findTypeBtn titleOfSelectedItem];
+	
+	if ([findType isEqualToString:@"Movies"]) {
+		[_findTitleBtn setHidden:FALSE];
+		[_findDescBtn setHidden:FALSE];
+		[_findFileNameBtn setHidden:FALSE];
+		[_findTitleBtn setTitle:@"Title"];
+		[_findDescBtn setTitle:@"Description"];
+	}
+	else if ([findType isEqualToString:@"Actors"]) {
+		[_findTitleBtn setHidden:FALSE];
+		[_findDescBtn setHidden:FALSE];
+		[_findFileNameBtn setHidden:TRUE];
+		[_findTitleBtn setTitle:@"Name"];
+		[_findDescBtn setTitle:@"Biography"];
+	}
+}
+
+/**
+ *
+ *
+ */
 - (IBAction)doActionFindShow:(id)sender
 {
 	[NSApp beginSheet:self.findWindow modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
@@ -1446,26 +1470,26 @@ static MBAppDelegate *gAppDelegate;
 		
 		if (findTitle && findDesc && findName) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location &&
-							 NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location &&
+				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location ||
+							 NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location ||
 							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else if (findTitle && findDesc) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location &&
+				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location ||
 							 NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else if (findTitle && findName) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location &&
+				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location ||
 							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else if (findDesc && findName) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location &&
+				return NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location ||
 							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
@@ -1503,43 +1527,49 @@ static MBAppDelegate *gAppDelegate;
 		[_movieTable scrollRowToVisible:index];
 	}
 	
-	/*
 	//
 	// actor search
 	//
-	else if ([findType isEqualToString:@"Actors"]) {
-		NSArray *arrangedObjects = self.actorsArrayController.arrangedObjects;
+	else if ([mFindType isEqualToString:@"Actors"]) {
+		NSArray *objects = self.actorsArrayController.arrangedObjects;
 		__block MBPerson *mbperson = nil;
 		__block NSUInteger index = NSNotFound;
+		BOOL (^compare) (MBPerson*) = nil;
 		
-		[arrangedObjects enumerateObjectsUsingBlock:^ (id actor, NSUInteger actorNdx, BOOL *actorStop) {
-			if ([((MBPerson *)actor).name.lowercaseString hasPrefix:queryTxt]) {
-				mbperson = actor;
-				index = actorNdx;
-				*actorStop = TRUE;
-			}
-		}];
-		
-		if (!mbperson) {
-			[arrangedObjects enumerateObjectsUsingBlock:^ (id actor, NSUInteger actorNdx, BOOL *actorStop) {
-				if (NSNotFound != [((MBPerson *)actor).name.lowercaseString rangeOfString:queryTxt].location) {
-					mbperson = actor;
-					index = actorNdx;
-					*actorStop = TRUE;
-				}
-			}];
+		if (findTitle && findDesc) {
+			compare = ^ BOOL (MBPerson *_mbperson) {
+				return NSNotFound != [_mbperson.name.lowercaseString rangeOfString:mFindQuery].location ||
+							 NSNotFound != [_mbperson.bio.lowercaseString rangeOfString:mFindQuery].location;
+			};
 		}
+		else if (findTitle) {
+			compare = ^ BOOL (MBPerson *_mbperson) {
+				return NSNotFound != [_mbperson.name.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else if (findDesc) {
+			compare = ^ BOOL (MBPerson *_mbperson) {
+				return NSNotFound != [_mbperson.bio.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else {
+			NSBeep();
+			return;
+		}
+		
+		if (!findNext(objects, mFindIndex, &mbperson, &index, compare) && mFindIndex != 0)
+			findNext(objects, 0, &mbperson, &index, compare);
 		
 		if (!mbperson) {
 			NSBeep();
 			return;
 		}
 		
+		mFindIndex = index;
+		
 		[self doActionFindHide:sender];
 		[_actorTable scrollRowToVisible:index];
 	}
-	*/
-	
 }
 
 /**
