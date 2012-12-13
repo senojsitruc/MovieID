@@ -2854,7 +2854,7 @@
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{663, 384}</string>
 				<object class="NSView" key="NSWindowView" id="286570717">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSTextField" id="165132024">
@@ -3178,7 +3178,6 @@
 						</object>
 					</array>
 					<string key="NSFrameSize">{663, 384}</string>
-					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="165132024"/>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
@@ -4692,14 +4691,6 @@ wGw</bytes>
 					<object class="IBActionConnection" key="connection">
 						<string key="label">performFindPanelAction:</string>
 						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="326711663"/>
-					</object>
-					<int key="connectionID">487</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="270902937"/>
 					</object>
 					<int key="connectionID">488</int>
@@ -5239,6 +5230,14 @@ wGw</bytes>
 						<reference key="destination" ref="879796170"/>
 					</object>
 					<int key="connectionID">3162</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">doActionFindNext:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="326711663"/>
+					</object>
+					<int key="connectionID">3163</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -15525,7 +15524,7 @@ wGw</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">3162</int>
+			<int key="maxID">3163</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

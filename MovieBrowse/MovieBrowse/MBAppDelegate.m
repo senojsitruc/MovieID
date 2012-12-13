@@ -56,6 +56,12 @@ static MBAppDelegate *gAppDelegate;
 	NSUInteger mActorWindowTransId;
 	
 	/**
+	 * Find
+	 */
+	NSString *mFindQuery;
+	NSUInteger mFindIndex;
+	
+	/**
 	 * Movie Table
 	 */
 	MBPopUpButtonCell *mMovieHeaderCell;
@@ -63,6 +69,7 @@ static MBAppDelegate *gAppDelegate;
 	NSMenuItem *mMovieHeaderMenuSortByTitleItem;
 	NSMenuItem *mMovieHeaderMenuSortByYearItem;
 	NSMenuItem *mMovieHeaderMenuSortByScoreItem;
+	NSMenuItem *mMovieHeaderMenuSortByAddedItem;
 	NSMenuItem *mMovieHeaderMenuSortByRuntimeItem;
 	NSMenuItem *mMovieHeaderMenuShowHidden;
 	BOOL mShowHiddenMovies;
@@ -188,6 +195,7 @@ static MBAppDelegate *gAppDelegate;
 		NSMenuItem *sortByYear = [menu addItemWithTitle:@"  Movie by Year" action:@selector(doActionMoviesSortByYear:) keyEquivalent:@""];
 		NSMenuItem *sortByScore = [menu addItemWithTitle:@"  Movie by Score" action:@selector(doActionMoviesSortByScore:) keyEquivalent:@""];
 		NSMenuItem *sortByRuntime = [menu addItemWithTitle:@"  Movie by Runtime" action:@selector(doActionMoviesSortByRuntime:) keyEquivalent:@""];
+		NSMenuItem *sortByAdded = [menu addItemWithTitle:@"  Movie by Added" action:@selector(doActionMoviesSortByAdded:) keyEquivalent:@""];
 		[menu addItem:[NSMenuItem separatorItem]];
 		NSMenuItem *showHidden = [menu addItemWithTitle:@"Show Hidden" action:@selector(doActionMoviesShowHidden:) keyEquivalent:@""];
 		
@@ -195,6 +203,7 @@ static MBAppDelegate *gAppDelegate;
 		sortByYear.target = self;
 		sortByScore.target = self;
 		sortByRuntime.target = self;
+		sortByAdded.target = self;
 		showHidden.target = self;
 		
 		headerCell.menu = menu;
@@ -208,6 +217,7 @@ static MBAppDelegate *gAppDelegate;
 		mMovieHeaderMenuSortByYearItem = sortByYear;
 		mMovieHeaderMenuSortByScoreItem = sortByScore;
 		mMovieHeaderMenuSortByRuntimeItem = sortByRuntime;
+		mMovieHeaderMenuSortByAddedItem = sortByAdded;
 		mMovieHeaderMenuShowHidden = showHidden;
 	}
 	
@@ -349,6 +359,8 @@ static MBAppDelegate *gAppDelegate;
 				[self doActionMoviesSortByScore:mMovieHeaderMenuSortByScoreItem];
 			else if ([sort isEqualToString:@"Runtime"])
 				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByRuntimeItem];
+			else if ([sort isEqualToString:@"Added"])
+				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByAddedItem];
 		}
 	}
 	
@@ -773,6 +785,8 @@ static MBAppDelegate *gAppDelegate;
 		prefix = @"Movie by Score";
 	else if (mMovieHeaderMenuSortByRuntimeItem.state == NSOnState)
 		prefix = @"Movie by Runtime";
+	else if (mMovieHeaderMenuSortByAddedItem.state == NSOnState)
+		prefix = @"Movie by Added";
 	
 	if (mMovieSelection)
 		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mMovieSelection.title];
@@ -792,6 +806,7 @@ static MBAppDelegate *gAppDelegate;
 	mMovieHeaderMenuSortByYearItem.state = NSOffState;
 	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
 	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
+	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
 	
 	[[NSUserDefaults standardUserDefaults] setObject:@"Title" forKey:MBDefaultsKeyMoviesSort];
 	
@@ -816,6 +831,7 @@ static MBAppDelegate *gAppDelegate;
 	mMovieHeaderMenuSortByYearItem.state = NSOnState;
 	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
 	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
+	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
 	
 	[[NSUserDefaults standardUserDefaults] setObject:@"Year" forKey:MBDefaultsKeyMoviesSort];
 	
@@ -840,6 +856,7 @@ static MBAppDelegate *gAppDelegate;
 	mMovieHeaderMenuSortByYearItem.state = NSOffState;
 	mMovieHeaderMenuSortByScoreItem.state = NSOnState;
 	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
+	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
 	
 	[[NSUserDefaults standardUserDefaults] setObject:@"Score" forKey:MBDefaultsKeyMoviesSort];
 	
@@ -864,11 +881,37 @@ static MBAppDelegate *gAppDelegate;
 	mMovieHeaderMenuSortByYearItem.state = NSOffState;
 	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
 	mMovieHeaderMenuSortByRuntimeItem.state = NSOnState;
+	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
 	
 	[[NSUserDefaults standardUserDefaults] setObject:@"Runtime" forKey:MBDefaultsKeyMoviesSort];
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"duration" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
+	
+	if (mMovieSelection)
+		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
+	else {
+		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
+		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
+	}
+}
+
+/**
+ *
+ *
+ */
+- (void)doActionMoviesSortByAdded:(id)sender
+{
+	mMovieHeaderMenuSortByTitleItem.state = NSOffState;
+	mMovieHeaderMenuSortByYearItem.state = NSOffState;
+	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
+	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
+	mMovieHeaderMenuSortByAddedItem.state = NSOnState;
+	
+	[[NSUserDefaults standardUserDefaults] setObject:@"Added" forKey:MBDefaultsKeyMoviesSort];
+	
+	[self updateMoviesHeaderLabel];
+	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"mtime" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:FALSE]]];
 	
 	if (mMovieSelection)
 		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
@@ -1326,6 +1369,15 @@ static MBAppDelegate *gAppDelegate;
 {
 	[NSApp endSheet:self.findWindow];
 	[self.findWindow orderOut:sender];
+}
+
+/**
+ *
+ *
+ */
+- (IBAction)doActionFindNext:(id)sender
+{
+	
 }
 
 /**

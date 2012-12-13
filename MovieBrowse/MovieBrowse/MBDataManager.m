@@ -21,6 +21,7 @@
 #import <MovieID/IDMovie.h>
 #import <MovieID/IDPerson.h>
 #import <MovieID/IDTmdbMovie.h>
+#import <MovieID/RegexKitLite.h>
 
 @interface MBDataManager ()
 {
@@ -242,6 +243,16 @@
 		NSString *value = mMovieDb[key];
 		
 		if (mbmovie && (![curTitle isEqualToString:title] || ![mbmovie.year isEqual:year])) {
+//		NSString *_yearTitle = [title stringByMatching:@"\\((\\d\\d\\d\\d)\\)"];
+//		_yearTitle = [_yearTitle substringWithRange:NSMakeRange(1, 4)];
+			
+			NSString *_yearPath = [mbmovie.dirpath stringByMatching:@"\\((\\d\\d\\d\\d)\\)"];
+			_yearPath = [_yearPath substringWithRange:NSMakeRange(1, 4)];
+			
+			if (mbmovie.year.integerValue != _yearPath.integerValue) {
+				NSLog(@"Year Mismatch for '%@' [%@ vs %@]", mbmovie.title, mbmovie.year, _yearPath);
+			}
+			
 			mMovies[mbmovie.dbkey] = mbmovie;
 			mbmovie = nil;
 			actors = nil;
