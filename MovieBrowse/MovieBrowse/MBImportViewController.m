@@ -357,9 +357,16 @@
 	
 	IDMovie *idmovie = selectedObjects[0];
 	MBDataManager *dataManager = [MBAppDelegate sharedInstance].dataManager;
+	NSString *dirPath = mDirPath;
+	NSNumber *runtime = mRuntime;
+	NSNumber *filesize = mFilesize;
+	NSNumber *bitrate = mBitrate;
+	NSNumber *width = mWidth;
+	NSNumber *height = mHeight;
+	NSDate *modtime = mModtime;
 	
 	dispatch_async(mImportQueue, ^{
-		[dataManager addMovie:idmovie withDirPath:mDirPath duration:mRuntime filesize:mFilesize width:mWidth height:mHeight bitrate:mBitrate mtime:mModtime];
+		[dataManager addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:modtime];
 	});
 }
 
