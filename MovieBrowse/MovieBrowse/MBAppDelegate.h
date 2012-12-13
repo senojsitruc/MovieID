@@ -115,6 +115,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSPopUpButton *findTypeBtn;
 @property (assign) IBOutlet NSTextField *findTxt;
 @property (assign) IBOutlet NSButton *findBtn;
+@property (assign) IBOutlet NSButton *findTitleBtn;
+@property (assign) IBOutlet NSButton *findFileNameBtn;
+@property (assign) IBOutlet NSButton *findDescBtn;
 
 + (MBAppDelegate *)sharedInstance;
 

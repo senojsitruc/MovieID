@@ -14,6 +14,7 @@
 #import "MBDataManager.h"
 #import "MBActorMovieView.h"
 #import "MBImageCache.h"
+#import "NSArray+Additions.h"
 #import <MovieID/IDMediaInfo.h>
 #import <MovieID/IDSearch.h>
 #import "NSThread+Additions.h"
@@ -58,6 +59,7 @@ static MBAppDelegate *gAppDelegate;
 	/**
 	 * Find
 	 */
+	NSString *mFindType;
 	NSString *mFindQuery;
 	NSUInteger mFindIndex;
 	
@@ -625,6 +627,9 @@ static MBAppDelegate *gAppDelegate;
 	[self updateActorsHeaderLabel];
 	[self updateGenreFilter];
 	[self updateMovieFilter];
+	
+	// our find state is now invalid for doing "find next"
+	mFindIndex = NSNotFound;
 }
 
 /**
@@ -657,6 +662,9 @@ static MBAppDelegate *gAppDelegate;
 	
 	[self updateActorFilter];
 	[self updateMovieFilter];
+	
+	// our find state is now invalid for doing "find next"
+	mFindIndex = NSNotFound;
 }
 
 /**
@@ -682,6 +690,9 @@ static MBAppDelegate *gAppDelegate;
 	[self updateMoviesHeaderLabel];
 	[self updateActorFilter];
 	[self updateGenreFilter];
+	
+	// our find state is now invalid for doing "find next"
+	mFindIndex = NSNotFound;
 }
 
 
@@ -819,6 +830,10 @@ static MBAppDelegate *gAppDelegate;
 		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
+	
+	// our find state is now invalid for doing "find next"
+	if ([mFindType isEqualToString:@"Movies"])
+		mFindIndex = NSNotFound;
 }
 
 /**
@@ -844,6 +859,10 @@ static MBAppDelegate *gAppDelegate;
 		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
+	
+	// our find state is now invalid for doing "find next"
+	if ([mFindType isEqualToString:@"Movies"])
+		mFindIndex = NSNotFound;
 }
 
 /**
@@ -869,6 +888,10 @@ static MBAppDelegate *gAppDelegate;
 		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
+	
+	// our find state is now invalid for doing "find next"
+	if ([mFindType isEqualToString:@"Movies"])
+		mFindIndex = NSNotFound;
 }
 
 /**
@@ -894,6 +917,10 @@ static MBAppDelegate *gAppDelegate;
 		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
+	
+	// our find state is now invalid for doing "find next"
+	if ([mFindType isEqualToString:@"Movies"])
+		mFindIndex = NSNotFound;
 }
 
 /**
@@ -919,6 +946,10 @@ static MBAppDelegate *gAppDelegate;
 		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
+	
+	// our find state is now invalid for doing "find next"
+	if ([mFindType isEqualToString:@"Movies"])
+		mFindIndex = NSNotFound;
 }
 
 /**
@@ -1377,59 +1408,102 @@ static MBAppDelegate *gAppDelegate;
  */
 - (IBAction)doActionFindNext:(id)sender
 {
-	
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionFind:(id)sender
-{
-	NSString *findType = _findTypeBtn.titleOfSelectedItem;
-	NSString *queryTxt = self.findTxt.stringValue.lowercaseString;
-	
-	// close the find window if the search query is zero-length
-	if (!queryTxt.length) {
-		[self doActionFindHide:sender];
+	if (!mFindQuery.length)
 		return;
-	}
+	
+	if (NSNotFound == mFindIndex)
+		mFindIndex = 0;
+	else
+		mFindIndex += 1;
+	
+	BOOL findTitle = _findTitleBtn.state;
+	BOOL findDesc = _findDescBtn.state;
+	BOOL findName = _findFileNameBtn.state;
+	
+	BOOL (^findNext) (NSArray*, NSUInteger, NSObject**, NSUInteger*, BOOL (^)(id)) = ^ BOOL (NSArray *objects, NSUInteger startNdx, NSObject **matchObj, NSUInteger *matchNdx, BOOL (^comparator)(id)) {
+		__block BOOL _found = FALSE;
+		
+		[objects enumerateObjectsFromIndex:startNdx usingBlock:^ (id obj, NSUInteger objNdx, BOOL *objStop) {
+			if (comparator(obj)) {
+				*matchObj = obj;
+				*matchNdx = objNdx;
+				_found = TRUE;
+				*objStop = TRUE;
+			}
+		}];
+		
+		return _found;
+	};
 	
 	//
 	// movie search
 	//
-	if ([findType isEqualToString:@"Movies"]) {
-		NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
+	if ([mFindType isEqualToString:@"Movies"]) {
+		NSArray *objects = self.moviesArrayController.arrangedObjects;
 		__block MBMovie *mbmovie = nil;
 		__block NSUInteger index = NSNotFound;
+		BOOL (^compare) (MBMovie*) = nil;
 		
-		[arrangedObjects enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
-			if ([((MBMovie *)movie).title.lowercaseString hasPrefix:queryTxt]) {
-				mbmovie = movie;
-				index = movieNdx;
-				*movieStop = TRUE;
-			}
-		}];
-		
-		if (!mbmovie) {
-			[arrangedObjects enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
-				if (NSNotFound != [((MBMovie *)movie).title.lowercaseString rangeOfString:queryTxt].location) {
-					mbmovie = movie;
-					index = movieNdx;
-					*movieStop = TRUE;
-				}
-			}];
+		if (findTitle && findDesc && findName) {
+			compare = ^ BOOL (MBMovie *_mbmovie) {
+				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location &&
+							 NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location &&
+							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+			};
 		}
+		else if (findTitle && findDesc) {
+			compare = ^ BOOL (MBMovie *_mbmovie) {
+				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location &&
+							 NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else if (findTitle && findName) {
+			compare = ^ BOOL (MBMovie *_mbmovie) {
+				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location &&
+							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else if (findDesc && findName) {
+			compare = ^ BOOL (MBMovie *_mbmovie) {
+				return NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location &&
+							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else if (findTitle) {
+			compare = ^ BOOL (MBMovie *_mbmovie) {
+				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else if (findDesc) {
+			compare = ^ BOOL (MBMovie *_mbmovie) {
+				return NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else if (findName) {
+			compare = ^ BOOL (MBMovie *_mbmovie) {
+				return NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+			};
+		}
+		else {
+			NSBeep();
+			return;
+		}
+		
+		if (!findNext(objects, mFindIndex, &mbmovie, &index, compare) && mFindIndex != 0)
+			findNext(objects, 0, &mbmovie, &index, compare);
 		
 		if (!mbmovie) {
 			NSBeep();
 			return;
 		}
 		
+		mFindIndex = index;
+		
 		[self doActionFindHide:sender];
 		[_movieTable scrollRowToVisible:index];
 	}
 	
+	/*
 	//
 	// actor search
 	//
@@ -1464,6 +1538,27 @@ static MBAppDelegate *gAppDelegate;
 		[self doActionFindHide:sender];
 		[_actorTable scrollRowToVisible:index];
 	}
+	*/
+	
+}
+
+/**
+ *
+ *
+ */
+- (IBAction)doActionFind:(id)sender
+{
+	mFindQuery = self.findTxt.stringValue.lowercaseString;
+	mFindType = _findTypeBtn.titleOfSelectedItem;
+	mFindIndex = NSNotFound;
+	
+	// close the find window if the search query is zero-length
+	if (!mFindQuery.length) {
+		[self doActionFindHide:sender];
+		return;
+	}
+	
+	[self doActionFindNext:sender];
 }
 
 
