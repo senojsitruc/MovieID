@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F9232067167AB1AB00D14519 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9232066167AB1AB00D14519 /* AVFoundation.framework */; };
 		F93211D616322FF10093E619 /* IDSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = F93211D416322FF10093E619 /* IDSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F93211D716322FF10093E619 /* IDSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211D516322FF10093E619 /* IDSearch.m */; };
 		F93211DB163230350093E619 /* IDPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = F93211D9163230350093E619 /* IDPerson.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -83,6 +84,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F9232066167AB1AB00D14519 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F93211D416322FF10093E619 /* IDSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDSearch.h; sourceTree = "<group>"; };
 		F93211D516322FF10093E619 /* IDSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDSearch.m; sourceTree = "<group>"; };
 		F93211D9163230350093E619 /* IDPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDPerson.h; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9232067167AB1AB00D14519 /* AVFoundation.framework in Frameworks */,
 				F97BF39315F9E61000444926 /* libcommonCrypto.dylib in Frameworks */,
 				F9B9021A15F779550089BB17 /* libicucore.dylib in Frameworks */,
 				F9B901FE15F761140089BB17 /* QTKit.framework in Frameworks */,
@@ -257,6 +260,7 @@
 		F9B9018B15F75E990089BB17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9232066167AB1AB00D14519 /* AVFoundation.framework */,
 				F97BF39215F9E61000444926 /* libcommonCrypto.dylib */,
 				F9B9021915F779550089BB17 /* libicucore.dylib */,
 				F9B901FD15F761140089BB17 /* QTKit.framework */,

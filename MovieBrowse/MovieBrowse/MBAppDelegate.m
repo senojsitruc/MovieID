@@ -1430,6 +1430,15 @@ static MBAppDelegate *gAppDelegate;
  *
  *
  */
+- (IBAction)doActionFindPrev:(id)sender
+{
+	
+}
+
+/**
+ *
+ *
+ */
 - (IBAction)doActionFindNext:(id)sender
 {
 	if (!mFindQuery.length)
@@ -1761,6 +1770,8 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateMovieFilter
 {
+	NSLog(@"%s", __PRETTY_FUNCTION__);
+	
 	if (!mIsDoneLoading)
 		return;
 	

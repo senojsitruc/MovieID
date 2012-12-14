@@ -28,6 +28,7 @@
 	NSNumber *mWidth;
 	NSNumber *mHeight;
 	NSDate *mModtime;
+	NSArray *mLanguages;
 	
 	dispatch_queue_t mImportQueue;
 }
@@ -114,11 +115,16 @@
 	NSMutableArray *idinfos = [[NSMutableArray alloc] init];
 	NSString *title = [IDSearch titleForName:[dirPath lastPathComponent]];
 	NSNumber *year = [IDSearch yearForName:[dirPath lastPathComponent]];
+	NSMutableDictionary *languages = [[NSMutableDictionary alloc] init];
 	
 	mDirPath = dirPath;
 	
 	[[self getMovieFilesInDir:dirPath] enumerateObjectsUsingBlock:^ (id file, NSUInteger fileNdx, BOOL *fileStop) {
 		IDMediaInfo *idinfo = [[IDMediaInfo alloc] initWithFilePath:file];
+		
+		[idinfo.languages enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
+			languages[languageObj] = languageObj;
+		}];
 		
 		if (idinfo)
 			[idinfos addObject:idinfo];
@@ -134,8 +140,8 @@
 		[idinfos enumerateObjectsUsingBlock:^ (id obj1, NSUInteger ndx1, BOOL *stop1) {
 			IDMediaInfo *idinfo = (IDMediaInfo *)obj1;
 			
-			_runtime += idinfo.duration2.integerValue;
-			_filesize += idinfo.fileSize.integerValue;
+			_runtime += idinfo.duration.integerValue;
+			_filesize += idinfo.filesize.integerValue;
 			
 			if (idinfo.bitrate.integerValue > _bitrate)
 				_bitrate = idinfo.bitrate.integerValue;
@@ -152,6 +158,7 @@
 		mWidth = @(_width);
 		mHeight = @(_height);
 		mModtime = ((IDMediaInfo *)idinfos[0]).mtime;
+		mLanguages = languages.allValues;
 	}
 	else {
 		mRuntime = @(0);
@@ -160,6 +167,7 @@
 		mWidth = @(0);
 		mHeight = @(0);
 		mModtime = nil;
+		mLanguages = @[];
 	}
 	
 	self.sourcePathTxt.stringValue = dirPath;
@@ -359,9 +367,10 @@
 	NSNumber *width = mWidth;
 	NSNumber *height = mHeight;
 	NSDate *modtime = mModtime;
+	NSArray *languages = mLanguages;
 	
 	dispatch_async(mImportQueue, ^{
-		[[MBAppDelegate sharedInstance].dataManager addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:modtime];
+		[[MBAppDelegate sharedInstance].dataManager addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:modtime languages:languages];
 	});
 }
 

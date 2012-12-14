@@ -34,6 +34,7 @@
 @property (readwrite, strong) NSNumber *bitrate;
 @property (readwrite, strong) NSNumber *filesize;
 @property (readwrite, strong) NSDate *mtime;
+@property (readwrite, strong) NSArray *languages;
 
 @property (readonly, getter=info1) NSString *info1;
 @property (readonly, getter=info2) NSString *info2;

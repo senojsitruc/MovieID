@@ -230,6 +230,7 @@
 	__block MBMovie *mbmovie = nil;
 	__block NSString *curTitle = nil;
 	__block NSMutableDictionary *actors = nil;
+	__block NSMutableArray *languages = nil;
 	
 	[mMovieDb enumerateKeys:^ (NSString *key, BOOL *stop) {
 		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
@@ -254,6 +255,7 @@
 			mMovies[mbmovie.dbkey] = mbmovie;
 			mbmovie = nil;
 			actors = nil;
+			languages = nil;
 		}
 		
 		if (!mbmovie) {
@@ -264,6 +266,7 @@
 			curTitle = title;
 			mbmovie = [[MBMovie alloc] init];
 			mbmovie.actors = (actors = [[NSMutableDictionary alloc] init]);
+			mbmovie.languages = (languages = [[NSMutableArray alloc] init]);
 			mbmovie.dbkey = key;
 			mbmovie.year = year;
 		}
@@ -306,6 +309,8 @@
 			mbmovie.posterId = value;
 		else if ([label isEqualToString:@"actor"])
 			actors[value] = @"";
+		else if ([label isEqualToString:@"language"] && keyParts.count >= 4)
+			[languages addObject:keyParts[3]];
 	}];
 	
 	if (mbmovie)
@@ -623,9 +628,10 @@
 - (void)updateFileStats
 {
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	NSMutableDictionary *languages = [[NSMutableDictionary alloc] init];
 	
 	NSArray *movies = [mMovies.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id obj1, id obj2) {
-		return [(NSString *)obj1 compare:(NSString *)obj2];
+		return [(NSString *)obj1 caseInsensitiveCompare:(NSString *)obj2];
 	}];
 	
 	NSLog(@"[DM] Found %04lu movies", movies.count);
@@ -659,6 +665,10 @@
 			[movieFiles enumerateObjectsUsingBlock:^ (id obj1, NSUInteger ndx1, BOOL *stop1) {
 				IDMediaInfo *idinfo = [[IDMediaInfo alloc] initWithFilePath:obj1];
 				
+				[idinfo.languages enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
+					languages[languageObj] = languageObj;
+				}];
+				
 				if (idinfo)
 					[idinfos addObject:idinfo];
 				else
@@ -683,8 +693,8 @@
 			[idinfos enumerateObjectsUsingBlock:^ (id obj1, NSUInteger ndx1, BOOL *stop1) {
 				IDMediaInfo *idinfo = (IDMediaInfo *)obj1;
 				
-				_runtime += idinfo.duration2.integerValue;
-				_filesize += idinfo.fileSize.integerValue;
+				_runtime += idinfo.duration.integerValue;
+				_filesize += idinfo.filesize.integerValue;
 				
 				if (idinfo.bitrate.integerValue > _bitrate)
 					_bitrate = idinfo.bitrate.integerValue;
@@ -705,7 +715,12 @@
 			height = @(_height);
 		}
 		
-		NSLog(@"[DM]   runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@", runtime, filesize, bitrate, width, height);
+		NSLog(@"[DM]   [new] runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@", runtime, filesize, bitrate, width, height);
+		NSLog(@"[DM]   [old] runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@", mbmovie.duration, mbmovie.filesize, mbmovie.bitrate, mbmovie.width, mbmovie.height);
+		
+		[languages.allValues enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
+			mMovieDb[[[dbkey stringByAppendingString:@"--language--"] stringByAppendingString:languageObj]] = @"";
+		}];
 		
 		mMovieDb[[dbkey stringByAppendingString:@"--duration"]] = runtime.stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--size"    ]] = filesize.stringValue;
@@ -714,12 +729,13 @@
 		mMovieDb[[dbkey stringByAppendingString:@"--bitrate" ]] = bitrate.stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--mtime"   ]] = @(latest.timeIntervalSinceReferenceDate).stringValue;
 		
-		mbmovie.runtime = runtime;
+		mbmovie.duration = runtime;
 		mbmovie.filesize = filesize;
 		mbmovie.width = width;
 		mbmovie.height = height;
 		mbmovie.bitrate = bitrate;
 		mbmovie.mtime = latest;
+		mbmovie.languages = languages.allValues;
 	}];
 }
 
@@ -805,6 +821,7 @@
 	NSNumber *year = [IDSearch yearForName:dirName];
 	NSString *movieBaseDir=nil, *actorBaseDir=nil;
 	NSString *baseDir = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache];
+	NSMutableDictionary *languages = [[NSMutableDictionary alloc] init];
 	
 	NSLog(@"[DM]   Title is %@", titles[0]);
 	NSLog(@"[DM]   Year is %@", year);
@@ -851,8 +868,12 @@
 		[movieFiles enumerateObjectsUsingBlock:^ (id obj1, NSUInteger ndx1, BOOL *stop1) {
 			IDMediaInfo *idinfo = [[IDMediaInfo alloc] initWithFilePath:obj1];
 			
+			[idinfo.languages enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
+				languages[languageObj] = languageObj;
+			}];
+			
 			if (idinfo) {
-				NSLog(@"[DM]   [%lu] %@ x %@, %@ seconds", ndx1, idinfo.width, idinfo.height, idinfo.duration2);
+				NSLog(@"[DM]   [%lu] %@ x %@, %@ seconds", ndx1, idinfo.width, idinfo.height, idinfo.duration);
 				[idinfos addObject:idinfo];
 			}
 			else
@@ -877,8 +898,8 @@
 		[idinfos enumerateObjectsUsingBlock:^ (id obj1, NSUInteger ndx1, BOOL *stop1) {
 			IDMediaInfo *idinfo = (IDMediaInfo *)obj1;
 			
-			_runtime += idinfo.duration2.integerValue;
-			_filesize += idinfo.fileSize.integerValue;
+			_runtime += idinfo.duration.integerValue;
+			_filesize += idinfo.filesize.integerValue;
 			
 			if (idinfo.bitrate.integerValue > _bitrate)
 				_bitrate = idinfo.bitrate.integerValue;
@@ -958,14 +979,14 @@
 		}
 	}
 	
-	[self addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:latest];
+	[self addMovie:idmovie withDirPath:dirPath duration:runtime filesize:filesize width:width height:height bitrate:bitrate mtime:latest languages:languages.allValues];
 }
 
 /**
  *
  *
  */
-- (void)addMovie:(IDMovie *)idmovie withDirPath:(NSString *)dirPath duration:(NSNumber *)duration filesize:(NSNumber *)filesize width:(NSNumber *)width height:(NSNumber *)height bitrate:(NSNumber *)bitrate mtime:(NSDate *)mtime
+- (void)addMovie:(IDMovie *)idmovie withDirPath:(NSString *)dirPath duration:(NSNumber *)duration filesize:(NSNumber *)filesize width:(NSNumber *)width height:(NSNumber *)height bitrate:(NSNumber *)bitrate mtime:(NSDate *)mtime languages:(NSArray *)languages
 {
 	if (!idmovie)
 		return;
@@ -1012,6 +1033,10 @@
 		mMovieDb[[dbkey stringByAppendingString:@"--height"  ]] = height.stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--bitrate" ]] = bitrate.stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--mtime"   ]] = @(mtime.timeIntervalSinceReferenceDate).stringValue;
+		
+		[languages enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
+			mMovieDb[[[dbkey stringByAppendingString:@"--language--"] stringByAppendingString:languageObj]] = @"";
+		}];
 		
 		if (idmovie.imdbId ) mMovieDb[[dbkey stringByAppendingString:@"--imdbid" ]] = idmovie.imdbId;
 		if (idmovie.rtId   ) mMovieDb[[dbkey stringByAppendingString:@"--rtid"   ]] = idmovie.rtId;
