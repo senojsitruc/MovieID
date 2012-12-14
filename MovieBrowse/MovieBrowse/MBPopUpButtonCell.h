@@ -8,9 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef void (^MBMenuWillDisplay) ();
+
 @interface MBPopUpButtonCell : NSCell
 
-@property (readwrite, strong) NSMenu *menu;
-@property (readwrite, strong) NSString *label;
+@property (readwrite, strong, nonatomic) NSMenu *menu;
+@property (readwrite, strong, nonatomic) NSString *label;
+@property (readwrite, copy, nonatomic) MBMenuWillDisplay willDisplayHandler;
 
 @end

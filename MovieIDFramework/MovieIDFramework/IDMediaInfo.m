@@ -520,7 +520,7 @@ static NSMutableDictionary *iso639codes;
 	iso639codes[@"phn"] = @"Phoenician";
 	iso639codes[@"xal"] = @"Kalmyk";
 	iso639codes[@"bam"] = @"Bambara";
-	iso639codes[@"und"] = @"Undetermined";
+//iso639codes[@"und"] = @"Undetermined";
 	iso639codes[@"ful"] = @"Fulah";
 	iso639codes[@"bik"] = @"Bikol";
 	iso639codes[@"ban"] = @"Balinese";

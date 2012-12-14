@@ -76,6 +76,7 @@
 		NSInteger duration = self.duration.integerValue;
 		NSNumber *score = self.score;
 		NSString *rating = self.rating;
+		NSArray *languages = self.languages;
 		
 		// if the runtime isn't available (that's the value we got from some official movie source)
 		// then work with the actual movie file duration (as found on disk)
@@ -145,6 +146,18 @@
 			
 			[info appendString:@"Rating: "];
 			[info appendString:rating];
+		}
+		
+		if (languages.count) {
+			if (info.length)
+				[info appendString:@", "];
+			
+			if (languages.count == 1)
+				[info appendString:@"Language: "];
+			else
+				[info appendString:@"Languages: "];
+			
+			[info appendString:[languages componentsJoinedByString:@", "]];
 		}
 		
 		mInfo1 = [NSString stringWithString:info];

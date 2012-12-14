@@ -33,6 +33,7 @@
 - (BOOL)doesGenre:(MBGenre *)mbgenre haveActor:(MBPerson *)mbperson;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveActor:(MBPerson *)mbperson;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveGenre:(MBGenre *)mbgenre;
+- (BOOL)doesMovie:(MBMovie *)mbmovie haveLanguage:(NSString *)language;
 - (MBMovie *)movieWithKey:(NSString *)dbkey;
 - (MBPerson *)personWithKey:(NSString *)dbkey;
 - (MBGenre *)genreWithKey:(NSString *)dbkey;

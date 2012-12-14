@@ -187,7 +187,7 @@
 		NSString *title = keyParts[2];
 		
 #ifndef DEBUG
-		if ([genre isEqualToString:@"Adult"])
+		if ([genre isEqualToString:@"Adult"] || [genre isEqualToString:@"Erotic"])
 			return;
 #endif
 		
@@ -357,6 +357,20 @@
 		return FALSE;
 	else
 		return nil != mbgenre.movies[mbmovie.dbkey];
+}
+
+/**
+ *
+ *
+ */
+- (BOOL)doesMovie:(MBMovie *)mbmovie haveLanguage:(NSString *)language
+{
+	if (!mbmovie || !language.length)
+		return FALSE;
+	else if ([language isEqualToString:@"Unknown"] && !mbmovie.languages.count)
+		return TRUE;
+	else
+		return NSNotFound != [mbmovie.languages indexOfObject:language];
 }
 
 /**
@@ -628,7 +642,6 @@
 - (void)updateFileStats
 {
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
-	NSMutableDictionary *languages = [[NSMutableDictionary alloc] init];
 	
 	NSArray *movies = [mMovies.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id obj1, id obj2) {
 		return [(NSString *)obj1 caseInsensitiveCompare:(NSString *)obj2];
@@ -637,6 +650,8 @@
 	NSLog(@"[DM] Found %04lu movies", movies.count);
 	
 	[movies enumerateObjectsUsingBlock:^ (id obj, NSUInteger ndx, BOOL *stop) {
+		NSMutableDictionary *languages = [[NSMutableDictionary alloc] init];
+		
 		MBMovie *mbmovie = mMovies[obj];
 		NSArray *movieFiles = [self getMovieFilesInDir:mbmovie.dirpath];
 		NSMutableArray *idinfos = [[NSMutableArray alloc] init];
@@ -715,7 +730,7 @@
 			height = @(_height);
 		}
 		
-		NSLog(@"[DM]   [new] runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@", runtime, filesize, bitrate, width, height);
+		NSLog(@"[DM]   [new] runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@, languages=%@", runtime, filesize, bitrate, width, height, [languages.allValues componentsJoinedByString:@", "]);
 		NSLog(@"[DM]   [old] runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@", mbmovie.duration, mbmovie.filesize, mbmovie.bitrate, mbmovie.width, mbmovie.height);
 		
 		[languages.allValues enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {

@@ -50,11 +50,28 @@ static MBAppDelegate *gAppDelegate;
 	MBDataManager *mDataManager;
 	BOOL mIsDoneLoading;
 	
+	/**
+	 * Handle async issues. When the actor window is opened a background thread starts loading the
+	 * images. By the time the thread finishes, it's possible that we've moved on to another actor.
+	 * Only show the loaded images when the time comes if we're still awiting on that same actor.
+	 */
+	NSUInteger mActorWindowTransId;
+	
+	/**
+	 * Keyed on language name with NSNumber values denoting the number of movies shown that include
+	 * the language.
+	 */
+	NSMutableDictionary *mLanguagesByName;
+	NSMutableArray *mLanguagesSorted;
+	BOOL mLanguagesDirty;
+	
+	/**
+	 * Selections
+	 */
 	MBPerson *mActorSelection;
 	NSMutableDictionary *mGenreSelections;
 	MBMovie *mMovieSelection;
-	
-	NSUInteger mActorWindowTransId;
+	NSString *mLanguageSelection;
 	
 	/**
 	 * Find
@@ -74,6 +91,9 @@ static MBAppDelegate *gAppDelegate;
 	NSMenuItem *mMovieHeaderMenuSortByAddedItem;
 	NSMenuItem *mMovieHeaderMenuSortByRuntimeItem;
 	NSMenuItem *mMovieHeaderMenuShowHidden;
+	NSMenuItem *mMovieHeaderMenuLanguageSeparatorItem;
+	NSMenuItem *mMovieHeaderMenuLanguageHeadingItem;
+	NSMutableArray *mMovieHeaderMenuLanguageItems;
 	BOOL mShowHiddenMovies;
 	
 	/**
@@ -114,6 +134,8 @@ static MBAppDelegate *gAppDelegate;
 	mIsDoneLoading = FALSE;
 	mDataManager = [[MBDataManager alloc] init];
 	mGenreSelections = [[NSMutableDictionary alloc] init];
+	mLanguagesByName = [[NSMutableDictionary alloc] init];
+	mLanguagesSorted = [[NSMutableArray alloc] init];
 	
 	self.actorsArray = [[NSMutableArray alloc] init];
 	self.genresArray = [[NSMutableArray alloc] init];
@@ -191,6 +213,7 @@ static MBAppDelegate *gAppDelegate;
 		NSRect headerFrame = self.movieTable.headerView.frame;
 		headerFrame.size.height += 10;
 		headerView.frame = headerFrame;
+		headerCell.willDisplayHandler = ^{ [self updateMoviesHeaderLanguages:TRUE]; };
 		
 		[menu addItemWithTitle:@"Sort" action:nil keyEquivalent:@""];
 		NSMenuItem *sortByTitle = [menu addItemWithTitle:@"  Movie by Title" action:@selector(doActionMoviesSortByTitle:) keyEquivalent:@""];
@@ -199,7 +222,8 @@ static MBAppDelegate *gAppDelegate;
 		NSMenuItem *sortByRuntime = [menu addItemWithTitle:@"  Movie by Runtime" action:@selector(doActionMoviesSortByRuntime:) keyEquivalent:@""];
 		NSMenuItem *sortByAdded = [menu addItemWithTitle:@"  Movie by Added" action:@selector(doActionMoviesSortByAdded:) keyEquivalent:@""];
 		[menu addItem:[NSMenuItem separatorItem]];
-		NSMenuItem *showHidden = [menu addItemWithTitle:@"Show Hidden" action:@selector(doActionMoviesShowHidden:) keyEquivalent:@""];
+		[menu addItemWithTitle:@"Options" action:nil keyEquivalent:@""];
+		NSMenuItem *showHidden = [menu addItemWithTitle:@"  Show Hidden" action:@selector(doActionMoviesShowHidden:) keyEquivalent:@""];
 		
 		sortByTitle.target = self;
 		sortByYear.target = self;
@@ -221,6 +245,9 @@ static MBAppDelegate *gAppDelegate;
 		mMovieHeaderMenuSortByRuntimeItem = sortByRuntime;
 		mMovieHeaderMenuSortByAddedItem = sortByAdded;
 		mMovieHeaderMenuShowHidden = showHidden;
+		mMovieHeaderMenuLanguageSeparatorItem = [NSMenuItem separatorItem];
+		mMovieHeaderMenuLanguageHeadingItem = [[NSMenuItem alloc] initWithTitle:@"Languages" action:nil keyEquivalent:@""];
+		mMovieHeaderMenuLanguageItems = [[NSMutableArray alloc] init];
 	}
 	
 	//
@@ -439,6 +466,7 @@ static MBAppDelegate *gAppDelegate;
 		[self.moviesArrayController addObjects:moviesArray];
 		
 		mIsDoneLoading = TRUE;
+		mLanguagesDirty = TRUE;
 		
 		[self updateActorFilter];
 		[self updateGenreFilter];
@@ -624,9 +652,14 @@ static MBAppDelegate *gAppDelegate;
 		[defaults setObject:@[mActorSelection.name] forKey:MBDefaultsKeyActorSelection];
 	}
 	
+	mLanguagesDirty = TRUE;
+	
 	[self updateActorsHeaderLabel];
 	[self updateGenreFilter];
 	[self updateMovieFilter];
+	
+	if (mLanguageSelection)
+		[self updateMoviesHeaderLanguages:TRUE];
 	
 	// our find state is now invalid for doing "find next"
 	mFindIndex = NSNotFound;
@@ -660,8 +693,13 @@ static MBAppDelegate *gAppDelegate;
 	
 	[self.genreTable.headerView setNeedsDisplay:TRUE];
 	
+	mLanguagesDirty = TRUE;
+	
 	[self updateActorFilter];
 	[self updateMovieFilter];
+	
+	if (mLanguageSelection)
+		[self updateMoviesHeaderLanguages:TRUE];
 	
 	// our find state is now invalid for doing "find next"
 	mFindIndex = NSNotFound;
@@ -686,6 +724,8 @@ static MBAppDelegate *gAppDelegate;
 		mMovieSelection = selectedObjects[0];
 		[defaults setObject:@[mMovieSelection.dbkey] forKey:MBDefaultsKeyMovieSelection];
 	}
+	
+	mLanguagesDirty = TRUE;
 	
 	[self updateMoviesHeaderLabel];
 	[self updateActorFilter];
@@ -799,12 +839,90 @@ static MBAppDelegate *gAppDelegate;
 	else if (mMovieHeaderMenuSortByAddedItem.state == NSOnState)
 		prefix = @"Movie by Added";
 	
-	if (mMovieSelection)
+	if (mMovieSelection && mLanguageSelection)
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@, %@)", prefix, mLanguageSelection, mMovieSelection.title];
+	else if (mMovieSelection)
 		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mMovieSelection.title];
+	else if (mLanguageSelection)
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mLanguageSelection];
 	else
 		mMovieHeaderCell.label = prefix;
 	
 	[self.movieTable.headerView setNeedsDisplay:TRUE];
+}
+
+/**
+ *
+ *
+ */
+- (void)updateMoviesHeaderLanguages:(BOOL)visibleOnly
+{
+	if (!mLanguagesDirty)
+		return;
+	
+	// we ain't dirty no more; or we won't be, shortly
+	mLanguagesDirty = FALSE;
+	
+	// remove any language-related menu items
+	if (mLanguagesSorted.count) {
+		[mMovieHeaderMenu removeItem:mMovieHeaderMenuLanguageSeparatorItem];
+		[mMovieHeaderMenu removeItem:mMovieHeaderMenuLanguageHeadingItem];
+		
+		[mMovieHeaderMenuLanguageItems enumerateObjectsUsingBlock:^ (id menuObj, NSUInteger menuNdx, BOOL *menuStop) {
+			[mMovieHeaderMenu removeItem:menuObj];
+		}];
+		
+		[mLanguagesByName removeAllObjects];
+		[mLanguagesSorted removeAllObjects];
+		[mMovieHeaderMenuLanguageItems removeAllObjects];
+	}
+	
+	// tally the count for each language
+	{
+		NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
+		
+		[objects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+			NSArray *languages = ((MBMovie *)movieObj).languages;
+			
+			if (languages.count) {
+				[languages enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
+					mLanguagesByName[languageObj] = @(1 + ((NSNumber *)mLanguagesByName[languageObj]).integerValue);
+				}];
+			}
+			else
+				mLanguagesByName[@"Unknown"] = @(1 + ((NSNumber *)mLanguagesByName[@"Unknown"]).integerValue);
+		}];
+		
+		[mLanguagesSorted setArray:[mLanguagesByName.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id language1, id language2) {
+			return [mLanguagesByName[language2] compare:mLanguagesByName[language1]];
+		}]];
+	}
+	
+	// insert the language-related menu items (if any)
+	if (mLanguagesSorted.count) {
+		[mMovieHeaderMenu addItem:mMovieHeaderMenuLanguageSeparatorItem];
+		[mMovieHeaderMenu addItem:mMovieHeaderMenuLanguageHeadingItem];
+		
+		[mLanguagesSorted enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
+			NSString *title = [NSString stringWithFormat:@"  %@ (%@)", languageObj, mLanguagesByName[languageObj]];
+			NSMenuItem *item = [mMovieHeaderMenu addItemWithTitle:title action:@selector(doActionMoviesFilterByLanguage:) keyEquivalent:@""];
+			item.target = self;
+			item.tag = languageNdx;
+			[mMovieHeaderMenuLanguageItems addObject:item];
+		}];
+	}
+	
+	// maintain the language selection if possible
+	if (mLanguageSelection) {
+		NSInteger index = [mLanguagesSorted indexOfObject:mLanguageSelection];
+		
+		if (NSNotFound == index) {
+			mLanguageSelection = nil;
+			[self updateMoviesHeaderLabel];
+		}
+		else
+			((NSMenuItem *)mMovieHeaderMenuLanguageItems[index]).state = NSOnState;
+	}
 }
 
 /**
@@ -975,7 +1093,33 @@ static MBAppDelegate *gAppDelegate;
 	[self.movieTable reloadData];
 }
 
-
+/**
+ *
+ *
+ */
+- (void)doActionMoviesFilterByLanguage:(id)sender
+{
+	NSMenuItem *item = sender;
+	
+	if (item.state) {
+		item.state = NSOffState;
+		mLanguageSelection = nil;
+	}
+	else {
+		[mMovieHeaderMenuLanguageItems enumerateObjectsUsingBlock:^ (id itemObj, NSUInteger itemNdx, BOOL *itemStop) {
+			((NSMenuItem *)itemObj).state = NSOffState;
+		}];
+		
+		item.state = NSOnState;
+		mLanguageSelection = mLanguagesSorted[item.tag];
+	}
+	
+	[self updateActorFilter];
+	[self updateGenreFilter];
+	[self updateMovieFilter];
+	
+	[self updateMoviesHeaderLabel];
+}
 
 
 
@@ -1739,6 +1883,18 @@ static MBAppDelegate *gAppDelegate;
 	
 	NSPredicate *predicate = nil;
 	
+	//
+	// actor & language & movie
+	//
+	/*
+	if (mActorSelection && mLanguageSelection && mMovieSelection) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesGenre:(MBGenre *)object haveActor:mActorSelection] &&
+			[mDataManager doesMovie:mMovieSelection haveGenre:(MBGenre *)object];
+		}];
+	}
+	*/
+	
 	if (mActorSelection && mMovieSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesGenre:(MBGenre *)object haveActor:mActorSelection] &&
@@ -1770,8 +1926,6 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateMovieFilter
 {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
-	
 	if (!mIsDoneLoading)
 		return;
 	
@@ -1823,23 +1977,79 @@ static MBAppDelegate *gAppDelegate;
 		}
 	}
 	
-	if (mActorSelection && genreMatches) {
+	//
+	// actor & language & genre
+	//
+	if (mActorSelection && mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
+						 [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+		}];
+	}
+	
+	//
+	// actor & language
+	//
+	else if (mActorSelection && mLanguageSelection) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
+						 [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
+		}];
+	}
+	
+	//
+	// actor & genre
+	//
+	else if (mActorSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
 		}];
 	}
+	
+	//
+	// language & genre
+	//
+	else if (mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+		}];
+	}
+	
+	//
+	// genre
+	//
 	else if (genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
 		}];
 	}
+	
+	//
+	// actor
+	//
 	else if (mActorSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
 		}];
 	}
+	
+	//
+	// language
+	//
+	else if (mLanguageSelection) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection];
+		}];
+	}
+	
+	//
+	// nothing
+	//
 	else {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
@@ -1848,7 +2058,7 @@ static MBAppDelegate *gAppDelegate;
 	
 	self.moviesArrayController.filterPredicate = predicate;
 	
-	// movie set duration
+	// cummulative movie set duration
 	{
 		NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
 		NSMutableString *infoTxt = [[NSMutableString alloc] init];
@@ -1869,6 +2079,7 @@ static MBAppDelegate *gAppDelegate;
 		self.movieInfoTxt.stringValue = infoTxt;
 	}
 	
+	// keep the movie selection (if any) visible, otherwise scroll to the top
 	if (mMovieSelection)
 		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
 	else {

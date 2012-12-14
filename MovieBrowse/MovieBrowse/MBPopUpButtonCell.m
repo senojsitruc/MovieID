@@ -45,6 +45,9 @@
  */
 - (void)performClickWithFrame:(NSRect)frame inView:(NSView *)controlView
 {
+	if (_willDisplayHandler)
+		_willDisplayHandler();
+	
 	NSEvent *event = [NSEvent mouseEventWithType:NSLeftMouseUp
 																			location:[controlView.window.contentView convertPoint:frame.origin fromView:controlView.superview]
 																 modifierFlags:0
