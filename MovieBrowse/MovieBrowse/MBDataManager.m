@@ -39,6 +39,8 @@
 
 @implementation MBDataManager
 
+@synthesize actorsByName = mActors;
+
 #pragma mark - Structors
 
 /**

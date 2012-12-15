@@ -15,6 +15,8 @@
 
 @interface MBDataManager : NSObject
 
+@property (readonly) NSDictionary *actorsByName;
+
 - (void)addSource:(NSString *)sourcePath;
 - (void)scanSource:(NSString *)sourcePath;
 - (NSArray *)findMissingMovies;

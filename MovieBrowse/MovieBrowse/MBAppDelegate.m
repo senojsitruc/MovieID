@@ -776,6 +776,7 @@ static MBAppDelegate *gAppDelegate;
 	mLanguagesDirty = TRUE;
 	
 	[self updateMoviesHeaderLabel];
+	[self updateMovieFilter_actorCache];
 	[self updateActorFilter];
 //[self updateGenreFilter];
 	
@@ -1288,11 +1289,11 @@ static MBAppDelegate *gAppDelegate;
 {
 	mActorHeaderMenuShowAllItem.state = NSOnState;
 	mActorHeaderMenuShowPopularItem.state = NSOffState;
-	[self.actorTable.headerView setNeedsDisplay:TRUE];
 	
 	[[NSUserDefaults standardUserDefaults] setObject:@"All" forKey:MBDefaultsKeyActorShow];
 	
 	[self updateActorFilter];
+	[self updateActorsHeaderLabel];
 }
 
 /**
@@ -1303,11 +1304,11 @@ static MBAppDelegate *gAppDelegate;
 {
 	mActorHeaderMenuShowAllItem.state = NSOffState;
 	mActorHeaderMenuShowPopularItem.state = NSOnState;
-	[self.actorTable.headerView setNeedsDisplay:TRUE];
 	
 	[[NSUserDefaults standardUserDefaults] setObject:@"Popular" forKey:MBDefaultsKeyActorShow];
 	
 	[self updateActorFilter];
+	[self updateActorsHeaderLabel];
 }
 
 /**
@@ -1871,16 +1872,6 @@ static MBAppDelegate *gAppDelegate;
 	
 	self.genresArrayController.filterPredicate = predicate;
 	
-//if (mGenreSelections.count) {
-//	if (mGenreSelections.count != _genresArrayController.selectionIndexes.count)
-//		[self doNotificationGenreSelectionChanged:nil];
-//}
-	
-	/*
-	if (mGenreSelections.count)
-		[self.genreTable scrollRowToVisible:self.genreTable.selectedRow];
-	*/
-	
 	[self updateWindowTitle];
 }
 
@@ -2026,8 +2017,11 @@ static MBAppDelegate *gAppDelegate;
 	
 	// keep the movie selection (if any) visible, otherwise scroll to the top
 	if (mMovieSelection) {
-		if (NSNotFound == _moviesArrayController.selectionIndex)
+		if (NSNotFound == _moviesArrayController.selectionIndex) {
+			mMovieSelection = nil;
+			[self updateMovieFilter];
 			[self doNotificationMovieSelectionChanged:nil];
+		}
 		else
 			[_movieTable scrollRowToVisible:_movieTable.selectedRow];
 	}
@@ -2096,22 +2090,27 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateMovieFilter_actorCache
 {
-	NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
+//NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
 	
 	[mActorsByName removeAllObjects];
 	[mActorsSorted removeAllObjects];
 	
+	if (mMovieSelection) {
+		[mMovieSelection.actors.allKeys enumerateObjectsUsingBlock:^ (id actorObj, NSUInteger actorNdx, BOOL *actorStop) {
+			mActorsByName[actorObj] = @(1 + ((NSNumber *)mActorsByName[actorObj]).integerValue);
+		}];
+	}
+	else
+		[mActorsByName setDictionary:mDataManager.actorsByName];
+	
+	/*
 	[arrangedObjects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
 		[((MBMovie *)movieObj).actors.allKeys enumerateObjectsUsingBlock:^ (id actorObj, NSUInteger actorNdx, BOOL *actorStop) {
 			mActorsByName[actorObj] = @(1 + ((NSNumber *)mActorsByName[actorObj]).integerValue);
 		}];
 	}];
-	
-	/*
-	[mActorsSorted setArray:[mActorsByName.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id actor1, id actor2) {
-		return [actor1 compare:actor2];
-	}]];
 	*/
+	
 }
 
 @end
