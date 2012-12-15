@@ -7,6 +7,7 @@
 //
 
 #import "MBGenre.h"
+#import "MBAppDelegate.h"
 
 @implementation MBGenre
 

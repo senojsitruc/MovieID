@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914FC6115FCF11400B960D0 /* MBMovieView.m */; };
 		F923205A167962D300D14519 /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232059167962D300D14519 /* NSArray+Additions.m */; };
+		F923206A167D147400D14519 /* MBGenreCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232069167D147400D14519 /* MBGenreCellView.m */; };
+		F923206D167D155F00D14519 /* MBGenreBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F923206C167D155E00D14519 /* MBGenreBadgeView.m */; };
 		F93211EC16327D2C0093E619 /* MBActorMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211EB16327D2C0093E619 /* MBActorMovieView.m */; };
 		F93211FB163310AB0093E619 /* MBActorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211FA163310AB0093E619 /* MBActorCellView.m */; };
 		F93212161635A2B30093E619 /* MBTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212151635A2B30093E619 /* MBTableHeaderView.m */; };
@@ -79,6 +81,10 @@
 		F91FD3121653E85E0060E4FC /* MovieID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MovieID.framework; path = "/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug/MovieID.framework"; sourceTree = "<absolute>"; };
 		F9232058167962D300D14519 /* NSArray+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Additions.h"; sourceTree = "<group>"; };
 		F9232059167962D300D14519 /* NSArray+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Additions.m"; sourceTree = "<group>"; };
+		F9232068167D147400D14519 /* MBGenreCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreCellView.h; sourceTree = "<group>"; };
+		F9232069167D147400D14519 /* MBGenreCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreCellView.m; sourceTree = "<group>"; };
+		F923206B167D155E00D14519 /* MBGenreBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreBadgeView.h; sourceTree = "<group>"; };
+		F923206C167D155E00D14519 /* MBGenreBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreBadgeView.m; sourceTree = "<group>"; };
 		F93211EA16327D2C0093E619 /* MBActorMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorMovieView.h; sourceTree = "<group>"; };
 		F93211EB16327D2C0093E619 /* MBActorMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorMovieView.m; sourceTree = "<group>"; };
 		F93211F9163310AB0093E619 /* MBActorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorCellView.h; sourceTree = "<group>"; };
@@ -220,6 +226,10 @@
 			children = (
 				F97BF37E15F9C41800444926 /* MBGenreView.h */,
 				F97BF37F15F9C41800444926 /* MBGenreView.m */,
+				F9232068167D147400D14519 /* MBGenreCellView.h */,
+				F9232069167D147400D14519 /* MBGenreCellView.m */,
+				F923206B167D155E00D14519 /* MBGenreBadgeView.h */,
+				F923206C167D155E00D14519 /* MBGenreBadgeView.m */,
 			);
 			name = Genre;
 			sourceTree = "<group>";
@@ -467,6 +477,8 @@
 				F93212611638C5460093E619 /* MBImportViewController.m in Sources */,
 				F93212641638EA170093E619 /* MBImportCellView.m in Sources */,
 				F923205A167962D300D14519 /* NSArray+Additions.m in Sources */,
+				F923206A167D147400D14519 /* MBGenreCellView.m in Sources */,
+				F923206D167D155F00D14519 /* MBGenreBadgeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

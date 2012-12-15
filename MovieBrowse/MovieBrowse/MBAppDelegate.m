@@ -76,6 +76,7 @@ static MBAppDelegate *gAppDelegate;
 	/**
 	 * Caches
 	 */
+	BOOL mIsUpdatingData;
 	NSMutableDictionary *mGenresByName;
 	NSMutableArray *mGenresSorted;
 	NSMutableDictionary *mActorsByName;
@@ -370,42 +371,6 @@ static MBAppDelegate *gAppDelegate;
 	[self.actorWindow.contentView addSubview:self.actorDescScroll];
 	
 	//
-	// reinstate saved sort orders
-	//
-	{
-		// actors
-		{
-			NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyActorSort];
-			
-			if ([sort isEqualToString:@"Name"])
-				[self doActionActorsSortByName:mActorHeaderMenuSortByName];
-			else if ([sort isEqualToString:@"Age"])
-				[self doActionActorsSortByAge:mActorHeaderMenuSortByAge];
-			else if ([sort isEqualToString:@"Movies"])
-				[self doActionActorsSortByMovies:mActorHeaderMenuSortByMovies];
-		}
-		
-		// genres
-		[self.genresArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
-		
-		// movies
-		{
-			NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyMoviesSort];
-			
-			if ([sort isEqualToString:@"Title"])
-				[self doActionMoviesSortByTitle:mMovieHeaderMenuSortByTitleItem];
-			else if ([sort isEqualToString:@"Year"])
-				[self doActionMoviesSortByYear:mMovieHeaderMenuSortByYearItem];
-			else if ([sort isEqualToString:@"Score"])
-				[self doActionMoviesSortByScore:mMovieHeaderMenuSortByScoreItem];
-			else if ([sort isEqualToString:@"Runtime"])
-				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByRuntimeItem];
-			else if ([sort isEqualToString:@"Added"])
-				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByAddedItem];
-		}
-	}
-	
-	//
 	// reinstate "show hidden" state
 	//
 	{
@@ -462,6 +427,42 @@ static MBAppDelegate *gAppDelegate;
 	}
 	
 	//
+	// reinstate saved sort orders
+	//
+	{
+		// actors
+		{
+			NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyActorSort];
+			
+			if ([sort isEqualToString:@"Name"])
+				[self doActionActorsSortByName:mActorHeaderMenuSortByName];
+			else if ([sort isEqualToString:@"Age"])
+				[self doActionActorsSortByAge:mActorHeaderMenuSortByAge];
+			else if ([sort isEqualToString:@"Movies"])
+				[self doActionActorsSortByMovies:mActorHeaderMenuSortByMovies];
+		}
+		
+		// genres
+		[self.genresArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
+		
+		// movies
+		{
+			NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyMoviesSort];
+			
+			if ([sort isEqualToString:@"Title"])
+				[self doActionMoviesSortByTitle:mMovieHeaderMenuSortByTitleItem];
+			else if ([sort isEqualToString:@"Year"])
+				[self doActionMoviesSortByYear:mMovieHeaderMenuSortByYearItem];
+			else if ([sort isEqualToString:@"Score"])
+				[self doActionMoviesSortByScore:mMovieHeaderMenuSortByScoreItem];
+			else if ([sort isEqualToString:@"Runtime"])
+				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByRuntimeItem];
+			else if ([sort isEqualToString:@"Added"])
+				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByAddedItem];
+		}
+	}
+	
+	//
 	// load data
 	//
 	{
@@ -484,7 +485,7 @@ static MBAppDelegate *gAppDelegate;
 		[self updateMovieFilter_actorCache];
 		[self updateActorFilter];
 		[self updateMovieFilter_genreCache];
-		[self updateGenreFilter];
+//	[self updateGenreFilter];
 		[self updateWindowTitle];
 	}
 	
@@ -643,6 +644,21 @@ static MBAppDelegate *gAppDelegate;
 
 
 
+#pragma mark - Accessors
+
+/**
+ *
+ *
+ */
+- (NSUInteger)movieCountForGenre:(MBGenre *)mbgenre
+{
+	return ((NSNumber *)mGenresByName[mbgenre.name]).integerValue;
+}
+
+
+
+
+
 #pragma mark - Selection Handling
 
 /**
@@ -668,9 +684,9 @@ static MBAppDelegate *gAppDelegate;
 	mLanguagesDirty = TRUE;
 	
 	[self updateActorsHeaderLabel];
+	
 	[self updateMovieFilter];
 	[self updateMovieFilter_genreCache];
-	[self updateGenreFilter];
 	
 	if (!mActorSelection) {
 		[self updateMovieFilter_actorCache];
@@ -679,6 +695,12 @@ static MBAppDelegate *gAppDelegate;
 	
 	if (mLanguageSelection)
 		[self updateMoviesHeaderLanguages:TRUE];
+	
+	if (!mIsUpdatingData) {
+		mIsUpdatingData = TRUE;
+		[_genresArrayController rearrangeObjects];
+		mIsUpdatingData = FALSE;
+	}
 	
 	// our find state is now invalid for doing "find next"
 	mFindIndex = NSNotFound;
@@ -690,6 +712,9 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)doNotificationGenreSelectionChanged:(NSNotification *)notification
 {
+	if (mIsUpdatingData)
+		return;
+	
 	NSArray *selectedObjects = self.genresArrayController.selectedObjects;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
@@ -752,7 +777,7 @@ static MBAppDelegate *gAppDelegate;
 	
 	[self updateMoviesHeaderLabel];
 	[self updateActorFilter];
-	[self updateGenreFilter];
+//[self updateGenreFilter];
 	
 	// our find state is now invalid for doing "find next"
 	mFindIndex = NSNotFound;
@@ -1145,7 +1170,7 @@ static MBAppDelegate *gAppDelegate;
 	
 	[self updateMovieFilter];
 	[self updateActorFilter];
-	[self updateGenreFilter];
+//[self updateGenreFilter];
 	
 	[self updateMoviesHeaderLabel];
 }
@@ -1247,6 +1272,8 @@ static MBAppDelegate *gAppDelegate;
 	
 	if (mActorSelection)
 		mActorHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mActorSelection.name];
+	else if (mActorHeaderMenuShowPopularItem.state)
+		mActorHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, @"Popular"];
 	else
 		mActorHeaderCell.label = prefix;
 	
@@ -1791,104 +1818,6 @@ static MBAppDelegate *gAppDelegate;
 	NSPredicate *predicate = nil;
 	BOOL showAll = mActorHeaderMenuShowAllItem.state == NSOnState;
 	
-	/*
-	BOOL (^genreMatches)(id) = nil;
-	NSUInteger genreSelectionCount = mGenreSelections.count;
-	BOOL showAll = mActorHeaderMenuShowAllItem.state == NSOnState;
-	
-	if (genreSelectionCount == 1) {
-		MBGenre *mbgenre = mGenreSelections.allValues[0];
-		BOOL x = ((NSOnState == mGenreHeaderMenuMultiOrItem.state) | (NSOnState == mGenreHeaderMenuMultiAndItem.state));
-		genreMatches = ^ BOOL (id person) {
-			return x == [mDataManager doesGenre:mbgenre haveActor:person];
-		};
-	}
-	else if (genreSelectionCount > 1) {
-		//
-		// OR / NOT OR
-		//
-		if (NSOnState == mGenreHeaderMenuMultiOrItem.state || NSOnState == mGenreHeaderMenuMultiNotOrItem.state) {
-			BOOL x = (NSOnState == mGenreHeaderMenuMultiOrItem.state);
-			
-			genreMatches = ^ BOOL (id person) {
-				NSArray *genres = mGenreSelections.allValues;
-				__block BOOL match = FALSE;
-				
-				[((MBPerson *)person).movies.allKeys enumerateObjectsUsingBlock:^ (id movieKey, NSUInteger movieNdx, BOOL *movieStop) {
-					__block BOOL match2 = FALSE;
-					MBMovie *mbmovie = [mDataManager movieWithKey:movieKey];
-					
-					[genres enumerateObjectsUsingBlock:^ (id mbgenre, NSUInteger genreNdx, BOOL *genreStop) {
-						if (TRUE == [mDataManager doesMovie:mbmovie haveGenre:mbgenre]) {
-							match2 = TRUE;
-							*genreStop = TRUE;
-						}
-					}];
-					
-					if (match2) {
-						match = TRUE;
-						*movieStop = TRUE;
-					}
-				}];
-				
-				return match == x;
-			};
-		}
-		
-		//
-		// AND / NOT AND
-		//
-		else if (NSOnState == mGenreHeaderMenuMultiAndItem.state || NSOnState == mGenreHeaderMenuMultiNotAndItem.state) {
-			BOOL x = (NSOnState == mGenreHeaderMenuMultiAndItem.state);
-			
-			genreMatches = ^ BOOL (id person) {
-				NSArray *genres = mGenreSelections.allValues;
-				__block BOOL match = FALSE;
-				
-				[((MBPerson *)person).movies.allKeys enumerateObjectsUsingBlock:^ (id movieKey, NSUInteger movieNdx, BOOL *movieStop) {
-					__block BOOL match2 = TRUE;
-					MBMovie *mbmovie = [mDataManager movieWithKey:movieKey];
-					
-					[genres enumerateObjectsUsingBlock:^ (id mbgenre, NSUInteger genreNdx, BOOL *genreStop) {
-						if (FALSE == [mDataManager doesMovie:mbmovie haveGenre:mbgenre]) {
-							match2 = FALSE;
-							*genreStop = TRUE;
-						}
-					}];
-					
-					if (match2) {
-						match = TRUE;
-						*movieStop = TRUE;
-					}
-				}];
-				
-				return match == x;
-			};
-		}
-	}
-	
-	if (genreMatches && mMovieSelection) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesMovie:mMovieSelection haveActor:(MBPerson *)object] && genreMatches(object);
-		}];
-	}
-	else if (genreMatches) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id mbperson, NSDictionary *bindings) {
-			return (showAll || 5 <= ((MBPerson *)mbperson).movies.count) && genreMatches(mbperson);
-		}];
-	}
-	else if (mMovieSelection) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesMovie:mMovieSelection haveActor:(MBPerson *)object];
-		}];
-	}
-	else if (!showAll) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return 5 <= ((MBPerson *)object).movies.count;
-		}];
-	}
-	*/
-	
 	if (mMovieSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:mMovieSelection haveActor:(MBPerson *)object];
@@ -1922,41 +1851,12 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateGenreFilter
 {
+	NSLog(@"%s", __PRETTY_FUNCTION__);
+	
 	if (!mIsDoneLoading)
 		return;
 	
 	NSPredicate *predicate = nil;
-	
-	//
-	// actor & language & movie
-	//
-	/*
-	if (mActorSelection && mLanguageSelection && mMovieSelection) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesGenre:(MBGenre *)object haveActor:mActorSelection] &&
-			[mDataManager doesMovie:mMovieSelection haveGenre:(MBGenre *)object];
-		}];
-	}
-	*/
-	
-	/*
-	if (mActorSelection && mMovieSelection) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesGenre:(MBGenre *)object haveActor:mActorSelection] &&
-						 [mDataManager doesMovie:mMovieSelection haveGenre:(MBGenre *)object];
-		}];
-	}
-	else if (mActorSelection) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesGenre:(MBGenre *)object haveActor:mActorSelection];
-		}];
-	}
-	else if (mMovieSelection) {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesMovie:mMovieSelection haveGenre:(MBGenre *)object];
-		}];
-	}
-	*/
 	
 	if (mMovieSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id genreObj, NSDictionary *bindings) {
@@ -1971,8 +1871,15 @@ static MBAppDelegate *gAppDelegate;
 	
 	self.genresArrayController.filterPredicate = predicate;
 	
+//if (mGenreSelections.count) {
+//	if (mGenreSelections.count != _genresArrayController.selectionIndexes.count)
+//		[self doNotificationGenreSelectionChanged:nil];
+//}
+	
+	/*
 	if (mGenreSelections.count)
 		[self.genreTable scrollRowToVisible:self.genreTable.selectedRow];
+	*/
 	
 	[self updateWindowTitle];
 }
@@ -1985,6 +1892,8 @@ static MBAppDelegate *gAppDelegate;
 {
 	if (!mIsDoneLoading)
 		return;
+	
+	NSLog(@"%s.. mActorSelection=%@, mGenreSelection=%@, mMovieSelection=%@", __PRETTY_FUNCTION__, mActorSelection.name, [mGenreSelections.allKeys componentsJoinedByString:@", "], mMovieSelection.title);
 	
 	NSPredicate *predicate = nil;
 	BOOL (^genreMatches)(id) = nil;
@@ -2113,14 +2022,18 @@ static MBAppDelegate *gAppDelegate;
 		}];
 	}
 	
-	self.moviesArrayController.filterPredicate = predicate;
+	_moviesArrayController.filterPredicate = predicate;
 	
 	// keep the movie selection (if any) visible, otherwise scroll to the top
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
+	if (mMovieSelection) {
+		if (NSNotFound == _moviesArrayController.selectionIndex)
+			[self doNotificationMovieSelectionChanged:nil];
+		else
+			[_movieTable scrollRowToVisible:_movieTable.selectedRow];
+	}
 	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
+		((NSScrollView *)_movieTable.superview.superview).verticalScroller.floatValue = 0;
+		[((NSScrollView *)_movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
 	
 	[self updateMovieFilter_infoText];
@@ -2158,22 +2071,23 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateMovieFilter_genreCache
 {
-	NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
-	
 	[mGenresByName removeAllObjects];
 	[mGenresSorted removeAllObjects];
 	
-	[arrangedObjects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
-		[((MBMovie *)movieObj).genres.allKeys enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
-			mGenresByName[genreObj] = @(1 + ((NSNumber *)mGenresByName[genreObj]).integerValue);
+	if (mActorSelection) {
+		[mActorSelection.movies.allKeys enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+			[[mDataManager movieWithKey:movieObj].genres.allKeys enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
+				mGenresByName[genreObj] = @(1 + ((NSNumber *)mGenresByName[genreObj]).integerValue);
+			}];
 		}];
-	}];
-	
-	/*
-	[mGenresSorted setArray:[mGenresByName.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id genre1, id genre2) {
-		return [genre1 compare:genre2];
-	}]];
-	*/
+	}
+	else {
+		[_moviesArray enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+			[((MBMovie *)movieObj).genres.allKeys enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
+				mGenresByName[genreObj] = @(1 + ((NSNumber *)mGenresByName[genreObj]).integerValue);
+			}];
+		}];
+	}
 }
 
 /**

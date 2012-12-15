@@ -16,6 +16,7 @@ extern NSString * const MBDefaultsKeyApiTmdb;
 extern NSString * const MBDefaultsKeyApiImdb;
 extern NSString * const MBDefaultsKeyApiRt;
 
+@class MBGenre;
 @class MBMovie;
 @class MBPerson;
 @class MBDataManager;
@@ -130,6 +131,8 @@ extern NSString * const MBDefaultsKeyApiRt;
 - (void)doActionLinkToTMDb:(MBMovie *)movie;
 - (void)doActionSearchShow:(id)sender;
 
-- (void)showActor:(MBPerson *)mbperson;
+- (void)showActor:(MBPerson *)person;
+
+- (NSUInteger)movieCountForGenre:(MBGenre *)genre;
 
 @end
