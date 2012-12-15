@@ -2090,8 +2090,6 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateMovieFilter_actorCache
 {
-//NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
-	
 	[mActorsByName removeAllObjects];
 	[mActorsSorted removeAllObjects];
 	
@@ -2102,15 +2100,6 @@ static MBAppDelegate *gAppDelegate;
 	}
 	else
 		[mActorsByName setDictionary:mDataManager.actorsByName];
-	
-	/*
-	[arrangedObjects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
-		[((MBMovie *)movieObj).actors.allKeys enumerateObjectsUsingBlock:^ (id actorObj, NSUInteger actorNdx, BOOL *actorStop) {
-			mActorsByName[actorObj] = @(1 + ((NSNumber *)mActorsByName[actorObj]).integerValue);
-		}];
-	}];
-	*/
-	
 }
 
 @end
