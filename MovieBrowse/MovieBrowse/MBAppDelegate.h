@@ -24,6 +24,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 
 @interface MBAppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
 
+@property (assign) IBOutlet NSSlider *slider;
+@property (assign) IBOutlet NSTextField *slider2;
+
 /**
  * Other
  */

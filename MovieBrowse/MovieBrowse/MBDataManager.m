@@ -59,8 +59,8 @@
 		[self openDb];
 		
 		[self loadActors];
-		[self loadGenres];
 		[self loadMovies];
+		[self loadGenres];
 	}
 	
 	return self;
@@ -98,11 +98,9 @@
 - (void)closeDb
 {
 #ifdef DEBUG
-	NSLog(@"%s.. compacting...", __PRETTY_FUNCTION__);
 	[mMovieDb compact];
 	[mGenreDb compact];
 	[mActorDb compact];
-	NSLog(@"%s.. compacting...done", __PRETTY_FUNCTION__);
 #endif
 }
 
@@ -215,7 +213,7 @@
 			[key appendString:@"--"];
 			[key appendString:keyParts[3]];
 			movies[key] = @"";
-//		movies[[NSString stringWithFormat:@"%@--%@", title, keyParts[3]]] = @"";
+			((MBMovie *)mMovies[key]).genres[genre] = @"";
 			years[@(((NSString *)keyParts[3]).integerValue)] = @"";
 		}
 	}];
@@ -267,6 +265,7 @@
 			mbmovie = [[MBMovie alloc] init];
 			mbmovie.actors = (actors = [[NSMutableDictionary alloc] init]);
 			mbmovie.languages = (languages = [[NSMutableArray alloc] init]);
+			mbmovie.genres = [[NSMutableDictionary alloc] init];
 			mbmovie.dbkey = key;
 			mbmovie.year = year;
 		}

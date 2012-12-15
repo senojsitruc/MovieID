@@ -74,6 +74,14 @@ static MBAppDelegate *gAppDelegate;
 	NSString *mLanguageSelection;
 	
 	/**
+	 * Caches
+	 */
+	NSMutableDictionary *mGenresByName;
+	NSMutableArray *mGenresSorted;
+	NSMutableDictionary *mActorsByName;
+	NSMutableArray *mActorsSorted;
+	
+	/**
 	 * Find
 	 */
 	NSString *mFindType;
@@ -136,6 +144,10 @@ static MBAppDelegate *gAppDelegate;
 	mGenreSelections = [[NSMutableDictionary alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];
 	mLanguagesSorted = [[NSMutableArray alloc] init];
+	mGenresByName = [[NSMutableDictionary alloc] init];
+	mGenresSorted = [[NSMutableArray alloc] init];
+	mActorsByName = [[NSMutableDictionary alloc] init];
+	mActorsSorted = [[NSMutableArray alloc] init];
 	
 	self.actorsArray = [[NSMutableArray alloc] init];
 	self.genresArray = [[NSMutableArray alloc] init];
@@ -468,10 +480,11 @@ static MBAppDelegate *gAppDelegate;
 		mIsDoneLoading = TRUE;
 		mLanguagesDirty = TRUE;
 		
-		[self updateActorFilter];
-		[self updateGenreFilter];
 		[self updateMovieFilter];
-		
+		[self updateMovieFilter_actorCache];
+		[self updateActorFilter];
+		[self updateMovieFilter_genreCache];
+		[self updateGenreFilter];
 		[self updateWindowTitle];
 	}
 	
@@ -655,8 +668,14 @@ static MBAppDelegate *gAppDelegate;
 	mLanguagesDirty = TRUE;
 	
 	[self updateActorsHeaderLabel];
-	[self updateGenreFilter];
 	[self updateMovieFilter];
+	[self updateMovieFilter_genreCache];
+	[self updateGenreFilter];
+	
+	if (!mActorSelection) {
+		[self updateMovieFilter_actorCache];
+		[self updateActorFilter];
+	}
 	
 	if (mLanguageSelection)
 		[self updateMoviesHeaderLanguages:TRUE];
@@ -695,8 +714,12 @@ static MBAppDelegate *gAppDelegate;
 	
 	mLanguagesDirty = TRUE;
 	
-	[self updateActorFilter];
 	[self updateMovieFilter];
+	
+	if (!mActorSelection) {
+		[self updateMovieFilter_actorCache];
+		[self updateActorFilter];
+	}
 	
 	if (mLanguageSelection)
 		[self updateMoviesHeaderLanguages:TRUE];
@@ -785,16 +808,22 @@ static MBAppDelegate *gAppDelegate;
 	[self.actorDescTxt insertText:(mbperson.bio ? [[NSAttributedString alloc] initWithString:mbperson.bio] : @"Nothing!")];
 	[self.actorDescTxt setEditable:FALSE];
 	
+	// set the actor's bio text
 	if (mbperson.bio)
 		[self.actorDescTxt.textStorage replaceCharactersInRange:NSMakeRange(0, self.actorDescTxt.textStorage.length) withString:mbperson.bio];
 	else
 		[self.actorDescTxt.textStorage replaceCharactersInRange:NSMakeRange(0, self.actorDescTxt.textStorage.length) withString:@""];
 	
+	// scroll to the top
+	self.actorDescScroll.verticalScroller.floatValue = 0;
 	[self.actorDescScroll.contentView scrollToPoint:NSMakePoint(0,0)];
-	self.actorDescScroll.horizontalScroller.floatValue = 0;
 	
+	// animate the indefinite progress indicator
 	[self.actorImagePrg startAnimation:self];
 	
+	// retrieve the actor's image and update the ui when we're done; but don't update the ui if the
+	// user has moved on to another actor between the time that we initiated the download and when
+	// the image actually became avaliable for use.
 	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
 		NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId];
 		
@@ -1114,9 +1143,9 @@ static MBAppDelegate *gAppDelegate;
 		mLanguageSelection = mLanguagesSorted[item.tag];
 	}
 	
+	[self updateMovieFilter];
 	[self updateActorFilter];
 	[self updateGenreFilter];
-	[self updateMovieFilter];
 	
 	[self updateMoviesHeaderLabel];
 }
@@ -1760,6 +1789,9 @@ static MBAppDelegate *gAppDelegate;
 		return;
 	
 	NSPredicate *predicate = nil;
+	BOOL showAll = mActorHeaderMenuShowAllItem.state == NSOnState;
+	
+	/*
 	BOOL (^genreMatches)(id) = nil;
 	NSUInteger genreSelectionCount = mGenreSelections.count;
 	BOOL showAll = mActorHeaderMenuShowAllItem.state == NSOnState;
@@ -1855,6 +1887,18 @@ static MBAppDelegate *gAppDelegate;
 			return 5 <= ((MBPerson *)object).movies.count;
 		}];
 	}
+	*/
+	
+	if (mMovieSelection) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:mMovieSelection haveActor:(MBPerson *)object];
+		}];
+	}
+	else {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id personObj, NSDictionary *bindings) {
+			return nil != mActorsByName[((MBPerson *)personObj).name] && (showAll || 5 <= ((MBPerson *)personObj).movies.count);
+		}];
+	}
 	
 	self.actorsArrayController.filterPredicate = predicate;
 	
@@ -1895,6 +1939,7 @@ static MBAppDelegate *gAppDelegate;
 	}
 	*/
 	
+	/*
 	if (mActorSelection && mMovieSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesGenre:(MBGenre *)object haveActor:mActorSelection] &&
@@ -1909,6 +1954,18 @@ static MBAppDelegate *gAppDelegate;
 	else if (mMovieSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:mMovieSelection haveGenre:(MBGenre *)object];
+		}];
+	}
+	*/
+	
+	if (mMovieSelection) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id genreObj, NSDictionary *bindings) {
+			return [mDataManager doesMovie:mMovieSelection haveGenre:genreObj];
+		}];
+	}
+	else {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return nil != mGenresByName[((MBGenre *)object).name];
 		}];
 	}
 	
@@ -2058,27 +2115,6 @@ static MBAppDelegate *gAppDelegate;
 	
 	self.moviesArrayController.filterPredicate = predicate;
 	
-	// cummulative movie set duration
-	{
-		NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
-		NSMutableString *infoTxt = [[NSMutableString alloc] init];
-		__block NSUInteger duration = 0;
-		__block NSUInteger filesize = 0;
-		
-		[arrangedObjects enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
-			duration += ((MBMovie *)movie).duration.integerValue;
-			filesize += ((MBMovie *)movie).filesize.integerValue;
-		}];
-		
-		[infoTxt appendString:@(arrangedObjects.count).stringValue];
-		[infoTxt appendString:@" movies, "];
-		[infoTxt appendString:[MBStuff humanReadableDuration:duration]];
-		[infoTxt appendString:@", "];
-		[infoTxt appendString:[MBStuff humanReadableFileSize:filesize]];
-		
-		self.movieInfoTxt.stringValue = infoTxt;
-	}
-	
 	// keep the movie selection (if any) visible, otherwise scroll to the top
 	if (mMovieSelection)
 		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
@@ -2086,8 +2122,82 @@ static MBAppDelegate *gAppDelegate;
 		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
-		
+	
+	[self updateMovieFilter_infoText];
 	[self updateWindowTitle];
+}
+
+/**
+ * calculate the total duration and file size for all of the movie represented in the current set.
+ * also, count the number of movies associated with each genre.
+ */
+- (void)updateMovieFilter_infoText
+{
+	NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
+	NSMutableString *infoTxt = [[NSMutableString alloc] init];
+	__block NSUInteger duration = 0;
+	__block NSUInteger filesize = 0;
+	
+	[arrangedObjects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+		duration += ((MBMovie *)movieObj).duration.integerValue;
+		filesize += ((MBMovie *)movieObj).filesize.integerValue;
+	}];
+	
+	[infoTxt appendString:@(arrangedObjects.count).stringValue];
+	[infoTxt appendString:@" movies, "];
+	[infoTxt appendString:[MBStuff humanReadableDuration:duration]];
+	[infoTxt appendString:@", "];
+	[infoTxt appendString:[MBStuff humanReadableFileSize:filesize]];
+	
+	self.movieInfoTxt.stringValue = infoTxt;
+}
+
+/**
+ *
+ *
+ */
+- (void)updateMovieFilter_genreCache
+{
+	NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
+	
+	[mGenresByName removeAllObjects];
+	[mGenresSorted removeAllObjects];
+	
+	[arrangedObjects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+		[((MBMovie *)movieObj).genres.allKeys enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
+			mGenresByName[genreObj] = @(1 + ((NSNumber *)mGenresByName[genreObj]).integerValue);
+		}];
+	}];
+	
+	/*
+	[mGenresSorted setArray:[mGenresByName.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id genre1, id genre2) {
+		return [genre1 compare:genre2];
+	}]];
+	*/
+}
+
+/**
+ *
+ *
+ */
+- (void)updateMovieFilter_actorCache
+{
+	NSArray *arrangedObjects = self.moviesArrayController.arrangedObjects;
+	
+	[mActorsByName removeAllObjects];
+	[mActorsSorted removeAllObjects];
+	
+	[arrangedObjects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+		[((MBMovie *)movieObj).actors.allKeys enumerateObjectsUsingBlock:^ (id actorObj, NSUInteger actorNdx, BOOL *actorStop) {
+			mActorsByName[actorObj] = @(1 + ((NSNumber *)mActorsByName[actorObj]).integerValue);
+		}];
+	}];
+	
+	/*
+	[mActorsSorted setArray:[mActorsByName.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id actor1, id actor2) {
+		return [actor1 compare:actor2];
+	}]];
+	*/
 }
 
 @end

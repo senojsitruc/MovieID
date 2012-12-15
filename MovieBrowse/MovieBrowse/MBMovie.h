@@ -10,32 +10,34 @@
 
 @interface MBMovie : NSObject
 
-@property (readwrite, strong) NSString *dbkey;
+@property (readwrite, strong, nonatomic) NSString *dbkey;
 @property (readwrite, nonatomic, setter=setTitle:) NSString *title;
+@property (readwrite, strong, nonatomic) NSNumber *year;
+@property (readwrite, strong, nonatomic) NSString *rating;
+@property (readwrite, strong, nonatomic) NSNumber *score;
+@property (readwrite, strong, nonatomic) NSString *posterId;
+@property (readwrite, strong, nonatomic) NSNumber *runtime;
+@property (readwrite, strong, nonatomic) NSMutableDictionary *actors;
+@property (readwrite, strong, nonatomic) NSString *synopsis;
+@property (readwrite, strong, nonatomic) NSNumber *hidden;
+
+@property (readwrite, strong, nonatomic) NSString *tmdbId;
+@property (readwrite, strong, nonatomic) NSString *imdbId;
+@property (readwrite, strong, nonatomic) NSString *rtId;
+
+@property (readwrite, strong, nonatomic) NSString *dirpath;
+@property (readwrite, strong, nonatomic) NSNumber *duration;
+@property (readwrite, strong, nonatomic) NSNumber *width;
+@property (readwrite, strong, nonatomic) NSNumber *height;
+@property (readwrite, strong, nonatomic) NSNumber *bitrate;
+@property (readwrite, strong, nonatomic) NSNumber *filesize;
+@property (readwrite, strong, nonatomic) NSDate *mtime;
+
+@property (readwrite, strong, nonatomic) NSArray *languages;
+@property (readwrite, strong, nonatomic) NSMutableDictionary *genres;
+
 @property (readonly) NSString *displayTitle;
 @property (readonly) NSString *sortTitle;
-@property (readwrite, strong) NSNumber *year;
-@property (readwrite, strong) NSString *rating;
-@property (readwrite, strong) NSNumber *score;
-@property (readwrite, strong) NSString *posterId;
-@property (readwrite, strong) NSNumber *runtime;
-@property (readwrite, strong) NSMutableDictionary *actors;
-@property (readwrite, strong) NSString *synopsis;
-@property (readwrite, strong) NSNumber *hidden;
-
-@property (readwrite, strong) NSString *tmdbId;
-@property (readwrite, strong) NSString *imdbId;
-@property (readwrite, strong) NSString *rtId;
-
-@property (readwrite, strong) NSString *dirpath;
-@property (readwrite, strong) NSNumber *duration;
-@property (readwrite, strong) NSNumber *width;
-@property (readwrite, strong) NSNumber *height;
-@property (readwrite, strong) NSNumber *bitrate;
-@property (readwrite, strong) NSNumber *filesize;
-@property (readwrite, strong) NSDate *mtime;
-@property (readwrite, strong) NSArray *languages;
-
 @property (readonly, getter=info1) NSString *info1;
 @property (readonly, getter=info2) NSString *info2;
 
