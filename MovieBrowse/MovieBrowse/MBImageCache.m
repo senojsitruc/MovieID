@@ -58,10 +58,48 @@ static MBImageCache *gSharedInstance;
  *
  *
  */
+- (void)clearAll
+{
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	NSString *actors = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
+	NSString *movies = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Movies"];
+	
+	NSArray *actorItems = [fileManager contentsOfDirectoryAtPath:actors error:nil];
+	NSArray *movieItems = [fileManager contentsOfDirectoryAtPath:movies error:nil];
+	
+	[actorItems enumerateObjectsUsingBlock:^ (id fileName, NSUInteger ndx, BOOL *stop) {
+		[fileManager removeItemAtPath:[actors stringByAppendingPathComponent:fileName] error:nil];
+	}];
+	
+	[movieItems enumerateObjectsUsingBlock:^ (id fileName, NSUInteger ndx, BOOL *stop) {
+		[fileManager removeItemAtPath:[movies stringByAppendingPathComponent:fileName] error:nil];
+	}];
+	
+	dispatch_barrier_sync(mDataQueue, ^{
+		[mCache removeAllObjects];
+	});
+}
+
+/**
+ *
+ *
+ */
 - (NSImage *)actorImageWithId:(NSString *)imageId
+{
+	return [self actorImageWithId:imageId width:0 height:0];
+}
+
+/**
+ *
+ *
+ */
+- (NSImage *)actorImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height
 {
 	if (!imageId.length)
 		return nil;
+	
+	if (width || height)
+		imageId = [imageId stringByAppendingFormat:@"--%lu--%lu", width, height];
 	
 	NSImage *image = nil;
 	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:@"Actors"] stringByAppendingPathComponent:imageId]];
@@ -103,8 +141,20 @@ static MBImageCache *gSharedInstance;
  */
 - (NSImage *)movieImageWithId:(NSString *)imageId
 {
+	return [self movieImageWithId:imageId width:0 height:0];
+}
+
+/**
+ *
+ *
+ */
+- (NSImage *)movieImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height
+{
 	if (!imageId.length)
 		return nil;
+	
+	if (width || height)
+		imageId = [imageId stringByAppendingFormat:@"--%lu--%lu", width, height];
 	
 	NSImage *image = nil;
 	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:@"Movies"] stringByAppendingPathComponent:imageId]];

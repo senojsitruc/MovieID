@@ -48,6 +48,7 @@ static NSImage *gMissingImg;
 		// actor image
 		{
 			NSString *imageId = mPerson.imageId;
+			CGFloat width = self.actorImg.frame.size.width;
 			CGFloat height = self.actorImg.frame.size.height;
 			NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
 			
@@ -63,7 +64,7 @@ static NSImage *gMissingImg;
 				self.actorImg.image = nil;
 				
 				[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-					NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:imageId];
+					NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:imageId width:width height:height];
 					
 					if (!image)
 						return;

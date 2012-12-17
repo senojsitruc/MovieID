@@ -70,7 +70,7 @@ static NSImage *gMissingImg;
 				self.movieImg.image = nil;
 				
 				[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-					NSImage *image = [[MBImageCache sharedInstance] movieImageWithId:imageId];
+					NSImage *image = [[MBImageCache sharedInstance] movieImageWithId:imageId width:0 height:height];
 					
 					if (!image)
 						return;

@@ -1491,6 +1491,17 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self.prefsWin orderOut:sender];
 }
 
+/**
+ * This function intentionally does nothing when running in debug mode, because I don't want to
+ * accidentally delete the master image set.
+ */
+- (IBAction)doActionPrefsClearCache:(id)sender
+{
+#if !defined DEBUG
+	[[MBImageCache sharedInstance] clearAll];
+#endif
+}
+
 
 
 

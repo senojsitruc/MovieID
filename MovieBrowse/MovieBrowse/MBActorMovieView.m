@@ -54,7 +54,7 @@
 			NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:mbmovie.posterId andHeight:myFrame.size.height];
 			
 			if (!image) {
-				if (nil == (image = [[MBImageCache sharedInstance] movieImageWithId:mbmovie.posterId]))
+				if (nil == (image = [[MBImageCache sharedInstance] movieImageWithId:mbmovie.posterId width:0 height:myFrame.size.height]))
 					return;
 				
 				CGFloat width = (NSUInteger)(image.size.width * (myFrame.size.height / image.size.height));

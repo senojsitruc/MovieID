@@ -82,7 +82,7 @@ static NSMutableDictionary *gActorViews;
 				return;
 			}
 			
-			NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId];
+			NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId width:0 height:myFrame.size.height];
 			
 			if (!image)
 				return;

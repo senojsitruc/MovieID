@@ -13,9 +13,16 @@
 + (id)sharedInstance;
 
 - (NSImage *)actorImageWithId:(NSString *)imageId;
+- (NSImage *)actorImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height;
 - (NSImage *)movieImageWithId:(NSString *)imageId;
+- (NSImage *)movieImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height;
 
 - (NSImage *)cachedImageWithId:(NSString *)imageId andHeight:(CGFloat)height;
 - (void)cacheImage:(NSImage *)image withId:(NSString *)imageId andHeight:(CGFloat)height;
+
+/**
+ * Clears all of the on-disk and in-memory cache
+ */
+- (void)clearAll;
 
 @end
