@@ -30,8 +30,6 @@
 	response.dataBuffer = [[NSMutableData alloc] init];
 	response->mIsDone = FALSE;
 	
-	NSLog(@"%s.. request='%@'", __PRETTY_FUNCTION__, filePath);
-	
 	[NSThread performBlockInBackground:^{
 		IDMediaInfo *mediaInfo = [[IDMediaInfo alloc] initWithFilePath:files[0]];
 		NSMutableDictionary *info = [[NSMutableDictionary alloc] init];

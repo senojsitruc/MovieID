@@ -52,11 +52,10 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
  */
 + (NSObject<HTTPResponse> *)responseWithPath:(NSString *)filePath forConnection:(HTTPConnection *)connection
 {
-	NSLog(@"%s.. filePath='%@'", __PRETTY_FUNCTION__, filePath);
+	NSLog(@"%@", filePath);
 	
 	@try {
 		NSArray *pathParts = [filePath componentsSeparatedByString:@"/"];
-		NSLog(@"%s.. %@", __PRETTY_FUNCTION__, pathParts);
 		
 		if (pathParts.count < 2)
 			return nil;

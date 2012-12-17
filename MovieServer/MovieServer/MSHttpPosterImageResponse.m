@@ -28,8 +28,6 @@ static NSString * const gBaseDir = @"/Volumes/Stuart Little/MovieBrowse/Movies";
 	response.dataBuffer = [[NSMutableData alloc] init];
 	response->mIsDone = FALSE;
 	
-	NSLog(@"%s.. request='%@'", __PRETTY_FUNCTION__, filePath);
-	
 	if (!movieId.length || NSNotFound != [movieId rangeOfString:@"/"].location)
 		return nil;
 	

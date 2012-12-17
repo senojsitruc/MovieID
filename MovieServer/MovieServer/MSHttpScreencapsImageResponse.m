@@ -31,8 +31,6 @@
 	response.dataBuffer = [[NSMutableData alloc] init];
 	response->mIsDone = FALSE;
 	
-	NSLog(@"%s.. request='%@'", __PRETTY_FUNCTION__, filePath);
-	
 	[NSThread performBlockInBackground:^{
 		AVAsset *avasset = [AVAsset assetWithURL:[NSURL fileURLWithPath:files[0]]];
 		
