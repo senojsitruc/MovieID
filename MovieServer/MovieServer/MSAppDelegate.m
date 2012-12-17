@@ -95,20 +95,20 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 		// Profile
 		//
 		else if ([action isEqualToString:@"Actors"]) {
-			if (pathParts.count < 3)
-				return nil;
-			else
+			if (pathParts.count == 3)
 				return [MSHttpProfileImageResponse responseWithFilePath:filePath andActorId:pathParts[2] forConnection:connection];
+			else
+				return nil;
 		}
 		
 		//
 		// Poster
 		//
 		else if ([action isEqualToString:@"Movies"]) {
-			if (pathParts.count < 3)
-				return nil;
-			else
+			if (pathParts.count == 3)
 				return [MSHttpPosterImageResponse responseWithFilePath:filePath andMovieId:pathParts[2] forConnection:connection];
+			else
+				return nil;
 		}
 	}
 	@catch (NSException *e) {
@@ -143,6 +143,53 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	}];
 	
 	return movieFiles;
+}
+
+/**
+ *
+ *
+ */
++ (CGImageRef)resizeCGImage:(CGImageRef)cgimage width:(NSUInteger)width height:(NSUInteger)height
+{
+	if (!cgimage || !width || !height)
+		return nil;
+	
+	CGColorSpaceRef cs = CGImageGetColorSpace(cgimage);
+	CGContextRef context = CGBitmapContextCreate(NULL, width, height, CGImageGetBitsPerComponent(cgimage), CGImageGetBytesPerRow(cgimage), cs, CGImageGetAlphaInfo(cgimage));
+	CGColorSpaceRelease(cs);
+	
+	if (!context)
+		return nil;
+	
+	CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgimage);
+	CGImageRef newImage = CGBitmapContextCreateImage(context);
+	CGContextRelease(context);
+	
+	return newImage;
+}
+
+/**
+ *
+ *
+ */
++ (NSData *)pngDataFromCGImage:(CGImageRef)cgimage
+{
+	if (!cgimage)
+		return nil;
+	
+	NSMutableData *imageData = [[NSMutableData alloc] init];
+	CGImageDestinationRef idRef = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
+	CGImageDestinationSetProperties(idRef, (__bridge CFDictionaryRef)@{(NSString *)kCGImageDestinationLossyCompressionQuality: @(0.5)});
+	CGImageDestinationAddImage(idRef, cgimage, NULL);
+	
+	if (!CGImageDestinationFinalize(idRef)) {
+		CFRelease(idRef);
+		return nil;
+	}
+	
+	CFRelease(idRef);
+	
+	return imageData;
 }
 
 @end

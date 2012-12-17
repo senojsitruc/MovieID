@@ -18,4 +18,10 @@
 + (NSObject<HTTPResponse> *)responseWithPath:(NSString *)filePath forConnection:(HTTPConnection *)connection;
 + (NSArray *)getMovieFilesInDir:(NSString *)dirPath;
 
+/**
+ *
+ */
++ (CGImageRef)resizeCGImage:(CGImageRef)cgimage width:(NSUInteger)width height:(NSUInteger)height;
++ (NSData *)pngDataFromCGImage:(CGImageRef)cgimage;
+
 @end
