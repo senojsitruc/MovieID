@@ -41,6 +41,11 @@ NSString * const MBDefaultsKeyActorSort = @"MBDefaultsKeyActorSort";
 NSString * const MBDefaultsKeyActorSelection = @"MBDefaultsKeyActorSelection";
 NSString * const MBDefaultsKeyGenreSelection = @"MBDefaultsKeyGenreSelection";
 NSString * const MBDefaultsKeyMovieSelection = @"MBDefaultsKeyMovieSelection";
+NSString * const MBDefaultsKeyFindQuery = @"MBDefaultsKeyFindQuery";
+NSString * const MBDefaultsKeyFindType = @"MBDefaultsKeyFindType";
+NSString * const MBDefaultsKeyFindTitleEnabled = @"MBDefaultsKeyFindTitleEnabled";
+NSString * const MBDefaultsKeyFindFileNameEnabled = @"MBDefaultsKeyFindFileNameEnabled";
+NSString * const MBDefaultsKeyFindDescriptionEnabled = @"MBDefaultsKeyFindDescriptionEnabled";
 
 static MBAppDelegate *gAppDelegate;
 
@@ -213,7 +218,12 @@ static MBAppDelegate *gAppDelegate;
 				MBDefaultsKeyActorSort: @"Name",
 	 MBDefaultsKeyActorSelection: @[],
 	 MBDefaultsKeyGenreSelection: @[],
-	 MBDefaultsKeyMovieSelection: @[]
+	 MBDefaultsKeyMovieSelection: @[],
+				MBDefaultsKeyFindQuery:@"",
+				 MBDefaultsKeyFindType:@"Movies",
+ MBDefaultsKeyFindTitleEnabled:@(TRUE),
+MBDefaultsKeyFindFileNameEnabled:@(FALSE),
+MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		}];
 	}
 	
