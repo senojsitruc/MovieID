@@ -42,7 +42,7 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 - (void)startHttp
 {
 	mHttpServer = [[HTTPServer alloc] init];
-	[mHttpServer setPort:10080];
+	[mHttpServer setPort:20080];
 	[mHttpServer start:nil];
 }
 

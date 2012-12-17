@@ -204,7 +204,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 - (void)serverGetScreencapsInfo
 {
 //NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
-	NSString *imageHost = @"http://127.0.0.1:10080";
+	NSString *imageHost = @"http://10.0.1.116:10080";
 	NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
 	
 	[urlString appendString:@"/Screencaps/"];
@@ -240,7 +240,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		return image;
 	
 //NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
-	NSString *imageHost = @"http://127.0.0.1:10080";
+	NSString *imageHost = @"http://10.0.1.116:10080";
 	NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
 	
 	[urlString appendString:@"/Screencaps/"];
