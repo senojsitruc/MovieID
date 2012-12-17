@@ -29,6 +29,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	NSUInteger mInfoWidth;
 	NSUInteger mInfoHeight;
 	
+	NSUInteger mTransactionId;
 	NSMutableDictionary *mImageCache;
 	NSMutableArray *mImageViews;
 }
@@ -130,8 +131,9 @@ NSString * const MBScreencapsKeyHeight = @"height";
 - (void)clearThumbnails
 {
 	[mImageViews enumerateObjectsUsingBlock:^ (id imageViewObj, NSUInteger imageViewNdx, BOOL *imageViewStop) {
-		((MBScreencapsThumbnailView *)imageViewObj).image = nil;
 		((MBScreencapsThumbnailView *)imageViewObj).timestamp = nil;
+		((MBScreencapsThumbnailView *)imageViewObj).loading = FALSE;
+		((MBScreencapsThumbnailView *)imageViewObj).image = nil;
 	}];
 }
 
@@ -143,6 +145,8 @@ NSString * const MBScreencapsKeyHeight = @"height";
 {
 	__block NSUInteger timeOffset = (16 * 60) + ((pageNum - 1) * 16 * 60);
 	
+	NSUInteger transactionId = (mTransactionId += 1);
+	NSUInteger duration = mInfoDuration;
 	mCurPage = pageNum;
 	
 	[_prevBtn setEnabled:mCurPage > 1];
@@ -153,14 +157,18 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	_infoTxt.stringValue = [NSString stringWithFormat:@"Page %lu of %lu", mCurPage, mNumOfPages];
 	
 	[mImageViews enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^ (id imageViewObj, NSUInteger imageViewNdx, BOOL *imageViewStop) {
-		if (timeOffset < mInfoDuration) {
+		if (timeOffset < duration) {
 			NSUInteger _timeOffset = timeOffset;
+			((MBScreencapsThumbnailView *)imageViewObj).loading = TRUE;
 			[[MBDownloadQueue sharedInstance] dispatchBeg:^{
 				NSImage *image = [self serverGetImageAtOffset:_timeOffset];
 				NSString *timestamp = [self humanReadableCode:_timeOffset];
 				[[NSThread mainThread] performBlock:^{
-					((MBScreencapsThumbnailView *)imageViewObj).timestamp = timestamp;
-					((MBScreencapsThumbnailView *)imageViewObj).image = image;
+					if (transactionId == mTransactionId) {
+						((MBScreencapsThumbnailView *)imageViewObj).loading = FALSE;
+						((MBScreencapsThumbnailView *)imageViewObj).timestamp = timestamp;
+						((MBScreencapsThumbnailView *)imageViewObj).image = image;
+					}
 				}];
 			}];
 		}
@@ -203,8 +211,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
  */
 - (void)serverGetScreencapsInfo
 {
-//NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
-	NSString *imageHost = @"http://10.0.1.116:10080";
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
 	NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
 	
 	[urlString appendString:@"/Screencaps/"];
@@ -234,13 +241,14 @@ NSString * const MBScreencapsKeyHeight = @"height";
  */
 - (NSImage *)serverGetImageAtOffset:(NSUInteger)offset
 {
-	NSImage *image = mImageCache[@(offset)];
+	NSImage *image = nil;
 	
-	if (image)
-		return image;
+	@synchronized (self) {
+		if ((image = mImageCache[@(offset)]))
+			return image;
+	}
 	
-//NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
-	NSString *imageHost = @"http://10.0.1.116:10080";
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
 	NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
 	
 	[urlString appendString:@"/Screencaps/"];
@@ -251,8 +259,10 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	
 	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
 	
-	if (image)
-		mImageCache[@(offset)] = image;
+	@synchronized (self) {
+		if (image)
+			mImageCache[@(offset)] = image;
+	}
 	
 	return image;
 }

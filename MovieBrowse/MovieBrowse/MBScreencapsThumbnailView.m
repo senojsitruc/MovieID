@@ -34,7 +34,7 @@
 	[mImageView setEditable:FALSE];
 //[self addSubview:mImageView];
 	
-	mProgressView = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(NSMidX(self.frame)-10, NSMidY(self.frame)-10, 20, 20)];
+	mProgressView = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(self.frame.size.width/2-10, self.frame.size.height/2-10, 20, 20)];
 	mProgressView.style = NSProgressIndicatorSpinningStyle;
 	mProgressView.controlSize = NSRegularControlSize;
 	[mProgressView setHidden:TRUE];
@@ -53,7 +53,9 @@
 	[NSBezierPath fillRect:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
 	
 	[super drawRect:dirtyRect];
-	[mImageView drawRect:dirtyRect];
+	
+	if (mImage)
+		[mImageView drawRect:dirtyRect];
 	
 	[[NSColor blackColor] setStroke];
 	[NSBezierPath strokeRect:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
@@ -115,6 +117,7 @@
 - (void)setImage:(NSImage *)image
 {
 	mImageView.image = (mImage = image);
+	[mImageView setHidden:(nil == image)];
 	[self setNeedsDisplay:TRUE];
 }
 
