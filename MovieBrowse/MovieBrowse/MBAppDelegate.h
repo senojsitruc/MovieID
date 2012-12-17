@@ -22,6 +22,7 @@ extern NSString * const MBDefaultsKeyApiRt;
 @class MBDataManager;
 @class MBActorMovieView;
 @class MBImportViewController;
+@class MBScreencapsWindowController;
 
 @interface MBAppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
 
@@ -33,6 +34,7 @@ extern NSString * const MBDefaultsKeyApiRt;
  */
 @property (readonly) MBDataManager *dataManager;
 @property (readonly) dispatch_queue_t imageQueue;
+@property (readonly) MBScreencapsWindowController *screencapsController;
 
 /**
  * Main Window

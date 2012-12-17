@@ -661,7 +661,8 @@ static NSMutableDictionary *iso639codes;
 			CMTimeRange range = avtrack.timeRange;
 			
 			if (kCMTimeFlags_Valid & range.duration.flags)
-				self.duration = @((NSUInteger)(range.duration.value / range.duration.timescale));
+				self.duration = @((NSUInteger)CMTimeGetSeconds(avasset.duration));
+//			self.duration = @((NSUInteger)(range.duration.value / range.duration.timescale));
 			
 			self.width = @(size.width);
 			self.height = @(size.height);

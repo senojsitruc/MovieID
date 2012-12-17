@@ -8,8 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol HTTPResponse;
+@class HTTPConnection;
+
 @interface MSAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
+
++ (NSObject<HTTPResponse> *)responseWithPath:(NSString *)filePath forConnection:(HTTPConnection *)connection;
++ (NSArray *)getMovieFilesInDir:(NSString *)dirPath;
 
 @end

@@ -14,16 +14,17 @@
 #import "MBDataManager.h"
 #import "MBActorMovieView.h"
 #import "MBImageCache.h"
-#import "NSArray+Additions.h"
-#import <MovieID/IDMediaInfo.h>
-#import <MovieID/IDSearch.h>
-#import "NSThread+Additions.h"
 #import "MBTableHeaderView.h"
 #import "MBPopUpButtonCell.h"
 #import "MBTableHeaderCell.h"
 #import "MBDownloadQueue.h"
 #import "MBImportViewController.h"
+#import "MBScreencapsWindowController.h"
+#import "NSArray+Additions.h"
 #import "NSString+Additions.h"
+#import "NSThread+Additions.h"
+#import <MovieID/IDMediaInfo.h>
+#import <MovieID/IDSearch.h>
 
 NSString * const MBDefaultsKeyImageHost = @"MBDefaultsKeyImageHost";
 NSString * const MBDefaultsKeyImageCache = @"MBDefaultsKeyImageCache";
@@ -48,6 +49,7 @@ static MBAppDelegate *gAppDelegate;
 	dispatch_queue_t mImageQueue;
 	
 	MBDataManager *mDataManager;
+	MBScreencapsWindowController *mScreencapsController;
 	BOOL mIsDoneLoading;
 	
 	/**
@@ -131,6 +133,7 @@ static MBAppDelegate *gAppDelegate;
 @implementation MBAppDelegate
 
 @synthesize dataManager = mDataManager;
+@synthesize screencapsController = mScreencapsController;
 
 /**
  *
@@ -142,6 +145,7 @@ static MBAppDelegate *gAppDelegate;
 	mShowHiddenMovies = FALSE;
 	mIsDoneLoading = FALSE;
 	mDataManager = [[MBDataManager alloc] init];
+	mScreencapsController = [[MBScreencapsWindowController alloc] init];
 	mGenreSelections = [[NSMutableDictionary alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];
 	mLanguagesSorted = [[NSMutableArray alloc] init];

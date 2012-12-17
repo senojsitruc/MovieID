@@ -10,6 +10,7 @@
 #import "MBAppDelegate.h"
 #import "MBDataManager.h"
 #import "MBMovie.h"
+#import "MBScreencapsWindowController.h"
 
 @implementation MBMovieView
 
@@ -19,21 +20,16 @@
  */
 - (IBAction)doActionHide:(id)sender
 {
-	NSTableCellView *parent = (NSTableCellView *)self.superview;
-	
-	if (![parent isKindOfClass:[NSTableCellView class]])
-		return;
-	
-	MBMovie *mbmovie = (MBMovie *)parent.objectValue;
+	MBMovie *mbmovie = self.movie;
 	BOOL hidden = mbmovie.hidden.boolValue;
 	
 	if (hidden) {
 		((NSMenuItem *)sender).state = NSOffState;
-		[[MBAppDelegate sharedInstance] doActionMovieUnhide:mbmovie withView:parent];
+		[[MBAppDelegate sharedInstance] doActionMovieUnhide:mbmovie withView:self.superview];
 	}
 	else {
 		((NSMenuItem *)sender).state = NSOnState;
-		[[MBAppDelegate sharedInstance] doActionMovieHide:mbmovie withView:parent];
+		[[MBAppDelegate sharedInstance] doActionMovieHide:mbmovie withView:self.superview];
 	}
 }
 
@@ -43,14 +39,8 @@
  */
 - (IBAction)doActionRemove:(id)sender
 {
-	NSTableCellView *parent = (NSTableCellView *)self.superview;
-	
-	if (![parent isKindOfClass:[NSTableCellView class]])
-		return;
-	
+	MBMovie *mbmovie = self.movie;
 	MBDataManager *dataManager = [MBAppDelegate sharedInstance].dataManager;
-	MBMovie *mbmovie = (MBMovie *)parent.objectValue;
-	
 	[dataManager deleteMovie:mbmovie];
 }
 
@@ -60,12 +50,17 @@
  */
 - (IBAction)doActionSearch:(id)sender
 {
-	NSTableCellView *parent = (NSTableCellView *)self.superview;
-	
-	if (![parent isKindOfClass:[NSTableCellView class]])
-		return;
-	
-	[[MBAppDelegate sharedInstance] doActionSearchShow:parent.objectValue];
+	[[MBAppDelegate sharedInstance] doActionSearchShow:self.movie];
+}
+
+/**
+ *
+ *
+ */
+- (IBAction)doActionScreencaps:(id)sender
+{
+	MBAppDelegate *appDelegate = (MBAppDelegate *)[NSApp delegate];
+	[appDelegate.screencapsController showInWindow:appDelegate.window forMovie:self.movie];
 }
 
 /**
@@ -74,25 +69,7 @@
  */
 - (IBAction)doActionLinkToTMDb:(id)sender
 {
-	MBMovie *mbmovie = nil;
-	
-	// find the parent NSTableCellView and get the object value (MBMovie) from it
-	{
-		NSView *parent = self.superview;
-		
-		while (parent && ![parent isKindOfClass:[NSTableCellView class]])
-			parent = parent.superview;
-		
-		if (parent)
-			mbmovie = (MBMovie *)((NSTableCellView *)parent).objectValue;
-		
-		if (!mbmovie) {
-			NSLog(@"%s.. could not find the associated MBMovie", __PRETTY_FUNCTION__);
-			return;
-		}
-	}
-	
-	[[MBAppDelegate sharedInstance] doActionLinkToTMDb:mbmovie];
+	[[MBAppDelegate sharedInstance] doActionLinkToTMDb:self.movie];
 }
 
 /**
@@ -134,5 +111,29 @@
 		[super mouseDown:theEvent];
 }
 */
+
+
+
+
+#pragma mark - Private
+
+/**
+ *
+ *
+ */
+- (MBMovie *)movie
+{
+	NSTableCellView *parent = (NSTableCellView *)self.superview;
+	
+	if (![parent isKindOfClass:NSTableCellView.class])
+		return nil;
+	
+	MBMovie *mbmovie = (MBMovie *)parent.objectValue;
+	
+	if (![mbmovie isKindOfClass:MBMovie.class])
+		return nil;
+	
+	return mbmovie;
+}
 
 @end

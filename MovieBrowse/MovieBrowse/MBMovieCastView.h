@@ -10,7 +10,7 @@
 
 @class MBMovie;
 
-@interface MBMovieCastView : NSView /*NSScrollView*/
+@interface MBMovieCastView : NSView
 
 @property (readwrite, assign, nonatomic, setter=setMovie:) MBMovie *movie;
 
