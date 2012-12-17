@@ -99,7 +99,7 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 			if (pathParts.count < 3)
 				return nil;
 			else
-				return [MSHttpProfileImageResponse responseWithActorId:pathParts[2] forConnection:connection];
+				return [MSHttpProfileImageResponse responseWithFilePath:filePath andActorId:pathParts[2] forConnection:connection];
 		}
 		
 		//
@@ -109,7 +109,7 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 			if (pathParts.count < 3)
 				return nil;
 			else
-				return [MSHttpPosterImageResponse responseWithMovieId:pathParts[2] forConnection:connection];
+				return [MSHttpPosterImageResponse responseWithFilePath:filePath andMovieId:pathParts[2] forConnection:connection];
 		}
 	}
 	@catch (NSException *e) {

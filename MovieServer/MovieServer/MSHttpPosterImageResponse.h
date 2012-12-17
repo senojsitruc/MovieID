@@ -11,6 +11,6 @@
 
 @interface MSHttpPosterImageResponse : MSHttpResponse
 
-+ (MSHttpResponse *)responseWithMovieId:(NSString *)movieId forConnection:(HTTPConnection *)connection;
++ (MSHttpResponse *)responseWithFilePath:(NSString *)filePath andMovieId:(NSString *)movieId forConnection:(HTTPConnection *)connection;
 
 @end

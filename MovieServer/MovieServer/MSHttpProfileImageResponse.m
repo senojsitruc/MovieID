@@ -16,7 +16,7 @@ static NSString * const gBaseDir = @"/Volumes/Stuart Little/MovieBrowse/Actors";
 
 @implementation MSHttpProfileImageResponse
 
-+ (MSHttpResponse *)responseWithActorId:(NSString *)actorId forConnection:(HTTPConnection *)connection
++ (MSHttpResponse *)responseWithFilePath:(NSString *)filePath andActorId:(NSString *)actorId forConnection:(HTTPConnection *)connection
 {
 	MSHttpProfileImageResponse *response = [[MSHttpProfileImageResponse alloc] init];
 //NSDictionary *args = [response parseCgiParams:filePath];
