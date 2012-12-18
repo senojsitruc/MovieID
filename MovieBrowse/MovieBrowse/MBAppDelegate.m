@@ -472,7 +472,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 			else if ([sort isEqualToString:@"Runtime"])
 				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByRuntimeItem];
 			else if ([sort isEqualToString:@"Added"])
-				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByAddedItem];
+				[self doActionMoviesSortByAdded:mMovieHeaderMenuSortByAddedItem];
 		}
 	}
 	
