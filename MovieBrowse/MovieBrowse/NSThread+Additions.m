@@ -34,9 +34,7 @@
 {
 	void (^block)() = [theBlock copy];
 	[self performBlock:^{
-		[NSThread performSelector:@selector(ng_runBlock:)
-									 withObject:block
-									 afterDelay:delay];
+		[NSThread performSelector:@selector(ng_runBlock:) withObject:block afterDelay:delay];
 	}];
 }
 
@@ -47,9 +45,7 @@
 
 + (void)performBlockInBackground:(void (^)())block
 {
-	[NSThread performSelectorInBackground:@selector(ng_runBlock:)
-														 withObject:[block copy]];
-	
+	[NSThread performSelectorInBackground:@selector(ng_runBlock:) withObject:[block copy]];
 }
 
 /**
@@ -76,8 +72,10 @@
 	
 	self = [self initWithTarget:self selector:@selector(ng_runThreadBlock:) object:threadBlock];
 	
-	if (self)
+	if (self) {
 		[self setStackSize:1024 * 1024 * 8];
+		self.name = @"NSThread+Additions";
+	}
 	
 	return self;
 }

@@ -23,5 +23,6 @@
  */
 + (CGImageRef)resizeCGImage:(CGImageRef)cgimage width:(NSUInteger)width height:(NSUInteger)height;
 + (NSData *)pngDataFromCGImage:(CGImageRef)cgimage;
++ (NSData *)pngDataForTime:(NSTimeInterval)timeInSeconds inMovie:(NSString *)moviePath maxSize:(CGSize)size;
 
 @end

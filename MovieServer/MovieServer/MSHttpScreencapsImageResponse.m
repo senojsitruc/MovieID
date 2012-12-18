@@ -32,44 +32,27 @@
 	response.dataBuffer = [[NSMutableData alloc] init];
 	response->mIsDone = FALSE;
 	
-	[NSThread performBlockInBackground:^{
-		AVAsset *avasset = [AVAsset assetWithURL:[NSURL fileURLWithPath:files[0]]];
-		
-		if (!avasset || !avasset.tracks.count) {
-			NSLog(@"%s.. failed to create AVAsset with '%@'", __PRETTY_FUNCTION__, files[0]);
-			response->mIsDone = TRUE;
-			[connection responseHasAvailableData:response];
-			return;
-		}
-		
+	[NSThread detachNewThreadBlock:^{
 		NSArray *paramParts = [params componentsSeparatedByString:@"--"];
 		
 		if (paramParts.count < 5) {
 			NSLog(@"%s.. invalid params, '%@'", __PRETTY_FUNCTION__, params);
 			response->mIsDone = TRUE;
-			[connection responseHasAvailableData:response];
+			[connection responseDidAbort:response];
 			return;
 		}
 		
-		NSError *error = nil;
 		NSUInteger offset = ((NSString *)paramParts[1]).integerValue;
-		AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:avasset];
+		CGSize size = CGSizeMake(((NSString *)paramParts[3]).integerValue, ((NSString *)paramParts[4]).integerValue);
+		NSData *imageData = [MSAppDelegate pngDataForTime:offset inMovie:files[0] maxSize:size];
 		
-		if (!generator) {
-			NSLog(@"%s.. failed to create AVAssetImageGenerator", __PRETTY_FUNCTION__);
+		if (!imageData) {
 			response->mIsDone = TRUE;
-			[connection responseHasAvailableData:response];
+			[connection responseDidAbort:response];
 			return;
 		}
 		
-		generator.maximumSize = CGSizeMake(((NSString *)paramParts[3]).integerValue, ((NSString *)paramParts[4]).integerValue);
-		
-		CGImageRef imageRef = [generator copyCGImageAtTime:CMTimeMake(offset,1) actualTime:NULL error:&error];
-		NSData *imageData = [MSAppDelegate pngDataFromCGImage:imageRef];
-		
-		if (imageData)
-			[response.dataBuffer appendData:imageData];
-		
+		[response.dataBuffer appendData:imageData];
 		response->mIsDone = TRUE;
 		[connection responseHasAvailableData:response];
 	}];

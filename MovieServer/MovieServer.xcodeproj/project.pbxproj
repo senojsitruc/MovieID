@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F935A2451680FA16002133A0 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F935A2441680FA16002133A0 /* QTKit.framework */; };
 		F96BBE09167EAE14000CA160 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96BBE08167EAE14000CA160 /* Cocoa.framework */; };
 		F96BBE13167EAE14000CA160 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F96BBE11167EAE14000CA160 /* InfoPlist.strings */; };
 		F96BBE15167EAE14000CA160 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F96BBE14167EAE14000CA160 /* main.m */; };
@@ -82,6 +83,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F935A2441680FA16002133A0 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		F96BBE05167EAE14000CA160 /* MovieServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F96BBE08167EAE14000CA160 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F96BBE0B167EAE14000CA160 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -177,6 +179,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F935A2451680FA16002133A0 /* QTKit.framework in Frameworks */,
 				F96BBEA4167EAF04000CA160 /* MovieID.framework in Frameworks */,
 				F96BBE96167EAEAC000CA160 /* CoreMedia.framework in Frameworks */,
 				F96BBE94167EAEA6000CA160 /* AVFoundation.framework in Frameworks */,
@@ -210,6 +213,7 @@
 		F96BBE07167EAE14000CA160 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F935A2441680FA16002133A0 /* QTKit.framework */,
 				F96BBE9E167EAEFB000CA160 /* MovieIDFramework.xcodeproj */,
 				F96BBE95167EAEAC000CA160 /* CoreMedia.framework */,
 				F96BBE93167EAEA6000CA160 /* AVFoundation.framework */,
