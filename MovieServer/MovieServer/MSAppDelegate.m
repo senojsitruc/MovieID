@@ -204,6 +204,9 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	CGImageRef cgimage = NULL;
 	NSData *imageData = nil;
 	
+	if ([moviePath hasSuffix:@".mkv"])
+		return nil;
+	
 	if ([moviePath hasSuffix:@".m4v"] ||
 			[moviePath hasSuffix:@".mp4"] ||
 			[moviePath hasSuffix:@".mov"])
