@@ -9,6 +9,7 @@
 #import "MSHttpScreencapsImageResponse.h"
 #import "HTTPConnection.h"
 #import "MSHttpResponse.h"
+#import "MSAppDelegate.h"
 #import "GCDAsyncSocket.h"
 #import "NSThread+Additions.h"
 #import <MovieID/IDMediaInfo.h>
@@ -52,7 +53,6 @@
 		
 		NSError *error = nil;
 		NSUInteger offset = ((NSString *)paramParts[1]).integerValue;
-		NSMutableData *imageData = [[NSMutableData alloc] init];
 		AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:avasset];
 		
 		if (!generator) {
@@ -65,29 +65,11 @@
 		generator.maximumSize = CGSizeMake(((NSString *)paramParts[3]).integerValue, ((NSString *)paramParts[4]).integerValue);
 		
 		CGImageRef imageRef = [generator copyCGImageAtTime:CMTimeMake(offset,1) actualTime:NULL error:&error];
+		NSData *imageData = [MSAppDelegate pngDataFromCGImage:imageRef];
 		
-		if (!imageRef) {
-			NSLog(@"%s.. failed to create CGImage from generator, %@", __PRETTY_FUNCTION__, error.localizedDescription);
-			response->mIsDone = TRUE;
-			[connection responseHasAvailableData:response];
-			return;
-		}
+		if (imageData)
+			[response.dataBuffer appendData:imageData];
 		
-		CGImageDestinationRef imageDestRef = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
-		CGImageDestinationSetProperties(imageDestRef, (__bridge CFDictionaryRef)@{(NSString *)kCGImageDestinationLossyCompressionQuality: @(0.5)});
-		CGImageDestinationAddImage(imageDestRef, imageRef, NULL);
-		
-		if (!CGImageDestinationFinalize(imageDestRef)) {
-			NSLog(@"%s.. failed to finalize image", __PRETTY_FUNCTION__);
-			response->mIsDone = TRUE;
-			[connection responseHasAvailableData:response];
-			CFRelease(imageDestRef);
-			return;
-		}
-		
-		CFRelease(imageDestRef);
-		
-		[response.dataBuffer appendData:imageData];
 		response->mIsDone = TRUE;
 		[connection responseHasAvailableData:response];
 	}];
