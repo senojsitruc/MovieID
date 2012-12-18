@@ -95,7 +95,7 @@
  */
 - (BOOL)isDone
 {
-	return mIsDone && self.theOffset >= [self.dataBuffer length];
+	return mIsDone && self.theOffset >= self.dataBuffer.length;
 }
 
 

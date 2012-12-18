@@ -10,11 +10,14 @@
 #import "HTTPConnection.h"
 #import "HTTPResponse.h"
 #import "HTTPServer.h"
+#import "NSThread+Additions.h"
 #import "MSHttpResponse.h"
 #import "MSHttpScreencapsInfoResponse.h"
 #import "MShttpScreencapsImageResponse.h"
 #import "MSHttpProfileImageResponse.h"
 #import "MSHttpPosterImageResponse.h"
+#import <AVFoundation/AVFoundation.h>
+#import <QTKit/QTKit.h>
 
 NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 
@@ -190,6 +193,103 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	CFRelease(idRef);
 	
 	return imageData;
+}
+
+/**
+ *
+ *
+ */
++ (NSData *)pngDataForTime:(NSTimeInterval)timeInSeconds inMovie:(NSString *)moviePath maxSize:(CGSize)size
+{
+	CGImageRef cgimage = NULL;
+	NSData *imageData = nil;
+	
+	if ([moviePath hasSuffix:@".mkv"])
+		return nil;
+	
+	if ([moviePath hasSuffix:@".m4v"] ||
+			[moviePath hasSuffix:@".mp4"] ||
+			[moviePath hasSuffix:@".mov"])
+		cgimage = [self avf_CGImageForTime:timeInSeconds inMovie:moviePath maxSize:size];
+	
+	if (!cgimage)
+		cgimage = [self qtkit_CGImageForTime:timeInSeconds inMovie:moviePath maxSize:size];
+	
+	if (cgimage) {
+		imageData = [self pngDataFromCGImage:cgimage];
+		CFRelease(cgimage);
+	}
+	
+	return imageData;
+}
+
+/**
+ *
+ *
+ */
++ (CGImageRef)avf_CGImageForTime:(NSTimeInterval)timeInSeconds inMovie:(NSString *)moviePath maxSize:(CGSize)size
+{
+	AVAsset *avasset = [AVAsset assetWithURL:[NSURL fileURLWithPath:moviePath]];
+	
+	if (!avasset || !avasset.tracks.count) {
+		NSLog(@"%s.. failed to create AVAsset [%@]", __PRETTY_FUNCTION__, moviePath.lastPathComponent);
+		return nil;
+	}
+	
+	AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:avasset];
+	
+	if (!generator) {
+		NSLog(@"%s.. failed to create AVAssetImageGenerator() [%@]", __PRETTY_FUNCTION__, moviePath.lastPathComponent);
+		return nil;
+	}
+	
+	generator.maximumSize = size;
+	
+	return [generator copyCGImageAtTime:CMTimeMake(timeInSeconds,1) actualTime:NULL error:nil];
+}
+
+/**
+ *
+ *
+ */
++ (CGImageRef)qtkit_CGImageForTime:(NSTimeInterval)timeInSeconds inMovie:(NSString *)moviePath maxSize:(CGSize)size
+{
+	__block NSError *error = nil;
+	__block QTMovie *qtmovie = nil;
+	
+	[[NSThread mainThread] performBlock:^{
+		qtmovie = [[QTMovie alloc] initWithURL:[NSURL fileURLWithPath:moviePath] error:&error];
+		[qtmovie detachFromCurrentThread];
+	} waitUntilDone:TRUE];
+	
+	if (!qtmovie) {
+		NSLog(@"%s.. failed to QTMovie::initWithURL(%@), %@", __PRETTY_FUNCTION__, moviePath, error.localizedDescription);
+		return nil;
+	}
+	
+	[QTMovie enterQTKitOnThread];
+	
+	if (![qtmovie attachToCurrentThread]) {
+		NSLog(@"%s.. failed to attachToCurrentThread() [%@]", __PRETTY_FUNCTION__, moviePath);
+		[QTMovie exitQTKitOnThread];
+		return nil;
+	}
+	
+	[qtmovie setIdling:FALSE];
+	
+	NSDictionary *attrs = @{QTMovieFrameImageType: QTMovieFrameImageTypeCGImageRef,
+												 QTMovieFrameImageSize: [NSValue valueWithSize:NSSizeFromCGSize(size)] };
+	CGImageRef cgimage = [qtmovie frameImageAtTime:QTMakeTime(timeInSeconds,1) withAttributes:attrs error:&error];
+	
+	if (!cgimage)
+		NSLog(@"%s.. failed to frameAtImageTime(), because %@ [%@]", __PRETTY_FUNCTION__, error.localizedDescription, moviePath);
+	else
+		CFRetain(cgimage);
+	
+	[qtmovie detachFromCurrentThread];
+	[QTMovie exitQTKitOnThread];
+	
+	return cgimage;
 }
 
 @end
