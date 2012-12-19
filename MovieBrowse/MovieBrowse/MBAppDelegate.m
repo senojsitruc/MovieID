@@ -2046,7 +2046,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	if (!mIsDoneLoading)
 		return;
 	
-	NSLog(@"%s.. mActorSelection=%@, mGenreSelection=%@, mMovieSelection=%@", __PRETTY_FUNCTION__, mActorSelection.name, [mGenreSelections.allKeys componentsJoinedByString:@", "], mMovieSelection.title);
+	NSLog(@"%s.. mActor=%@, mGenre=%@, mMovie=%@, mLanguage=%@, mRating=%@", __PRETTY_FUNCTION__, mActorSelection.name, [mGenreSelections.allKeys componentsJoinedByString:@", "], mMovieSelection.title, mLanguageSelection, mRatingSelection);
 	
 	NSPredicate *predicate = nil;
 	BOOL (^genreMatches)(id) = nil;
@@ -2115,7 +2115,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	//
 	// actor & language & rating
 	//
-	if (mActorSelection && mLanguageSelection && genreMatches) {
+	if (mActorSelection && mLanguageSelection && mRatingSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
@@ -2138,7 +2138,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	//
 	// actor & rating & genre
 	//
-	if (mActorSelection && mLanguageSelection && genreMatches) {
+	if (mActorSelection && mRatingSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
@@ -2149,7 +2149,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	//
 	// language & rating & genre
 	//
-	if (mActorSelection && mLanguageSelection && genreMatches) {
+	if (mLanguageSelection && mRatingSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
 			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
@@ -2175,7 +2175,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	//
 	// actor & rating
 	//
-	else if (mActorSelection && mLanguageSelection) {
+	else if (mActorSelection && mRatingSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
@@ -2196,7 +2196,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	//
 	// language & rating
 	//
-	else if (mLanguageSelection && genreMatches) {
+	else if (mLanguageSelection && mRatingSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
 			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
@@ -2217,7 +2217,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	//
 	// rating & genre
 	//
-	else if (mLanguageSelection && genreMatches) {
+	else if (mRatingSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
 			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
