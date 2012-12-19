@@ -233,7 +233,6 @@ static NSString *gRtApiKey;
 	}
 	
 	NSMutableString *searchQuery = [[NSMutableString alloc] init];
-//[searchQuery appendString:@"http://api.themoviedb.org/3/search/movie?api_key=d257f5f93714b665cefa48800a6332e2&include_adult=1&query="];
 	[searchQuery appendString:@"http://api.themoviedb.org/3/search/movie?api_key="];
 	[searchQuery appendString:[self tmdbApiKey]];
 	[searchQuery appendString:@"&include_adult=1&query="];

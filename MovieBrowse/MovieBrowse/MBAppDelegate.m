@@ -73,12 +73,21 @@ static MBAppDelegate *gAppDelegate;
 	BOOL mLanguagesDirty;
 	
 	/**
+	 * Keyed on rating name with NSNumber values denoting the number of movies show that include the
+	 * rating.
+	 */
+	NSMutableDictionary *mRatingsByName;
+	NSMutableArray *mRatingsSorted;
+	BOOL mRatingsDirty;
+	
+	/**
 	 * Selections
 	 */
 	MBPerson *mActorSelection;
 	NSMutableDictionary *mGenreSelections;
 	MBMovie *mMovieSelection;
 	NSString *mLanguageSelection;
+	NSString *mRatingSelection;
 	
 	/**
 	 * Caches
@@ -110,6 +119,9 @@ static MBAppDelegate *gAppDelegate;
 	NSMenuItem *mMovieHeaderMenuLanguageSeparatorItem;
 	NSMenuItem *mMovieHeaderMenuLanguageHeadingItem;
 	NSMutableArray *mMovieHeaderMenuLanguageItems;
+	NSMenuItem *mMovieHeaderMenuRatingSeparatorItem;
+	NSMenuItem *mMovieHeaderMenuRatingHeadingItem;
+	NSMutableArray *mMovieHeaderMenuRatingItems;
 	BOOL mShowHiddenMovies;
 	
 	/**
@@ -154,6 +166,8 @@ static MBAppDelegate *gAppDelegate;
 	mGenreSelections = [[NSMutableDictionary alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];
 	mLanguagesSorted = [[NSMutableArray alloc] init];
+	mRatingsByName = [[NSMutableDictionary alloc] init];
+	mRatingsSorted = [[NSMutableArray alloc] init];
 	mGenresByName = [[NSMutableDictionary alloc] init];
 	mGenresSorted = [[NSMutableArray alloc] init];
 	mActorsByName = [[NSMutableDictionary alloc] init];
@@ -240,7 +254,10 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		NSRect headerFrame = self.movieTable.headerView.frame;
 		headerFrame.size.height += 10;
 		headerView.frame = headerFrame;
-		headerCell.willDisplayHandler = ^{ [self updateMoviesHeaderLanguages:TRUE]; };
+		headerCell.willDisplayHandler = ^{
+			[self updateMoviesHeaderLanguages:TRUE];
+			[self updateMoviesHeaderRating:TRUE];
+		};
 		
 		[menu addItemWithTitle:@"Sort" action:nil keyEquivalent:@""];
 		NSMenuItem *sortByTitle = [menu addItemWithTitle:@"  Movie by Title" action:@selector(doActionMoviesSortByTitle:) keyEquivalent:@""];
@@ -275,6 +292,9 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		mMovieHeaderMenuLanguageSeparatorItem = [NSMenuItem separatorItem];
 		mMovieHeaderMenuLanguageHeadingItem = [[NSMenuItem alloc] initWithTitle:@"Languages" action:nil keyEquivalent:@""];
 		mMovieHeaderMenuLanguageItems = [[NSMutableArray alloc] init];
+		mMovieHeaderMenuRatingSeparatorItem = [NSMenuItem separatorItem];
+		mMovieHeaderMenuRatingHeadingItem = [[NSMenuItem alloc] initWithTitle:@"Ratings" action:nil keyEquivalent:@""];
+		mMovieHeaderMenuRatingItems = [[NSMutableArray alloc] init];
 	}
 	
 	//
@@ -494,12 +514,12 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		
 		mIsDoneLoading = TRUE;
 		mLanguagesDirty = TRUE;
+		mRatingsDirty = TRUE;
 		
 		[self updateMovieFilter];
 		[self updateMovieFilter_actorCache];
 		[self updateActorFilter];
 		[self updateMovieFilter_genreCache];
-//	[self updateGenreFilter];
 		[self updateWindowTitle];
 	}
 	
@@ -563,6 +583,9 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	}
 	
 	[NSThread performBlockInBackground:^{
+		
+		//[mDataManager ratingsUpdate];
+		//[mDataManager ratingsNormalize];
 		
 		/*
 		[[mDataManager findMissingFiles] enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
@@ -696,6 +719,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	}
 	
 	mLanguagesDirty = TRUE;
+	mRatingsDirty = TRUE;
 	
 	[self updateActorsHeaderLabel];
 	
@@ -752,6 +776,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self.genreTable.headerView setNeedsDisplay:TRUE];
 	
 	mLanguagesDirty = TRUE;
+	mRatingsDirty = TRUE;
 	
 	[self updateMovieFilter];
 	
@@ -788,6 +813,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	}
 	
 	mLanguagesDirty = TRUE;
+	mRatingsDirty = TRUE;
 	
 	[self updateMoviesHeaderLabel];
 	[self updateMovieFilter_actorCache];
@@ -908,12 +934,22 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	else if (mMovieHeaderMenuSortByAddedItem.state == NSOnState)
 		prefix = @"Movie by Added";
 	
-	if (mMovieSelection && mLanguageSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@, %@)", prefix, mLanguageSelection, mMovieSelection.title];
+	if (mMovieSelection && mLanguageSelection && mRatingSelection)
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@, %@) - %@", prefix, mLanguageSelection, mRatingSelection, mMovieSelection.title];
+	
+	else if (mMovieSelection && mLanguageSelection)
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@) - %@", prefix, mLanguageSelection, mMovieSelection.title];
+	else if (mMovieSelection && mRatingSelection)
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@) - %@", prefix, mRatingSelection, mMovieSelection.title];
+	else if (mLanguageSelection && mRatingSelection)
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@, %@)", prefix, mLanguageSelection, mRatingSelection];
+	
 	else if (mMovieSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mMovieSelection.title];
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ - %@", prefix, mMovieSelection.title];
 	else if (mLanguageSelection)
 		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mLanguageSelection];
+	else if (mRatingSelection)
+		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mRatingSelection];
 	else
 		mMovieHeaderCell.label = prefix;
 	
@@ -991,6 +1027,77 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		}
 		else
 			((NSMenuItem *)mMovieHeaderMenuLanguageItems[index]).state = NSOnState;
+	}
+}
+
+/**
+ *
+ *
+ */
+- (void)updateMoviesHeaderRating:(BOOL)visibleOnly
+{
+	if (!mRatingsDirty)
+		return;
+	
+	// we ain't dirty no more; or we won't be, shortly
+	mRatingsDirty = FALSE;
+	
+	// remove any rating-related menu items
+	if (mRatingsSorted.count) {
+		[mMovieHeaderMenu removeItem:mMovieHeaderMenuRatingSeparatorItem];
+		[mMovieHeaderMenu removeItem:mMovieHeaderMenuRatingHeadingItem];
+		
+		[mMovieHeaderMenuRatingItems enumerateObjectsUsingBlock:^ (id menuObj, NSUInteger menuNdx, BOOL *menuStop) {
+			[mMovieHeaderMenu removeItem:menuObj];
+		}];
+		
+		[mRatingsByName removeAllObjects];
+		[mRatingsSorted removeAllObjects];
+		[mMovieHeaderMenuRatingItems removeAllObjects];
+	}
+	
+	// tally the count for each rating
+	{
+		NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
+		
+		[objects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+			NSString *rating = ((MBMovie *)movieObj).rating;
+			
+			if (rating.length)
+				mRatingsByName[rating] = @(1 + ((NSNumber *)mRatingsByName[rating]).integerValue);
+			else
+				mRatingsByName[@"Unknown"] = @(1 + ((NSNumber *)mRatingsByName[@"Unknown"]).integerValue);
+		}];
+		
+		[mRatingsSorted setArray:[mRatingsByName.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id rating1, id rating2) {
+			return [rating1 compare:rating2];
+		}]];
+	}
+	
+	// insert the rating-related menu items (if any)
+	if (mRatingsSorted.count) {
+		[mMovieHeaderMenu addItem:mMovieHeaderMenuRatingSeparatorItem];
+		[mMovieHeaderMenu addItem:mMovieHeaderMenuRatingHeadingItem];
+		
+		[mRatingsSorted enumerateObjectsUsingBlock:^ (id ratingObj, NSUInteger ratingNdx, BOOL *ratingStop) {
+			NSString *title = [NSString stringWithFormat:@"  %@ (%@)", ratingObj, mRatingsByName[ratingObj]];
+			NSMenuItem *item = [mMovieHeaderMenu addItemWithTitle:title action:@selector(doActionMoviesFilterByRating:) keyEquivalent:@""];
+			item.target = self;
+			item.tag = ratingNdx;
+			[mMovieHeaderMenuRatingItems addObject:item];
+		}];
+	}
+	
+	// maintain the rating selection if possible
+	if (mRatingSelection) {
+		NSInteger index = [mRatingsSorted indexOfObject:mRatingSelection];
+		
+		if (NSNotFound == index) {
+			mRatingSelection = nil;
+			[self updateMoviesHeaderLabel];
+		}
+		else
+			((NSMenuItem *)mMovieHeaderMenuRatingItems[index]).state = NSOnState;
 	}
 }
 
@@ -1185,10 +1292,36 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMovieFilter];
 	[self updateActorFilter];
-//[self updateGenreFilter];
-	
 	[self updateMoviesHeaderLabel];
 }
+
+/**
+ *
+ *
+ */
+- (void)doActionMoviesFilterByRating:(id)sender
+{
+	NSMenuItem *item = sender;
+	
+	if (item.state) {
+		item.state = NSOffState;
+		mRatingSelection = nil;
+	}
+	else {
+		[mMovieHeaderMenuRatingItems enumerateObjectsUsingBlock:^ (id itemObj, NSUInteger itemNdx, BOOL *itemStop) {
+			((NSMenuItem *)itemObj).state = NSOffState;
+		}];
+		
+		item.state = NSOnState;
+		mRatingSelection = mRatingsSorted[item.tag];
+	}
+	
+	[self updateMovieFilter];
+	[self updateActorFilter];
+	[self updateMoviesHeaderLabel];
+}
+
+
 
 
 
@@ -1960,15 +2093,69 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	}
 	
 	//
+	// actor & language & rating & genre
+	//
+	if (mActorSelection && mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
+			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+						 [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+		}];
+	}
+	
+	
+	
+	
+	
+	//
+	// actor & language & rating
+	//
+	if (mActorSelection && mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
+			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
+		}];
+	}
+	
+	//
 	// actor & language & genre
 	//
 	if (mActorSelection && mLanguageSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
-						 [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
 			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
 		}];
 	}
+	
+	//
+	// actor & rating & genre
+	//
+	if (mActorSelection && mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+		}];
+	}
+	
+	//
+	// language & rating & genre
+	//
+	if (mActorSelection && mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+		}];
+	}
+	
+	
+	
+	
 	
 	//
 	// actor & language
@@ -1977,6 +2164,17 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 						 [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
+		}];
+	}
+	
+	//
+	// actor & rating
+	//
+	else if (mActorSelection && mLanguageSelection) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
 			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
 		}];
 	}
@@ -1992,6 +2190,17 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	}
 	
 	//
+	// language & rating
+	//
+	else if (mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+		}];
+	}
+	
+	//
 	// language & genre
 	//
 	else if (mLanguageSelection && genreMatches) {
@@ -2000,6 +2209,20 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
 		}];
 	}
+	
+	//
+	// rating & genre
+	//
+	else if (mLanguageSelection && genreMatches) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
+			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+		}];
+	}
+	
+	
+	
+	
 	
 	//
 	// genre
@@ -2026,6 +2249,15 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	else if (mLanguageSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection];
+		}];
+	}
+	
+	//
+	// rating
+	//
+	else if (mRatingSelection) {
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
+			return [mRatingSelection isEqualToString:((MBMovie *)object).rating];
 		}];
 	}
 	

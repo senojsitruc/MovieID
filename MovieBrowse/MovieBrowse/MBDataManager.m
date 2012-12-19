@@ -20,6 +20,7 @@
 #import <MovieID/IDSearch.h>
 #import <MovieID/IDMovie.h>
 #import <MovieID/IDPerson.h>
+#import <MovieID/IDRating.h>
 #import <MovieID/IDTmdbMovie.h>
 #import <MovieID/RegexKitLite.h>
 
@@ -34,6 +35,10 @@
 	NSMutableDictionary *mActors;
 	NSMutableDictionary *mGenres;
 	NSMutableDictionary *mMovies;
+	
+	dispatch_queue_t queue1;
+	dispatch_queue_t queue2;
+	dispatch_queue_t queue3;
 }
 @end
 
@@ -57,6 +62,10 @@
 		mActors = [[NSMutableDictionary alloc] init];
 		mGenres = [[NSMutableDictionary alloc] init];
 		mMovies = [[NSMutableDictionary alloc] init];
+		
+		queue1 = dispatch_queue_create("queue-01", DISPATCH_QUEUE_SERIAL);
+		queue2 = dispatch_queue_create("queue-02", DISPATCH_QUEUE_SERIAL);
+		queue3 = dispatch_queue_create("queue-03", DISPATCH_QUEUE_SERIAL);
 		
 		[self openDb];
 		
@@ -634,6 +643,88 @@
 	}];
 	
 	return movies;
+}
+
+/**
+ *
+ *
+ */
+- (void)ratingsUpdate
+{
+	NSUInteger total = mMovies.count;
+	__block NSUInteger current = 0;
+	__block NSUInteger install = 0;
+	
+	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *movieStop) {
+		NSUInteger _current = (current += 1);
+		
+		NSString *rating = mbmovie.rating;
+		NSString *imdbId = mbmovie.imdbId;
+		
+		if (![rating isEqualToString:@"NC-17"])
+//	if (rating.length)
+			return;
+		else if (!imdbId.length)
+			return;
+		
+		dispatch_queue_t queue = NULL;
+		NSUInteger step = (install % 3);
+		
+		if (0 == step)
+			queue = queue1;
+		else if (1 == step)
+			queue = queue2;
+		else
+			queue = queue3;
+		
+		install += 1;
+		
+		dispatch_async(queue, ^{
+			NSString *ratingKey = [mbmovie.dbkey stringByAppendingString:@"--rating"];
+			NSArray *movies = [IDSearch imdbSearchMovieWithTitle:imdbId andYear:nil andRuntime:nil];
+			
+			if (!movies.count)
+				return;
+			
+			IDMovie *idmovie = movies[0];
+			NSString *idrating = idmovie.rating;
+			
+			if (!idrating.length)
+				idrating = @"Unknown";
+			
+			NSLog(@"[%04lu of %04lu] %@ -- %@", _current, total, idrating, mbmovie.dirpath);
+			
+			mMovieDb[ratingKey] = idrating;
+		});
+	}];
+}
+
+/**
+ *
+ *
+ */
+- (void)ratingsNormalize
+{
+	NSMutableDictionary *ratings = [[NSMutableDictionary alloc] init];
+	
+	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+		NSString *rating = mbmovie.rating;
+		
+		if (rating.length)
+			ratings[rating] = @(1 + ((NSNumber *)ratings[rating]).integerValue);
+	}];
+	
+	NSLog(@"%@", ratings);
+	
+	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+		NSString *rating = [IDRating normalizedRating:mbmovie.rating];
+		
+		if (rating.length && ![mbmovie.rating isEqualToString:rating]) {
+			NSLog(@" [%@] change %@ to %@", mbmovie.dbkey, mbmovie.rating, rating);
+			NSString *ratingKey = [mbmovie.dbkey stringByAppendingString:@"--rating"];
+			mMovieDb[ratingKey] = rating;
+		}
+	}];
 }
 
 /**

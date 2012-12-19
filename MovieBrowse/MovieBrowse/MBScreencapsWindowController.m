@@ -259,8 +259,6 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	[urlString appendFormat:@"%lu", offset];
 	[urlString appendString:@"--png--200--150"];
 	
-	NSLog(@"%@", [NSURL URLWithString:urlString]);
-	
 	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
 	
 	@synchronized (self) {

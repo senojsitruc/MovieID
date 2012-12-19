@@ -27,6 +27,8 @@
 		F932120F1634B5420093E619 /* IDIMDbPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = F932120D1634B5420093E619 /* IDIMDbPerson.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F93212101634B5420093E619 /* IDIMDbPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F932120E1634B5420093E619 /* IDIMDbPerson.m */; };
 		F96BBEA8167EAF53000CA160 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96BBEA7167EAF53000CA160 /* CoreMedia.framework */; };
+		F96BBEB816813D35000CA160 /* IDRating.h in Headers */ = {isa = PBXBuildFile; fileRef = F96BBEB616813D35000CA160 /* IDRating.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F96BBEB916813D35000CA160 /* IDRating.m in Sources */ = {isa = PBXBuildFile; fileRef = F96BBEB716813D35000CA160 /* IDRating.m */; };
 		F97BF38F15F9E5ED00444926 /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = F97BF38D15F9E5ED00444926 /* NSData+Base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F97BF39015F9E5ED00444926 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF38E15F9E5ED00444926 /* NSData+Base64.m */; };
 		F97BF39315F9E61000444926 /* libcommonCrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F97BF39215F9E61000444926 /* libcommonCrypto.dylib */; };
@@ -105,6 +107,8 @@
 		F932120D1634B5420093E619 /* IDIMDbPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDIMDbPerson.h; sourceTree = "<group>"; };
 		F932120E1634B5420093E619 /* IDIMDbPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDIMDbPerson.m; sourceTree = "<group>"; };
 		F96BBEA7167EAF53000CA160 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		F96BBEB616813D35000CA160 /* IDRating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDRating.h; sourceTree = "<group>"; };
+		F96BBEB716813D35000CA160 /* IDRating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDRating.m; sourceTree = "<group>"; };
 		F97BF38D15F9E5ED00444926 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		F97BF38E15F9E5ED00444926 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		F97BF39215F9E61000444926 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
@@ -236,6 +240,8 @@
 				F93211DA163230350093E619 /* IDPerson.m */,
 				F93211DD1632303E0093E619 /* IDMovie.h */,
 				F93211DE1632303E0093E619 /* IDMovie.m */,
+				F96BBEB616813D35000CA160 /* IDRating.h */,
+				F96BBEB716813D35000CA160 /* IDRating.m */,
 				F93211FE1634B38C0093E619 /* IMDb */,
 				F93211FF1634B3930093E619 /* RT */,
 				F93211FD1634B3860093E619 /* TMDb */,
@@ -408,6 +414,7 @@
 				F93212031634B4F80093E619 /* IDRTMovie.h in Headers */,
 				F93212071634B5090093E619 /* IDRTPerson.h in Headers */,
 				F932120B1634B52D0093E619 /* IDIMDbMovie.h in Headers */,
+				F96BBEB816813D35000CA160 /* IDRating.h in Headers */,
 				F932120F1634B5420093E619 /* IDIMDbPerson.h in Headers */,
 				F9B9025915F789000089BB17 /* SBJson.h in Headers */,
 				F9B9025A15F789000089BB17 /* SBJsonParser.h in Headers */,
@@ -527,6 +534,7 @@
 				F93212081634B5090093E619 /* IDRTPerson.m in Sources */,
 				F932120C1634B52D0093E619 /* IDIMDbMovie.m in Sources */,
 				F93212101634B5420093E619 /* IDIMDbPerson.m in Sources */,
+				F96BBEB916813D35000CA160 /* IDRating.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
