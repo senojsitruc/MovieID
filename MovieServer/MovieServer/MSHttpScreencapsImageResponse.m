@@ -46,7 +46,7 @@
 		CGSize size = CGSizeMake(((NSString *)paramParts[3]).integerValue, ((NSString *)paramParts[4]).integerValue);
 		NSData *imageData = [MSAppDelegate pngDataForTime:offset inMovie:files[0] maxSize:size];
 		
-		if (!imageData) {
+		if (!imageData.length) {
 			response->mIsDone = TRUE;
 			[connection responseDidAbort:response];
 			return;

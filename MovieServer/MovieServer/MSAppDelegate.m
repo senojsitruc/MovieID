@@ -158,6 +158,10 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 		return nil;
 	
 	CGColorSpaceRef cs = CGImageGetColorSpace(cgimage);
+	
+	if (!cs)
+		return nil;
+	
 	CGContextRef context = CGBitmapContextCreate(NULL, width, height, CGImageGetBitsPerComponent(cgimage), CGImageGetBytesPerRow(cgimage), cs, CGImageGetAlphaInfo(cgimage));
 	CGColorSpaceRelease(cs);
 	
