@@ -1072,6 +1072,10 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		[mRatingsSorted setArray:[mRatingsByName.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id rating1, id rating2) {
 			return [rating1 compare:rating2];
 		}]];
+		
+#if !defined DEBUG
+		[mRatingsByName removeObjectForKey:@"NC-17"];
+#endif
 	}
 	
 	// insert the rating-related menu items (if any)
