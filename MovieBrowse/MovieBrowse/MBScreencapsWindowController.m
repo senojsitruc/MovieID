@@ -161,6 +161,8 @@ NSString * const MBScreencapsKeyHeight = @"height";
 			NSUInteger _timeOffset = timeOffset;
 			((MBScreencapsThumbnailView *)imageViewObj).loading = TRUE;
 			[[MBDownloadQueue sharedInstance] dispatchBeg:^{
+				if (transactionId != mTransactionId)
+					return;
 				NSImage *image = [self serverGetImageAtOffset:_timeOffset];
 				NSString *timestamp = [self humanReadableCode:_timeOffset];
 				[[NSThread mainThread] performBlock:^{
@@ -257,6 +259,8 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	[urlString appendFormat:@"%lu", offset];
 	[urlString appendString:@"--png--200--150"];
 	
+	NSLog(@"%@", [NSURL URLWithString:urlString]);
+	
 	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
 	
 	@synchronized (self) {
@@ -297,6 +301,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
  */
 - (IBAction)doActionClose:(id)sender
 {
+	mTransactionId += 1;
 	[self hide];
 }
 
