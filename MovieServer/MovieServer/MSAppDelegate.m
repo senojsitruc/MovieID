@@ -274,7 +274,7 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	[QTMovie enterQTKitOnThread];
 	
 	if (![qtmovie attachToCurrentThread]) {
-		NSLog(@"%s.. failed to attachToCurrentThread() [%@]", __PRETTY_FUNCTION__, moviePath);
+		NSLog(@"%s.. failed to QTMovie::attachToCurrentThread() [%@]", __PRETTY_FUNCTION__, moviePath);
 		[QTMovie exitQTKitOnThread];
 		return nil;
 	}
@@ -286,7 +286,7 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	CGImageRef cgimage = [qtmovie frameImageAtTime:QTMakeTime(timeInSeconds,1) withAttributes:attrs error:&error];
 	
 	if (!cgimage)
-		NSLog(@"%s.. failed to frameAtImageTime(), because %@ [%@]", __PRETTY_FUNCTION__, error.localizedDescription, moviePath);
+		NSLog(@"%s.. failed to QTMovie::frameAtImageTime(), because %@ [%@]", __PRETTY_FUNCTION__, error.localizedDescription, moviePath);
 	else
 		CFRetain(cgimage);
 	
