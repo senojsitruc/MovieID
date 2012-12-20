@@ -18,7 +18,9 @@
 #import "MBPopUpButtonCell.h"
 #import "MBTableHeaderCell.h"
 #import "MBDownloadQueue.h"
-#import "MBImportViewController.h"
+#import "MBImportWindowController.h"
+#import "MBActorProfileWindowController.h"
+#import "MBPreferencesWindowController.h"
 #import "MBScreencapsWindowController.h"
 #import "NSArray+Additions.h"
 #import "NSString+Additions.h"
@@ -51,9 +53,10 @@ static MBAppDelegate *gAppDelegate;
 
 @interface MBAppDelegate ()
 {
-	dispatch_queue_t mImageQueue;
-	
 	MBDataManager *mDataManager;
+	MBActorProfileWindowController *mActorProfileController;
+	MBImportWindowController *mImportController;
+	MBPreferencesWindowController *mPreferencesController;
 	MBScreencapsWindowController *mScreencapsController;
 	BOOL mIsDoneLoading;
 	
@@ -150,7 +153,6 @@ static MBAppDelegate *gAppDelegate;
 @implementation MBAppDelegate
 
 @synthesize dataManager = mDataManager;
-@synthesize screencapsController = mScreencapsController;
 
 /**
  *
@@ -162,6 +164,9 @@ static MBAppDelegate *gAppDelegate;
 	mShowHiddenMovies = FALSE;
 	mIsDoneLoading = FALSE;
 	mDataManager = [[MBDataManager alloc] init];
+	mActorProfileController = [[MBActorProfileWindowController alloc] init];
+	mImportController = [[MBImportWindowController alloc] init];
+	mPreferencesController = [[MBPreferencesWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
 	mGenreSelections = [[NSMutableDictionary alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];
@@ -176,7 +181,6 @@ static MBAppDelegate *gAppDelegate;
 	self.actorsArray = [[NSMutableArray alloc] init];
 	self.genresArray = [[NSMutableArray alloc] init];
 	self.moviesArray = [[NSMutableArray alloc] init];
-	self.searchArray = [[NSMutableArray alloc] init];
 	
 	// user defaults
 	{
@@ -378,8 +382,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		mActorHeaderMenuSortByAge = sortByAge;
 		mActorHeaderMenuSortByMovies = sortByMovies;
 	}
-	
-	mImageQueue = dispatch_queue_create("image-queue", DISPATCH_QUEUE_CONCURRENT);
 }
 
 /**
@@ -401,8 +403,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	// actor - double click action
 	self.actorTable.target = self;
 	self.actorTable.doubleAction = @selector(doActionActorDoubleClick:);
-	self.actorDescScroll.frame = NSMakeRect(423, 49, 425, 400);
-	[self.actorWindow.contentView addSubview:self.actorDescScroll];
 	
 	//
 	// reinstate "show hidden" state
@@ -670,15 +670,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	self.window.title = [@"MovieBrowse - " stringByAppendingString:title];
 }
 
-/**
- *
- *
- */
-- (dispatch_queue_t)imageQueue
-{
-	return mImageQueue;
-}
-
 
 
 
@@ -686,12 +677,65 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 #pragma mark - Accessors
 
 /**
- *
+ * Used to populate the "count" badge for each genre in the genre table.
  *
  */
 - (NSUInteger)movieCountForGenre:(MBGenre *)mbgenre
 {
 	return ((NSNumber *)mGenresByName[mbgenre.name]).integerValue;
+}
+
+/**
+ *
+ *
+ */
+- (void)showActor:(MBPerson *)mbperson
+{
+	if (mbperson)
+		[mActorProfileController showInWindow:self.window forPerson:mbperson];
+}
+
+/**
+ *
+ *
+ */
+- (void)showScreencapsForMovie:(MBMovie *)mbmovie
+{
+	[mScreencapsController showInWindow:self.window forMovie:mbmovie];
+}
+
+/**
+ *
+ *
+ */
+- (void)movie:(MBMovie *)mbmovie hideWithView:(NSView *)view
+{
+	mbmovie.hidden = @(TRUE);
+	[mDataManager saveMovie:mbmovie];
+	
+	NSLog(@"%@", view);
+	
+	if (view) {
+		NSInteger index = [self.movieTable rowForView:view];
+		
+		NSLog(@"%ld", index);
+		
+		if (index >= 0) {
+			[self.movieTable removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideRight];
+			[self.movieTable reloadData];
+		}
+	}
+}
+
+/**
+ *
+ *
+ */
+- (void)movie:(MBMovie *)mbmovie UnhideWithView:(NSView *)view
+{
+	mbmovie.hidden = @(FALSE);
+	[mDataManager saveMovie:mbmovie];
+	[self.movieTable reloadData];
 }
 
 
@@ -820,7 +864,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateMoviesHeaderLabel];
 	[self updateMovieFilter_actorCache];
 	[self updateActorFilter];
-//[self updateGenreFilter];
 	
 	// our find state is now invalid for doing "find next"
 	mFindIndex = NSNotFound;
@@ -838,79 +881,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  */
 - (void)doActionActorDoubleClick:(NSTableView *)tableView
 {
-	NSInteger row = tableView.selectedRow;
-	
-	if (row < 0)
-		return;
-	
-	MBPerson *mbperson = [[self.actorsArrayController arrangedObjects] objectAtIndex:row];
-	
-	if (mbperson)
-		[self showActor:mbperson];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionActorClose:(id)sender
-{
-	[NSApp endSheet:self.actorWindow];
-	[self.actorWindow orderOut:sender];
-}
-
-/**
- *
- *
- */
-- (void)showActor:(MBPerson *)mbperson
-{
-	NSUInteger actorWindowTransId = ++mActorWindowTransId;
-	
-	self.actorWindowName.stringValue = mbperson.name ? mbperson.name : @"";
-	self.actorWindowInfo.stringValue = mbperson.info ? mbperson.info : @"";
-	self.actorMovies.person = mbperson;
-	self.actorWindowImage.image = nil;
-	
-	[self.actorDescTxt setEditable:TRUE];
-	[self.actorDescTxt insertText:(mbperson.bio ? [[NSAttributedString alloc] initWithString:mbperson.bio] : @"Nothing!")];
-	[self.actorDescTxt setEditable:FALSE];
-	
-	// set the actor's bio text
-	if (mbperson.bio)
-		[self.actorDescTxt.textStorage replaceCharactersInRange:NSMakeRange(0, self.actorDescTxt.textStorage.length) withString:mbperson.bio];
-	else
-		[self.actorDescTxt.textStorage replaceCharactersInRange:NSMakeRange(0, self.actorDescTxt.textStorage.length) withString:@""];
-	
-	// scroll to the top
-	self.actorDescScroll.verticalScroller.floatValue = 0;
-	[self.actorDescScroll.contentView scrollToPoint:NSMakePoint(0,0)];
-	
-	// animate the indefinite progress indicator
-	[self.actorImagePrg startAnimation:self];
-	
-	NSSize imageSize = _actorWindowImage.frame.size;
-	
-	// retrieve the actor's image and update the ui when we're done; but don't update the ui if the
-	// user has moved on to another actor between the time that we initiated the download and when
-	// the image actually became avaliable for use.
-	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-		NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId width:imageSize.width height:imageSize.height];
-		
-		if (actorWindowTransId != mActorWindowTransId)
-			return;
-		
-		[[NSThread mainThread] performBlock:^{
-			[self.actorImagePrg stopAnimation:self];
-			
-			if (actorWindowTransId != mActorWindowTransId)
-				return;
-			
-			self.actorWindowImage.image = image;
-		}];
-	}];
-	
-	[NSApp beginSheet:self.actorWindow modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+	if (tableView.selectedRow >= 0)
+		[self showActor:[[self.actorsArrayController arrangedObjects] objectAtIndex:tableView.selectedRow]];
 }
 
 
@@ -1110,6 +1082,24 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 }
 
 /**
+ * Various things to do after we change the sort order for the movies table.
+ *
+ */
+- (void)updateMoviesPostSort
+{
+	if (mMovieSelection)
+		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
+	else {
+		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
+		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
+	}
+	
+	// our find state is now invalid for doing "find next"
+	if ([mFindType isEqualToString:@"Movies"])
+		mFindIndex = NSNotFound;
+}
+
+/**
  *
  *
  */
@@ -1125,17 +1115,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1154,17 +1134,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"year" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1183,17 +1153,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"score" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1212,17 +1172,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"duration" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1241,17 +1191,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"mtime" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:FALSE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1440,6 +1380,20 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  *
  *
  */
+- (void)updateActorPostSort
+{
+	if (mActorSelection)
+		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
+	else {
+		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
+		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
+	}
+}
+
+/**
+ *
+ *
+ */
 - (void)doActionActorsShowAll:(id)sender
 {
 	mActorHeaderMenuShowAllItem.state = NSOnState;
@@ -1479,13 +1433,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateActorsHeaderLabel];
 	[[NSUserDefaults standardUserDefaults] setObject:@"Name" forKey:MBDefaultsKeyActorSort];
 	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
-	
-	if (mActorSelection)
-		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
-	else {
-		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
+	[self updateActorPostSort];
 }
 
 /**
@@ -1501,13 +1449,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateActorsHeaderLabel];
 	[[NSUserDefaults standardUserDefaults] setObject:@"Age" forKey:MBDefaultsKeyActorSort];
 	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dob" ascending:FALSE]]];
-	
-	if (mActorSelection)
-		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
-	else {
-		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
+	[self updateActorPostSort];
 }
 
 /**
@@ -1523,89 +1465,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateActorsHeaderLabel];
 	[[NSUserDefaults standardUserDefaults] setObject:@"Movies" forKey:MBDefaultsKeyActorSort];
 	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"movieCount" ascending:FALSE]]];
-	
-	if (mActorSelection)
-		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
-	else {
-		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
+	[self updateActorPostSort];
 }
-
-
-
-
-
-#pragma mark - Movies - Hide/Unhide
-
-/**
- *
- *
- */
-- (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view
-{
-	mbmovie.hidden = @(TRUE);
-	[mDataManager saveMovie:mbmovie];
-	
-	NSLog(@"%@", view);
-	
-	if (view) {
-		NSInteger index = [self.movieTable rowForView:view];
-		
-		NSLog(@"%ld", index);
-		
-		if (index >= 0) {
-			[self.movieTable removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideRight];
-			[self.movieTable reloadData];
-		}
-	}
-}
-
-/**
- *
- *
- */
-- (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view
-{
-	mbmovie.hidden = @(FALSE);
-	[mDataManager saveMovie:mbmovie];
-	[self.movieTable reloadData];
-}
-
-
-
-
-
-#pragma mark - Link-To
-
-/**
- *
- *
- */
-- (void)doActionLinkToTMDb:(MBMovie *)mbmovie
-{
-	self.linkToTxt.stringValue = @"";
-	[NSApp beginSheet:self.linkToWindow modalForWindow:self.window modalDelegate:self didEndSelector:@selector(tmdbSheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)mbmovie];
-}
-
-- (void)tmdbSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-	if (!returnCode)
-		return;
-}
-
-- (IBAction)doActionLinkToCancel:(id)sender
-{
-	[NSApp endSheet:self.linkToWindow returnCode:0];
-	[self.linkToWindow orderOut:sender];
-}
-
-- (IBAction)doActionLinkToLink:(id)sender
-{
-	[NSApp endSheet:self.linkToWindow returnCode:1];
-	[self.linkToWindow orderOut:sender];
-}
-
 
 
 
@@ -1617,90 +1478,9 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  *
  *
  */
-- (IBAction)doActionShowPrefs:(id)sender
+- (IBAction)doActionPreferencesShow:(id)sender
 {
-	[NSApp beginSheet:self.prefsWin modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionPrefsClose:(id)sender
-{
-	[NSApp endSheet:self.prefsWin];
-	[self.prefsWin orderOut:sender];
-}
-
-/**
- * This function intentionally does nothing when running in debug mode, because I don't want to
- * accidentally delete the master image set.
- */
-- (IBAction)doActionPrefsClearCache:(id)sender
-{
-	[[MBImageCache sharedInstance] clearAll];
-}
-
-
-
-
-
-#pragma mark - Search
-
-/**
- *
- *
- */
-- (void)doActionSearchShow:(id)sender
-{
-	if ([sender isKindOfClass:[MBMovie class]]) {
-		MBMovie *mbmovie = (MBMovie *)sender;
-		self.searchTxt.stringValue = mbmovie.title;
-	}
-	
-	[NSApp beginSheet:self.searchWin modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionSearchClose:(id)sender
-{
-	[NSApp endSheet:self.searchWin];
-	[self.searchWin orderOut:sender];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionSearch:(id)sender
-{
-	NSString *searchTxt = self.searchTxt.stringValue;
-	
-	if (!searchTxt)
-		return;
-	
-	searchTxt = [searchTxt stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	if (!searchTxt.length)
-		return;
-	
-	// clear out the search result table
-	[self.searchArrayController removeObjects:self.searchArray];
-	
-	/*
-	self.searchBtn.stringValue = @"Cancel";
-	
-	[NSThread performBlockInBackground:^{
-		NSArray *results = [IDSearch tmdbSearchMovie:title andYear:year];
-		[[NSThread mainThread] performBlock:^{
-			self.searchBtn.stringValue = @"Search";
-		}];
-	}];
-	*/
-	
+	[mPreferencesController showInWindow:self.window];
 }
 
 
@@ -1715,8 +1495,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  */
 - (IBAction)doActionImport:(id)sender
 {
-	[self.importController scanSource:@"/Volumes/bigger/Media/Movies/O"];
-	[NSApp beginSheet:self.importWindow modalForWindow:self.window modalDelegate:self didEndSelector:nil contextInfo:nil];
+	[mImportController showInWindow:self.window];
 }
 
 /**

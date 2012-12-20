@@ -21,44 +21,23 @@ extern NSString * const MBDefaultsKeyApiRt;
 @class MBPerson;
 @class MBDataManager;
 @class MBActorMovieView;
-@class MBImportViewController;
+@class MBImportWindowController;
+@class MBActorProfileWindowController;
+@class MBPreferencesWindowController;
 @class MBScreencapsWindowController;
 
 @interface MBAppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
-
-@property (assign) IBOutlet NSSlider *slider;
-@property (assign) IBOutlet NSTextField *slider2;
 
 /**
  * Other
  */
 @property (readonly) MBDataManager *dataManager;
-@property (readonly) dispatch_queue_t imageQueue;
-@property (readonly) MBScreencapsWindowController *screencapsController;
 
 /**
  * Main Window
  */
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSTextField *movieInfoTxt;
-
-/**
- * Actor Sheet
- */
-@property (assign) IBOutlet NSWindow *actorWindow;
-@property (assign) IBOutlet NSImageView *actorWindowImage;
-@property (assign) IBOutlet NSTextField *actorWindowName;
-@property (assign) IBOutlet NSTextField *actorWindowInfo;
-@property (assign) IBOutlet NSTextView *actorDescTxt;
-@property (assign) IBOutlet NSScrollView *actorDescScroll;
-@property (assign) IBOutlet MBActorMovieView *actorMovies;
-@property (assign) IBOutlet NSProgressIndicator *actorImagePrg;
-
-/**
- * Link-To Sheet
- */
-@property (assign) IBOutlet NSWindow *linkToWindow;
-@property (assign) IBOutlet NSTextField *linkToTxt;
 
 /**
  * Tables
@@ -89,32 +68,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (readwrite, strong) IBOutlet NSArrayController *moviesArrayController;
 
 /**
- * Preferences
- */
-@property (assign) IBOutlet NSWindow *prefsWin;
-@property (assign) IBOutlet NSMenuItem *prefsMenu;
-@property (assign) IBOutlet NSButton *prefsAddBtn;
-@property (assign) IBOutlet NSButton *prefsDelBtn;
-
-/**
- * Search
- */
-@property (readwrite, strong) NSMutableArray *searchArray;
-@property (assign) IBOutlet NSArrayController *searchArrayController;
-@property (assign) IBOutlet NSWindow *searchWin;
-@property (assign) IBOutlet NSTextField *searchTxt;
-@property (assign) IBOutlet NSPopUpButton *searchType;
-@property (assign) IBOutlet NSPopUpButton *searchSite;
-@property (assign) IBOutlet NSButton *searchBtn;
-@property (assign) IBOutlet NSTableView *searchTbl;
-
-/**
- * Import
- */
-@property (assign) IBOutlet NSWindow *importWindow;
-@property (assign) IBOutlet MBImportViewController *importController;
-
-/**
  * Find
  */
 @property (assign) IBOutlet NSWindow *findWindow;
@@ -127,14 +80,25 @@ extern NSString * const MBDefaultsKeyApiRt;
 
 + (MBAppDelegate *)sharedInstance;
 
-- (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view;
-- (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view;
+/**
+ * Used by the MBMovieView to toggle whether a movie is hidden.
+ */
+- (void)movie:(MBMovie *)mbmovie hideWithView:(NSView *)view;
+- (void)movie:(MBMovie *)mbmovie UnhideWithView:(NSView *)view;
 
-- (void)doActionLinkToTMDb:(MBMovie *)movie;
-- (void)doActionSearchShow:(id)sender;
-
+/**
+ * Display a modal sheet with the actor profile.
+ */
 - (void)showActor:(MBPerson *)person;
 
+/**
+ * Display a modal sheet with the screencaps for given movie.
+ */
+- (void)showScreencapsForMovie:(MBMovie *)movie;
+
+/**
+ * Used to populate the "count" badge for each genre in the genre table.
+ */
 - (NSUInteger)movieCountForGenre:(MBGenre *)genre;
 
 @end

@@ -25,11 +25,11 @@
 	
 	if (hidden) {
 		((NSMenuItem *)sender).state = NSOffState;
-		[[MBAppDelegate sharedInstance] doActionMovieUnhide:mbmovie withView:self.superview];
+		[[MBAppDelegate sharedInstance] movie:mbmovie UnhideWithView:self.superview];
 	}
 	else {
 		((NSMenuItem *)sender).state = NSOnState;
-		[[MBAppDelegate sharedInstance] doActionMovieHide:mbmovie withView:self.superview];
+		[[MBAppDelegate sharedInstance] movie:mbmovie hideWithView:self.superview];
 	}
 }
 
@@ -50,7 +50,7 @@
  */
 - (IBAction)doActionSearch:(id)sender
 {
-	[[MBAppDelegate sharedInstance] doActionSearchShow:self.movie];
+	
 }
 
 /**
@@ -59,35 +59,7 @@
  */
 - (IBAction)doActionScreencaps:(id)sender
 {
-	MBAppDelegate *appDelegate = (MBAppDelegate *)[NSApp delegate];
-	[appDelegate.screencapsController showInWindow:appDelegate.window forMovie:self.movie];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionLinkToTMDb:(id)sender
-{
-	[[MBAppDelegate sharedInstance] doActionLinkToTMDb:self.movie];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionLinkToRT:(id)sender
-{
-	
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionLinkToIMDb:(id)sender
-{
-	
+	[((MBAppDelegate *)[NSApp delegate]) showScreencapsForMovie:self.movie];
 }
 
 /**
