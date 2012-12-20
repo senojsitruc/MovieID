@@ -584,6 +584,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[NSThread performBlockInBackground:^{
 		
+		//[mDataManager moveImages];
+		//[mDataManager upgradeTmdbToImdb];
 		//[mDataManager ratingsUpdate];
 		//[mDataManager ratingsNormalize];
 		

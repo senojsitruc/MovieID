@@ -24,6 +24,7 @@
 - (void)ratingsUpdate;
 - (void)ratingsNormalize;
 - (void)updateFileStats;
+- (void)upgradeTmdbToImdb;
 
 - (void)enumerateMovies:(void (^)(MBMovie*, BOOL*))handler;
 - (void)enumerateMoviesForPerson:(MBPerson *)mbperson handler:(void (^)(MBMovie*, BOOL*))handler;

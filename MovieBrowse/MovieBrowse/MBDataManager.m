@@ -283,6 +283,10 @@
 		
 		if ([label isEqualToString:@"path"])
 			mbmovie.dirpath = value;
+		else if ([label isEqualToString:@"updated"]) {
+			if (value.integerValue)
+				mbmovie.updated = [NSDate dateWithTimeIntervalSinceReferenceDate:value.doubleValue];
+		}
 		else if ([label isEqualToString:@"title"])
 			mbmovie.title = value;
 		else if ([label isEqualToString:@"year"])
@@ -643,6 +647,93 @@
 	}];
 	
 	return movies;
+}
+
+/**
+ *
+ *
+ */
+/*
+- (void)moveImages
+{
+	NSString *actorsPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
+	NSString *moviesPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Movies"];
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	void (^moveImages)(NSString*);
+	
+	moveImages = ^ (NSString *baseDir) {
+		NSArray *files = [fileManager contentsOfDirectoryAtPath:baseDir error:nil];
+		
+		[files enumerateObjectsUsingBlock:^ (id fileName, NSUInteger fileNdx, BOOL *fileStop) {
+			if (NSNotFound != [(NSString *)fileName rangeOfString:@"--"].location)
+				return;
+			
+			BOOL isDir = FALSE;
+			NSString *srcPath = [baseDir stringByAppendingPathComponent:fileName];
+			
+			if (![fileManager fileExistsAtPath:srcPath isDirectory:&isDir] || isDir)
+				return;
+			
+			NSString *subdir = [(NSString *)fileName substringToIndex:2].lowercaseString;
+			NSString *dstPath = [baseDir stringByAppendingPathComponent:subdir];
+			
+			[fileManager createDirectoryAtPath:dstPath withIntermediateDirectories:FALSE attributes:nil error:nil];
+			
+			dstPath = [dstPath stringByAppendingPathComponent:fileName];
+			
+			NSLog(@"%@ ---> %@", srcPath, dstPath);
+			
+			if (![fileManager moveItemAtPath:srcPath toPath:dstPath error:nil])
+				NSLog(@"  failed!");
+		}];
+	};
+	
+	moveImages(actorsPath);
+	moveImages(moviesPath);
+}
+*/
+
+/**
+ *
+ *
+ */
+- (void)upgradeTmdbToImdb
+{
+	static BOOL _stop = FALSE;
+	
+	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+		if (_stop) {
+			*stop = TRUE;
+			return;
+		}
+		
+		NSString *tmdbId = mbmovie.tmdbId;
+		NSString *imdbId = mbmovie.imdbId;
+		
+		if (mbmovie.updated)
+			return;
+		
+		if (tmdbId.length && imdbId.length) {
+			NSLog(@"%@ [%@, %@]", mbmovie.dbkey, tmdbId, imdbId);
+			
+			NSArray *movies = [IDSearch imdbSearchMovieWithTitle:imdbId andYear:nil andRuntime:nil];
+			
+			if (!movies.count)
+				return;
+			
+			IDMovie *idmovie = movies[0];
+			
+			[self addMovie:idmovie
+				 withDirPath:mbmovie.dirpath
+						duration:mbmovie.duration
+						filesize:mbmovie.filesize
+							 width:mbmovie.width
+							height:mbmovie.height
+						 bitrate:mbmovie.bitrate
+							 mtime:mbmovie.mtime
+					 languages:mbmovie.languages];
+		}
+	}];
 }
 
 /**
@@ -1127,6 +1218,7 @@
 	{
 		mMovieDb[dirName] = dbkey;
 		mMovieDb[dbkey] = @"";
+		mMovieDb[[dbkey stringByAppendingString:@"--updated" ]] = @((NSUInteger)[[NSDate date] timeIntervalSinceReferenceDate]).stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--path"    ]] = dirPath;
 		mMovieDb[[dbkey stringByAppendingString:@"--title"   ]] = idmovie.title;
 		mMovieDb[[dbkey stringByAppendingString:@"--year"    ]] = idmovie.year.stringValue;
@@ -1167,7 +1259,8 @@
 				else
 					NSLog(@"[DM]           Using existing image id [%@]", imageId);
 				
-				NSString *dataPath = [movieBaseDir stringByAppendingPathComponent:imageId];
+//			NSString *dataPath = [movieBaseDir stringByAppendingPathComponent:imageId];
+				NSString *dataPath = [[movieBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString] stringByAppendingPathComponent:imageId];
 				
 				mMovieDb[[dbkey stringByAppendingString:@"--poster"]] = imageId;
 				
@@ -1281,7 +1374,8 @@
 					else
 						NSLog(@"[DM]           Using existing image id [%@]", imageId);
 					
-					NSString *dataPath = [actorBaseDir stringByAppendingPathComponent:imageId];
+//				NSString *dataPath = [actorBaseDir stringByAppendingPathComponent:imageId];
+					NSString *dataPath = [[actorBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString] stringByAppendingPathComponent:imageId];
 					
 					mActorDb[[name stringByAppendingString:@"--image--id"]] = imageId;
 					mActorDb[[name stringByAppendingString:@"--image--url"]] = ((NSURL *)value).absoluteString;

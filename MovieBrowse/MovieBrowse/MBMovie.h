@@ -25,6 +25,7 @@
 @property (readwrite, strong, nonatomic) NSString *imdbId;
 @property (readwrite, strong, nonatomic) NSString *rtId;
 
+@property (readwrite, strong, nonatomic) NSDate *updated;
 @property (readwrite, strong, nonatomic) NSString *dirpath;
 @property (readwrite, strong, nonatomic) NSNumber *duration;
 @property (readwrite, strong, nonatomic) NSNumber *width;
