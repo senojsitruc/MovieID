@@ -85,6 +85,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 
 + (MBAppDelegate *)sharedInstance;
 
+/**
+ * Used by the MBMovieView to toggle whether a movie is hidden.
+ */
 - (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view;
 - (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view;
 

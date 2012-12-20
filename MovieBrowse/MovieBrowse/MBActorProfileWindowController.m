@@ -16,6 +16,7 @@
 @interface MBActorProfileWindowController ()
 {
 	NSUInteger mTransactionId;
+	MBPerson *mPerson;
 }
 @end
 
@@ -59,50 +60,53 @@
  */
 - (void)showInWindow:(NSWindow *)parentWindow forPerson:(MBPerson *)mbperson
 {
-	NSUInteger transactionId = ++mTransactionId;
-	
-	_nameTxt.stringValue = mbperson.name ? mbperson.name : @"";
-	_infoTxt.stringValue = mbperson.info ? mbperson.info : @"";
-	_moviesView.person = mbperson;
-	_actorImg.image = nil;
-	
-	[_descTxt setEditable:TRUE];
-	[_descTxt insertText:(mbperson.bio ? [[NSAttributedString alloc] initWithString:mbperson.bio] : @"Nothing!")];
-	[_descTxt setEditable:FALSE];
-	
-	// set the actor's bio text
-	if (mbperson.bio)
-		[_descTxt.textStorage replaceCharactersInRange:NSMakeRange(0, _descTxt.textStorage.length) withString:mbperson.bio];
-	else
-		[_descTxt.textStorage replaceCharactersInRange:NSMakeRange(0, _descTxt.textStorage.length) withString:@""];
-	
-	// scroll to the top
-	_descScroll.verticalScroller.floatValue = 0;
-	[_descScroll.contentView scrollToPoint:NSMakePoint(0,0)];
-	
-	// animate the indefinite progress indicator
-	[_imagePrg startAnimation:self];
-	
-	NSSize imageSize = _actorImg.frame.size;
-	
-	// retrieve the actor's image and update the ui when we're done; but don't update the ui if the
-	// user has moved on to another actor between the time that we initiated the download and when
-	// the image actually became avaliable for use.
-	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-		NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId width:imageSize.width height:imageSize.height];
+	if (mbperson != mPerson) {
+		NSUInteger transactionId = ++mTransactionId;
 		
-		if (transactionId != mTransactionId)
-			return;
+		mPerson = mbperson;
+		_nameTxt.stringValue = mbperson.name ? mbperson.name : @"";
+		_infoTxt.stringValue = mbperson.info ? mbperson.info : @"";
+		_moviesView.person = mbperson;
+		_actorImg.image = nil;
 		
-		[[NSThread mainThread] performBlock:^{
-			[_imagePrg stopAnimation:self];
+		[_descTxt setEditable:TRUE];
+		[_descTxt insertText:(mbperson.bio ? [[NSAttributedString alloc] initWithString:mbperson.bio] : @"Nothing!")];
+		[_descTxt setEditable:FALSE];
+		
+		// set the actor's bio text
+		if (mbperson.bio)
+			[_descTxt.textStorage replaceCharactersInRange:NSMakeRange(0, _descTxt.textStorage.length) withString:mbperson.bio];
+		else
+			[_descTxt.textStorage replaceCharactersInRange:NSMakeRange(0, _descTxt.textStorage.length) withString:@""];
+		
+		// scroll to the top
+		_descScroll.verticalScroller.floatValue = 0;
+		[_descScroll.contentView scrollToPoint:NSMakePoint(0,0)];
+		
+		// animate the indefinite progress indicator
+		[_imagePrg startAnimation:self];
+		
+		NSSize imageSize = _actorImg.frame.size;
+		
+		// retrieve the actor's image and update the ui when we're done; but don't update the ui if the
+		// user has moved on to another actor between the time that we initiated the download and when
+		// the image actually became avaliable for use.
+		[[MBDownloadQueue sharedInstance] dispatchBeg:^{
+			NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId width:imageSize.width height:imageSize.height];
 			
 			if (transactionId != mTransactionId)
 				return;
 			
-			_actorImg.image = image;
+			[[NSThread mainThread] performBlock:^{
+				[_imagePrg stopAnimation:self];
+				
+				if (transactionId != mTransactionId)
+					return;
+				
+				_actorImg.image = image;
+			}];
 		}];
-	}];
+	}
 	
 	[NSApp beginSheet:self.window modalForWindow:parentWindow modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
