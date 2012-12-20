@@ -1542,40 +1542,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 
 
 
-#pragma mark - Link-To
-
-/**
- *
- *
- */
-- (void)doActionLinkToTMDb:(MBMovie *)mbmovie
-{
-	self.linkToTxt.stringValue = @"";
-	[NSApp beginSheet:self.linkToWindow modalForWindow:self.window modalDelegate:self didEndSelector:@selector(tmdbSheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)mbmovie];
-}
-
-- (void)tmdbSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-	if (!returnCode)
-		return;
-}
-
-- (IBAction)doActionLinkToCancel:(id)sender
-{
-	[NSApp endSheet:self.linkToWindow returnCode:0];
-	[self.linkToWindow orderOut:sender];
-}
-
-- (IBAction)doActionLinkToLink:(id)sender
-{
-	[NSApp endSheet:self.linkToWindow returnCode:1];
-	[self.linkToWindow orderOut:sender];
-}
-
-
-
-
-
 #pragma mark - Preferences
 
 /**

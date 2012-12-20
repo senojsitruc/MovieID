@@ -54,12 +54,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSProgressIndicator *actorImagePrg;
 
 /**
- * Link-To Sheet
- */
-@property (assign) IBOutlet NSWindow *linkToWindow;
-@property (assign) IBOutlet NSTextField *linkToTxt;
-
-/**
  * Tables
  */
 @property (assign) IBOutlet NSTableView *actorTable;
@@ -108,8 +102,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 
 - (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view;
 - (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view;
-
-- (void)doActionLinkToTMDb:(MBMovie *)movie;
 
 - (void)showActor:(MBPerson *)person;
 

@@ -50,7 +50,7 @@
  */
 - (IBAction)doActionSearch:(id)sender
 {
-	//[[MBAppDelegate sharedInstance] doActionSearchShow:self.movie];
+	
 }
 
 /**
@@ -61,33 +61,6 @@
 {
 	MBAppDelegate *appDelegate = (MBAppDelegate *)[NSApp delegate];
 	[appDelegate.screencapsController showInWindow:appDelegate.window forMovie:self.movie];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionLinkToTMDb:(id)sender
-{
-	[[MBAppDelegate sharedInstance] doActionLinkToTMDb:self.movie];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionLinkToRT:(id)sender
-{
-	
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionLinkToIMDb:(id)sender
-{
-	
 }
 
 /**
