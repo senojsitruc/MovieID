@@ -15,6 +15,7 @@
 #import "MBMovie.h"
 #import "MBPerson.h"
 #import "NSString+Additions.h"
+#import "NSThread+Additions.h"
 #import <MovieID/APLevelDB.h>
 #import <MovieID/IDMediaInfo.h>
 #import <MovieID/IDSearch.h>
@@ -35,10 +36,6 @@
 	NSMutableDictionary *mActors;
 	NSMutableDictionary *mGenres;
 	NSMutableDictionary *mMovies;
-	
-	dispatch_queue_t queue1;
-	dispatch_queue_t queue2;
-	dispatch_queue_t queue3;
 }
 @end
 
@@ -63,15 +60,30 @@
 		mGenres = [[NSMutableDictionary alloc] init];
 		mMovies = [[NSMutableDictionary alloc] init];
 		
-		queue1 = dispatch_queue_create("queue-01", DISPATCH_QUEUE_SERIAL);
-		queue2 = dispatch_queue_create("queue-02", DISPATCH_QUEUE_SERIAL);
-		queue3 = dispatch_queue_create("queue-03", DISPATCH_QUEUE_SERIAL);
-		
 		[self openDb];
 		
-		[self loadActors];
-		[self loadMovies];
+		__block NSUInteger count = 0;
+		
+		[NSThread performBlockInBackground:^{
+			NSLog(@"actors - start");
+			[self loadActors];
+			NSLog(@"actors - done");
+			count += 1;
+		}];
+		
+		[NSThread performBlockInBackground:^{
+			NSLog(@"movies - start");
+			[self loadMovies];
+			NSLog(@"movies - done");
+			count += 1;
+		}];
+		
+		while (count < 2)
+			usleep(100000);
+		
+		NSLog(@"genres - start");
 		[self loadGenres];
+		NSLog(@"genres - done");
 	}
 	
 	return self;
@@ -745,60 +757,6 @@
 							 mtime:mbmovie.mtime
 					 languages:mbmovie.languages];
 		}
-	}];
-}
-
-/**
- *
- *
- */
-- (void)ratingsUpdate
-{
-	NSUInteger total = mMovies.count;
-	__block NSUInteger current = 0;
-	__block NSUInteger install = 0;
-	
-	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *movieStop) {
-		NSUInteger _current = (current += 1);
-		
-		NSString *rating = mbmovie.rating;
-		NSString *imdbId = mbmovie.imdbId;
-		
-		if (![rating isEqualToString:@"NC-17"])
-//	if (rating.length)
-			return;
-		else if (!imdbId.length)
-			return;
-		
-		dispatch_queue_t queue = NULL;
-		NSUInteger step = (install % 3);
-		
-		if (0 == step)
-			queue = queue1;
-		else if (1 == step)
-			queue = queue2;
-		else
-			queue = queue3;
-		
-		install += 1;
-		
-		dispatch_async(queue, ^{
-			NSString *ratingKey = [mbmovie.dbkey stringByAppendingString:@"--rating"];
-			NSArray *movies = [IDSearch imdbSearchMovieWithTitle:imdbId andYear:nil andRuntime:nil];
-			
-			if (!movies.count)
-				return;
-			
-			IDMovie *idmovie = movies[0];
-			NSString *idrating = idmovie.rating;
-			
-			if (!idrating.length)
-				idrating = @"Unknown";
-			
-			NSLog(@"[%04lu of %04lu] %@ -- %@", _current, total, idrating, mbmovie.dirpath);
-			
-			mMovieDb[ratingKey] = idrating;
-		});
 	}];
 }
 

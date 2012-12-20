@@ -10,9 +10,9 @@
 
 @interface MBGenre : NSObject
 
-@property (readwrite, strong) NSString *name;
-@property (readwrite, strong) NSMutableDictionary *actors;
-@property (readwrite, strong) NSMutableDictionary *movies;
-@property (readwrite, strong) NSMutableDictionary *years;
+@property (readwrite, strong, nonatomic) NSString *name;
+@property (readwrite, strong, nonatomic) NSMutableDictionary *actors;
+@property (readwrite, strong, nonatomic) NSMutableDictionary *movies;
+@property (readwrite, strong, nonatomic) NSMutableDictionary *years;
 
 @end

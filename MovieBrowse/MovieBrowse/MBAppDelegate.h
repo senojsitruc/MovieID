@@ -78,6 +78,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSButton *findFileNameBtn;
 @property (assign) IBOutlet NSButton *findDescBtn;
 
+/**
+ * Share instance.
+ */
 + (MBAppDelegate *)sharedInstance;
 
 /**
