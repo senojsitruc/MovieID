@@ -19,9 +19,10 @@
 @property (readwrite, strong, nonatomic) NSString *rtId;
 @property (readwrite, strong, nonatomic) NSString *imdbId;
 @property (readwrite, strong, nonatomic) NSString *imageId;
+@property (readwrite, strong, nonatomic) NSURL *imageUrl;
 @property (readwrite, strong, nonatomic) NSMutableDictionary *movies;
-@property (readonly) NSNumber *movieCount;
 
+@property (readonly, getter=movieCount) NSNumber *movieCount;
 @property (readonly, getter=info) NSString *info;
 
 @end

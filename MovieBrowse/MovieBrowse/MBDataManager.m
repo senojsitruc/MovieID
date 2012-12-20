@@ -164,8 +164,14 @@
 			mbperson.name = actor;
 		}
 		
-		if ([label isEqualToString:@"image"] && keyParts.count == 3 && [keyParts[2] isEqual:@"id"])
-			mbperson.imageId = value;
+		if ([label isEqualToString:@"image"]) {
+			if (keyParts.count == 3) {
+				if ([keyParts[2] isEqual:@"id"])
+					mbperson.imageId = value;
+				else if ([keyParts[2] isEqual:@"url"])
+					mbperson.imageUrl = [NSURL URLWithString:value];
+			}
+		}
 		else if ([label isEqualToString:@"tmdbid" ]) mbperson.tmdbId = value;
 		else if ([label isEqualToString:@"rtid"   ]) mbperson.rtId   = value;
 		else if ([label isEqualToString:@"imdbid" ]) mbperson.imdbId = value;
@@ -583,33 +589,6 @@
 #pragma mark - Import
 
 /**
- * Add missing IMDb data to existing TMDb movies.
- *
- */
-- (void)updateIMDbData
-{
-	NSArray *movies = [mMovies.allKeys sortedArrayUsingComparator:^ NSComparisonResult (id obj1, id obj2) {
-		return [(NSString *)obj1 compare:(NSString *)obj2];
-	}];
-	
-	NSLog(@"[DM] Found %04lu movies", movies.count);
-	
-	[movies enumerateObjectsUsingBlock:^ (id obj, NSUInteger ndx, BOOL *stop) {
-		MBMovie *mbmovie = mMovies[obj];
-		
-		if (!mbmovie.tmdbId.length)
-			return;
-		
-		if (mbmovie.imdbId.length) {
-			
-		}
-		else {
-			
-		}
-	}];
-}
-
-/**
  *
  *
  */
@@ -704,6 +683,82 @@
 	moveImages(moviesPath);
 }
 */
+
+- (void)getMissingImages
+{
+	NSString *moviesDir = [[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByAppendingPathComponent:@"Movies"];
+	NSString *actorsDir = [[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByAppendingPathComponent:@"Actors"];
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	
+	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+		NSString *imdbId = mbmovie.imdbId;
+		NSString *imageId = mbmovie.posterId;
+		
+		if (!imdbId.length)
+			return;
+		
+		if (!imageId.length)
+			return;
+		
+		NSString *imageDir = [moviesDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
+		NSString *imagePath = [imageDir stringByAppendingPathComponent:imageId];
+		
+		if ([fileManager fileExistsAtPath:imagePath])
+			return;
+		
+		NSArray *movies = [IDSearch imdbSearchMovieWithTitle:imdbId andYear:nil andRuntime:nil];
+		
+		if (!movies.count)
+			return;
+		
+		IDMovie *idmovie = movies[0];
+		NSURL *imageUrl = idmovie.imageUrl;
+		NSURL *anonUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.absoluteString]];
+		NSData *imageData = [NSData dataWithContentsOfURL:anonUrl];
+		NSImage *image = [[NSImage alloc] initWithData:imageData];
+		
+		if (!image)
+			return;
+		
+		[fileManager createDirectoryAtPath:imageDir withIntermediateDirectories:TRUE attributes:nil error:nil];
+		[imageData writeToFile:imagePath atomically:FALSE];
+		
+		NSLog(@"%@", mbmovie.dbkey);
+	}];
+	
+	NSLog(@"Done with movies");
+	
+	[self enumerateActors:^ (MBPerson *mbactor, NSUInteger actorNdx, BOOL *stop) {
+		NSURL *imageUrl = mbactor.imageUrl;
+		NSString *imageId = mbactor.imageId;
+		
+		if (!imageId.length)
+			return;
+		
+		if (!imageUrl)
+			return;
+		
+		NSString *imageDir = [actorsDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
+		NSString *imagePath = [imageDir stringByAppendingPathComponent:imageId];
+		
+		if ([fileManager fileExistsAtPath:imagePath])
+			return;
+		
+		NSURL *anonUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.absoluteString]];
+		NSData *imageData = [NSData dataWithContentsOfURL:anonUrl];
+		NSImage *image = [[NSImage alloc] initWithData:imageData];
+		
+		if (!image)
+			return;
+		
+		[fileManager createDirectoryAtPath:imageDir withIntermediateDirectories:TRUE attributes:nil error:nil];
+		[imageData writeToFile:imagePath atomically:FALSE];
+		
+		NSLog(@"%@", mbactor.name);
+	}];
+	
+	NSLog(@"Done with actors");
+}
 
 /**
  *
@@ -1211,26 +1266,26 @@
 		if (idmovie.rtId   ) mMovieDb[[dbkey stringByAppendingString:@"--rtid"   ]] = idmovie.rtId;
 		if (idmovie.tmdbId ) mMovieDb[[dbkey stringByAppendingString:@"--tmdbid" ]] = idmovie.tmdbId;
 		
+		NSString *imageId = mMovieDb[[dbkey stringByAppendingString:@"--poster"]];
+		NSURL *imageUrl = idmovie.imageUrl;
+		
 		// get the image (if we don't already have it)
-		if (nil != idmovie.imageUrl) {
-			NSString *imageId = mMovieDb[[dbkey stringByAppendingString:@"--poster"]];
-			
+		if (!imageId.length && imageUrl) {
 			NSLog(@"[DM]         Found image at %@", idmovie.imageUrl);
 			
-			NSData *imageData = [NSData dataWithContentsOfURL:(NSURL *)idmovie.imageUrl];
+			imageUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.description]];
+			NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 			
 			NSLog(@"[DM]           Got %lu bytes", imageData.length);
 			
 			if (imageData) {
-				if (!imageId) {
-					imageId = [NSString randomStringOfLength:32];
-					NSLog(@"[DM]           Assigning new image id [%@]", imageId);
-				}
-				else
-					NSLog(@"[DM]           Using existing image id [%@]", imageId);
+				NSLog(@"[DM]           Assigning new image id [%@]", imageId);
 				
 //			NSString *dataPath = [movieBaseDir stringByAppendingPathComponent:imageId];
-				NSString *dataPath = [[movieBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString] stringByAppendingPathComponent:imageId];
+				NSString *dataDir = [movieBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
+				NSString *dataPath = [dataDir stringByAppendingPathComponent:imageId];
+				
+				[fileManager createDirectoryAtPath:dataDir withIntermediateDirectories:TRUE attributes:nil error:nil];
 				
 				mMovieDb[[dbkey stringByAppendingString:@"--poster"]] = imageId;
 				
@@ -1332,27 +1387,38 @@
 			if ((!imageId.length || !imageUrl.length) && nil != (value = idperson.imageUrl)) {
 				NSLog(@"[DM]         Found image at %@", value);
 				
-				NSData *imageData = [NSData dataWithContentsOfURL:(NSURL *)value];
+				NSURL *imageUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:((NSURL *)value).absoluteString]];
+//			NSData *imageData = [NSData dataWithContentsOfURL:(NSURL *)value];
+				NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 				
+				NSLog(@"[DM]           %@", imageUrl);
 				NSLog(@"[DM]           Got %lu bytes", imageData.length);
 				
 				if (imageData) {
-					if (!imageId) {
-						imageId = [NSString randomStringOfLength:32];
-						NSLog(@"[DM]           Assigning new image id [%@]", imageId);
+					NSImage *image = [[NSImage alloc] initWithData:imageData];
+					
+					if (image) {
+						if (!imageId) {
+							imageId = [NSString randomStringOfLength:32];
+							NSLog(@"[DM]           Assigning new image id [%@]", imageId);
+						}
+						else
+							NSLog(@"[DM]           Using existing image id [%@]", imageId);
+						
+						NSString *dataDir = [actorBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
+						NSString *dataPath = [dataDir stringByAppendingPathComponent:imageId];
+						
+						[fileManager createDirectoryAtPath:dataDir withIntermediateDirectories:TRUE attributes:nil error:nil];
+						
+						mActorDb[[name stringByAppendingString:@"--image--id"]] = imageId;
+						mActorDb[[name stringByAppendingString:@"--image--url"]] = ((NSURL *)value).absoluteString;
+						
+						[imageData writeToFile:dataPath atomically:FALSE];
+						
+						NSLog(@"[DM]           %@", dataPath);
 					}
 					else
-						NSLog(@"[DM]           Using existing image id [%@]", imageId);
-					
-//				NSString *dataPath = [actorBaseDir stringByAppendingPathComponent:imageId];
-					NSString *dataPath = [[actorBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString] stringByAppendingPathComponent:imageId];
-					
-					mActorDb[[name stringByAppendingString:@"--image--id"]] = imageId;
-					mActorDb[[name stringByAppendingString:@"--image--url"]] = ((NSURL *)value).absoluteString;
-					
-					[imageData writeToFile:dataPath atomically:FALSE];
-					
-					NSLog(@"[DM]           %@", dataPath);
+						NSLog(@"[DM]           Invalid image data");
 				}
 			}
 		}];
