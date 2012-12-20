@@ -47,9 +47,9 @@
 	
 }
 
+/*
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	/*
 	MBAppDelegate *appDelegate = [MBAppDelegate sharedInstance];
 	NSCollectionView *collectionView = appDelegate.genresCollectionView;
 	
@@ -57,7 +57,7 @@
 		collectionView.selectionIndexes = nil;
 	else
 		[super mouseDown:theEvent];
-	*/
 }
+*/
 
 @end

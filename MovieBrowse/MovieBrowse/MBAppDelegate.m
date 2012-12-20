@@ -153,10 +153,6 @@ static MBAppDelegate *gAppDelegate;
 @implementation MBAppDelegate
 
 @synthesize dataManager = mDataManager;
-@synthesize actorProfileController = mActorProfileController;
-@synthesize importController = mImportController;
-@synthesize preferencesController = mPreferencesController;
-@synthesize screencapsController = mScreencapsController;
 
 /**
  *
@@ -688,6 +684,59 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	return ((NSNumber *)mGenresByName[mbgenre.name]).integerValue;
 }
 
+/**
+ *
+ *
+ */
+- (void)showActor:(MBPerson *)mbperson
+{
+	if (mbperson)
+		[mActorProfileController showInWindow:self.window forPerson:mbperson];
+}
+
+/**
+ *
+ *
+ */
+- (void)showScreencapsForMovie:(MBMovie *)mbmovie
+{
+	[mScreencapsController showInWindow:self.window forMovie:mbmovie];
+}
+
+/**
+ *
+ *
+ */
+- (void)movie:(MBMovie *)mbmovie hideWithView:(NSView *)view
+{
+	mbmovie.hidden = @(TRUE);
+	[mDataManager saveMovie:mbmovie];
+	
+	NSLog(@"%@", view);
+	
+	if (view) {
+		NSInteger index = [self.movieTable rowForView:view];
+		
+		NSLog(@"%ld", index);
+		
+		if (index >= 0) {
+			[self.movieTable removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideRight];
+			[self.movieTable reloadData];
+		}
+	}
+}
+
+/**
+ *
+ *
+ */
+- (void)movie:(MBMovie *)mbmovie UnhideWithView:(NSView *)view
+{
+	mbmovie.hidden = @(FALSE);
+	[mDataManager saveMovie:mbmovie];
+	[self.movieTable reloadData];
+}
+
 
 
 
@@ -833,16 +882,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 {
 	if (tableView.selectedRow >= 0)
 		[self showActor:[[self.actorsArrayController arrangedObjects] objectAtIndex:tableView.selectedRow]];
-}
-
-/**
- *
- *
- */
-- (void)showActor:(MBPerson *)mbperson
-{
-	if (mbperson)
-		[mActorProfileController showInWindow:self.window forPerson:mbperson];
 }
 
 
@@ -1426,46 +1465,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[[NSUserDefaults standardUserDefaults] setObject:@"Movies" forKey:MBDefaultsKeyActorSort];
 	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"movieCount" ascending:FALSE]]];
 	[self updateActorPostSort];
-}
-
-
-
-
-
-#pragma mark - Movies - Hide/Unhide
-
-/**
- *
- *
- */
-- (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view
-{
-	mbmovie.hidden = @(TRUE);
-	[mDataManager saveMovie:mbmovie];
-	
-	NSLog(@"%@", view);
-	
-	if (view) {
-		NSInteger index = [self.movieTable rowForView:view];
-		
-		NSLog(@"%ld", index);
-		
-		if (index >= 0) {
-			[self.movieTable removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideRight];
-			[self.movieTable reloadData];
-		}
-	}
-}
-
-/**
- *
- *
- */
-- (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view
-{
-	mbmovie.hidden = @(FALSE);
-	[mDataManager saveMovie:mbmovie];
-	[self.movieTable reloadData];
 }
 
 

@@ -32,10 +32,6 @@ extern NSString * const MBDefaultsKeyApiRt;
  * Other
  */
 @property (readonly) MBDataManager *dataManager;
-@property (readonly) MBActorProfileWindowController *actorProfileController;
-@property (readonly) MBImportWindowController *importController;
-@property (readonly) MBPreferencesWindowController *preferencesController;
-@property (readonly) MBScreencapsWindowController *screencapsController;
 
 /**
  * Main Window
@@ -87,13 +83,18 @@ extern NSString * const MBDefaultsKeyApiRt;
 /**
  * Used by the MBMovieView to toggle whether a movie is hidden.
  */
-- (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view;
-- (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view;
+- (void)movie:(MBMovie *)mbmovie hideWithView:(NSView *)view;
+- (void)movie:(MBMovie *)mbmovie UnhideWithView:(NSView *)view;
 
 /**
  * Display a modal sheet with the actor profile.
  */
 - (void)showActor:(MBPerson *)person;
+
+/**
+ * Display a modal sheet with the screencaps for given movie.
+ */
+- (void)showScreencapsForMovie:(MBMovie *)movie;
 
 /**
  * Used to populate the "count" badge for each genre in the genre table.
