@@ -19,6 +19,7 @@
 #import "MBTableHeaderCell.h"
 #import "MBDownloadQueue.h"
 #import "MBImportViewController.h"
+#import "MBPreferencesWindowController.h"
 #import "MBScreencapsWindowController.h"
 #import "NSArray+Additions.h"
 #import "NSString+Additions.h"
@@ -54,6 +55,7 @@ static MBAppDelegate *gAppDelegate;
 	dispatch_queue_t mImageQueue;
 	
 	MBDataManager *mDataManager;
+	MBPreferencesWindowController *mPreferencesController;
 	MBScreencapsWindowController *mScreencapsController;
 	BOOL mIsDoneLoading;
 	
@@ -150,6 +152,7 @@ static MBAppDelegate *gAppDelegate;
 @implementation MBAppDelegate
 
 @synthesize dataManager = mDataManager;
+@synthesize preferencesController = mPreferencesController;
 @synthesize screencapsController = mScreencapsController;
 
 /**
@@ -162,6 +165,7 @@ static MBAppDelegate *gAppDelegate;
 	mShowHiddenMovies = FALSE;
 	mIsDoneLoading = FALSE;
 	mDataManager = [[MBDataManager alloc] init];
+	mPreferencesController = [[MBPreferencesWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
 	mGenreSelections = [[NSMutableDictionary alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];
@@ -1609,35 +1613,15 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 
 
 
-
 #pragma mark - Preferences
 
 /**
  *
  *
  */
-- (IBAction)doActionShowPrefs:(id)sender
+- (IBAction)doActionPreferencesShow:(id)sender
 {
-	[NSApp beginSheet:self.prefsWin modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionPrefsClose:(id)sender
-{
-	[NSApp endSheet:self.prefsWin];
-	[self.prefsWin orderOut:sender];
-}
-
-/**
- * This function intentionally does nothing when running in debug mode, because I don't want to
- * accidentally delete the master image set.
- */
-- (IBAction)doActionPrefsClearCache:(id)sender
-{
-	[[MBImageCache sharedInstance] clearAll];
+	[mPreferencesController showInWindow:self.window];
 }
 
 

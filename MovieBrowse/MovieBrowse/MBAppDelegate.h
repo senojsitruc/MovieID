@@ -22,6 +22,7 @@ extern NSString * const MBDefaultsKeyApiRt;
 @class MBDataManager;
 @class MBActorMovieView;
 @class MBImportViewController;
+@class MBPreferencesWindowController;
 @class MBScreencapsWindowController;
 
 @interface MBAppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
@@ -34,6 +35,7 @@ extern NSString * const MBDefaultsKeyApiRt;
  */
 @property (readonly) MBDataManager *dataManager;
 @property (readonly) dispatch_queue_t imageQueue;
+@property (readonly) MBPreferencesWindowController *preferencesController;
 @property (readonly) MBScreencapsWindowController *screencapsController;
 
 /**
@@ -87,14 +89,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (readwrite, strong) IBOutlet NSArrayController *actorsArrayController;
 @property (readwrite, strong) IBOutlet NSArrayController *genresArrayController;
 @property (readwrite, strong) IBOutlet NSArrayController *moviesArrayController;
-
-/**
- * Preferences
- */
-@property (assign) IBOutlet NSWindow *prefsWin;
-@property (assign) IBOutlet NSMenuItem *prefsMenu;
-@property (assign) IBOutlet NSButton *prefsAddBtn;
-@property (assign) IBOutlet NSButton *prefsDelBtn;
 
 /**
  * Search
