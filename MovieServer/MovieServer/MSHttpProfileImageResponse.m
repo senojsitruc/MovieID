@@ -38,12 +38,27 @@ static NSString * const gBaseDir = @"/Volumes/Stuart Little/MovieBrowse/Actors";
 		NSUInteger width=0, height=0;
 		
 		if (parts.count == 3) {
-			path = [gBaseDir stringByAppendingPathComponent:parts[0]];
+			if (3 > ((NSString *)parts[0]).length) {
+				response->mIsDone = TRUE;
+				[connection responseDidAbort:response];
+				return;
+			}
+			
+			path = [gBaseDir stringByAppendingPathComponent:[(NSString *)parts[0] substringToIndex:2].lowercaseString];
+			path = [path stringByAppendingPathComponent:parts[0]];
 			width = ((NSString *)parts[1]).integerValue;
 			height = ((NSString *)parts[2]).integerValue;
 		}
-		else
-			path = [gBaseDir stringByAppendingPathComponent:actorId];
+		else {
+			if (3 > actorId.length) {
+				response->mIsDone = TRUE;
+				[connection responseDidAbort:response];
+				return;
+			}
+			
+			path = [gBaseDir stringByAppendingPathComponent:[actorId substringToIndex:2].lowercaseString];
+			path = [path stringByAppendingPathComponent:actorId];
+		}
 		
 		NSData *data = [NSData dataWithContentsOfFile:path];
 		
