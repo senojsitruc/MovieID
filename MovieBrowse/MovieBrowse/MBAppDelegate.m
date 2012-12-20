@@ -19,6 +19,7 @@
 #import "MBTableHeaderCell.h"
 #import "MBDownloadQueue.h"
 #import "MBImportViewController.h"
+#import "MBActorProfileWindowController.h"
 #import "MBPreferencesWindowController.h"
 #import "MBScreencapsWindowController.h"
 #import "NSArray+Additions.h"
@@ -55,6 +56,7 @@ static MBAppDelegate *gAppDelegate;
 	dispatch_queue_t mImageQueue;
 	
 	MBDataManager *mDataManager;
+	MBActorProfileWindowController *mActorProfileController;
 	MBPreferencesWindowController *mPreferencesController;
 	MBScreencapsWindowController *mScreencapsController;
 	BOOL mIsDoneLoading;
@@ -152,6 +154,7 @@ static MBAppDelegate *gAppDelegate;
 @implementation MBAppDelegate
 
 @synthesize dataManager = mDataManager;
+@synthesize actorProfileController = mActorProfileController;
 @synthesize preferencesController = mPreferencesController;
 @synthesize screencapsController = mScreencapsController;
 
@@ -165,6 +168,7 @@ static MBAppDelegate *gAppDelegate;
 	mShowHiddenMovies = FALSE;
 	mIsDoneLoading = FALSE;
 	mDataManager = [[MBDataManager alloc] init];
+	mActorProfileController = [[MBActorProfileWindowController alloc] init];
 	mPreferencesController = [[MBPreferencesWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
 	mGenreSelections = [[NSMutableDictionary alloc] init];
@@ -404,8 +408,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	// actor - double click action
 	self.actorTable.target = self;
 	self.actorTable.doubleAction = @selector(doActionActorDoubleClick:);
-	self.actorDescScroll.frame = NSMakeRect(423, 49, 425, 400);
-	[self.actorWindow.contentView addSubview:self.actorDescScroll];
 	
 	//
 	// reinstate "show hidden" state
@@ -822,7 +824,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateMoviesHeaderLabel];
 	[self updateMovieFilter_actorCache];
 	[self updateActorFilter];
-//[self updateGenreFilter];
 	
 	// our find state is now invalid for doing "find next"
 	mFindIndex = NSNotFound;
@@ -840,25 +841,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  */
 - (void)doActionActorDoubleClick:(NSTableView *)tableView
 {
-	NSInteger row = tableView.selectedRow;
-	
-	if (row < 0)
-		return;
-	
-	MBPerson *mbperson = [[self.actorsArrayController arrangedObjects] objectAtIndex:row];
-	
-	if (mbperson)
-		[self showActor:mbperson];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionActorClose:(id)sender
-{
-	[NSApp endSheet:self.actorWindow];
-	[self.actorWindow orderOut:sender];
+	if (tableView.selectedRow >= 0)
+		[self showActor:[[self.actorsArrayController arrangedObjects] objectAtIndex:tableView.selectedRow]];
 }
 
 /**
@@ -867,52 +851,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  */
 - (void)showActor:(MBPerson *)mbperson
 {
-	NSUInteger actorWindowTransId = ++mActorWindowTransId;
-	
-	self.actorWindowName.stringValue = mbperson.name ? mbperson.name : @"";
-	self.actorWindowInfo.stringValue = mbperson.info ? mbperson.info : @"";
-	self.actorMovies.person = mbperson;
-	self.actorWindowImage.image = nil;
-	
-	[self.actorDescTxt setEditable:TRUE];
-	[self.actorDescTxt insertText:(mbperson.bio ? [[NSAttributedString alloc] initWithString:mbperson.bio] : @"Nothing!")];
-	[self.actorDescTxt setEditable:FALSE];
-	
-	// set the actor's bio text
-	if (mbperson.bio)
-		[self.actorDescTxt.textStorage replaceCharactersInRange:NSMakeRange(0, self.actorDescTxt.textStorage.length) withString:mbperson.bio];
-	else
-		[self.actorDescTxt.textStorage replaceCharactersInRange:NSMakeRange(0, self.actorDescTxt.textStorage.length) withString:@""];
-	
-	// scroll to the top
-	self.actorDescScroll.verticalScroller.floatValue = 0;
-	[self.actorDescScroll.contentView scrollToPoint:NSMakePoint(0,0)];
-	
-	// animate the indefinite progress indicator
-	[self.actorImagePrg startAnimation:self];
-	
-	NSSize imageSize = _actorWindowImage.frame.size;
-	
-	// retrieve the actor's image and update the ui when we're done; but don't update the ui if the
-	// user has moved on to another actor between the time that we initiated the download and when
-	// the image actually became avaliable for use.
-	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-		NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId width:imageSize.width height:imageSize.height];
-		
-		if (actorWindowTransId != mActorWindowTransId)
-			return;
-		
-		[[NSThread mainThread] performBlock:^{
-			[self.actorImagePrg stopAnimation:self];
-			
-			if (actorWindowTransId != mActorWindowTransId)
-				return;
-			
-			self.actorWindowImage.image = image;
-		}];
-	}];
-	
-	[NSApp beginSheet:self.actorWindow modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+	if (mbperson)
+		[mActorProfileController showInWindow:self.window forPerson:mbperson];
 }
 
 

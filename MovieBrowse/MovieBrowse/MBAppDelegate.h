@@ -22,6 +22,7 @@ extern NSString * const MBDefaultsKeyApiRt;
 @class MBDataManager;
 @class MBActorMovieView;
 @class MBImportViewController;
+@class MBActorProfileWindowController;
 @class MBPreferencesWindowController;
 @class MBScreencapsWindowController;
 
@@ -32,6 +33,7 @@ extern NSString * const MBDefaultsKeyApiRt;
  */
 @property (readonly) MBDataManager *dataManager;
 @property (readonly) dispatch_queue_t imageQueue;
+@property (readonly) MBActorProfileWindowController *actorProfileController;
 @property (readonly) MBPreferencesWindowController *preferencesController;
 @property (readonly) MBScreencapsWindowController *screencapsController;
 
@@ -40,18 +42,6 @@ extern NSString * const MBDefaultsKeyApiRt;
  */
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSTextField *movieInfoTxt;
-
-/**
- * Actor Sheet
- */
-@property (assign) IBOutlet NSWindow *actorWindow;
-@property (assign) IBOutlet NSImageView *actorWindowImage;
-@property (assign) IBOutlet NSTextField *actorWindowName;
-@property (assign) IBOutlet NSTextField *actorWindowInfo;
-@property (assign) IBOutlet NSTextView *actorDescTxt;
-@property (assign) IBOutlet NSScrollView *actorDescScroll;
-@property (assign) IBOutlet MBActorMovieView *actorMovies;
-@property (assign) IBOutlet NSProgressIndicator *actorImagePrg;
 
 /**
  * Tables
@@ -103,6 +93,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 - (void)doActionMovieHide:(MBMovie *)mbmovie withView:(NSView *)view;
 - (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view;
 
+/**
+ * Display a modal sheet with the actor profile.
+ */
 - (void)showActor:(MBPerson *)person;
 
 /**

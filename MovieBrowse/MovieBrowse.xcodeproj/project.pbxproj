@@ -17,6 +17,8 @@
 		F923207C167E623A00D14519 /* MBScreencapsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F923207A167E623A00D14519 /* MBScreencapsWindowController.xib */; };
 		F92A7EAC16831FFA00F04EDF /* MBPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F92A7EAA16831FFA00F04EDF /* MBPreferencesWindowController.m */; };
 		F92A7EAD16831FFA00F04EDF /* MBPreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92A7EAB16831FFA00F04EDF /* MBPreferencesWindowController.xib */; };
+		F92A7EB216832DB100F04EDF /* MBActorProfileWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F92A7EB016832DB100F04EDF /* MBActorProfileWindowController.m */; };
+		F92A7EB316832DB100F04EDF /* MBActorProfileWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92A7EB116832DB100F04EDF /* MBActorProfileWindowController.xib */; };
 		F93211EC16327D2C0093E619 /* MBActorMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211EB16327D2C0093E619 /* MBActorMovieView.m */; };
 		F93211FB163310AB0093E619 /* MBActorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211FA163310AB0093E619 /* MBActorCellView.m */; };
 		F93212161635A2B30093E619 /* MBTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212151635A2B30093E619 /* MBTableHeaderView.m */; };
@@ -101,6 +103,9 @@
 		F92A7EA916831FFA00F04EDF /* MBPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBPreferencesWindowController.h; sourceTree = "<group>"; };
 		F92A7EAA16831FFA00F04EDF /* MBPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPreferencesWindowController.m; sourceTree = "<group>"; };
 		F92A7EAB16831FFA00F04EDF /* MBPreferencesWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBPreferencesWindowController.xib; sourceTree = "<group>"; };
+		F92A7EAF16832DB100F04EDF /* MBActorProfileWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorProfileWindowController.h; sourceTree = "<group>"; };
+		F92A7EB016832DB100F04EDF /* MBActorProfileWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorProfileWindowController.m; sourceTree = "<group>"; };
+		F92A7EB116832DB100F04EDF /* MBActorProfileWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBActorProfileWindowController.xib; sourceTree = "<group>"; };
 		F93211EA16327D2C0093E619 /* MBActorMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorMovieView.h; sourceTree = "<group>"; };
 		F93211EB16327D2C0093E619 /* MBActorMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorMovieView.m; sourceTree = "<group>"; };
 		F93211F9163310AB0093E619 /* MBActorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorCellView.h; sourceTree = "<group>"; };
@@ -223,6 +228,18 @@
 			name = Preferences;
 			sourceTree = "<group>";
 		};
+		F92A7EAE16832D9800F04EDF /* Actor Profile */ = {
+			isa = PBXGroup;
+			children = (
+				F92A7EAF16832DB100F04EDF /* MBActorProfileWindowController.h */,
+				F92A7EB016832DB100F04EDF /* MBActorProfileWindowController.m */,
+				F92A7EB116832DB100F04EDF /* MBActorProfileWindowController.xib */,
+				F93211EA16327D2C0093E619 /* MBActorMovieView.h */,
+				F93211EB16327D2C0093E619 /* MBActorMovieView.m */,
+			);
+			name = "Actor Profile";
+			sourceTree = "<group>";
+		};
 		F932125E1638C4F10093E619 /* Import */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +254,7 @@
 		F97BF37415F91F8200444926 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				F92A7EAE16832D9800F04EDF /* Actor Profile */,
 				F92A7EA716831FB600F04EDF /* Preferences */,
 				F923206E167E60DA00D14519 /* Screencaps */,
 				F932125E1638C4F10093E619 /* Import */,
@@ -253,8 +271,6 @@
 			children = (
 				F97BF37815F91FF400444926 /* MBActorView.h */,
 				F97BF37915F91FF400444926 /* MBActorView.m */,
-				F93211EA16327D2C0093E619 /* MBActorMovieView.h */,
-				F93211EB16327D2C0093E619 /* MBActorMovieView.m */,
 				F93211F9163310AB0093E619 /* MBActorCellView.h */,
 				F93211FA163310AB0093E619 /* MBActorCellView.m */,
 				F93212211635E2440093E619 /* MBActorImageView.h */,
@@ -485,6 +501,7 @@
 				F9321229163610AD0093E619 /* TimeMachineIcon.icns in Resources */,
 				F923207C167E623A00D14519 /* MBScreencapsWindowController.xib in Resources */,
 				F92A7EAD16831FFA00F04EDF /* MBPreferencesWindowController.xib in Resources */,
+				F92A7EB316832DB100F04EDF /* MBActorProfileWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +544,7 @@
 				F9232074167E613E00D14519 /* MBScreencapsBigView.m in Sources */,
 				F923207B167E623A00D14519 /* MBScreencapsWindowController.m in Sources */,
 				F92A7EAC16831FFA00F04EDF /* MBPreferencesWindowController.m in Sources */,
+				F92A7EB216832DB100F04EDF /* MBActorProfileWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
