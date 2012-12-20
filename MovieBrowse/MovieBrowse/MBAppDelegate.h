@@ -21,7 +21,7 @@ extern NSString * const MBDefaultsKeyApiRt;
 @class MBPerson;
 @class MBDataManager;
 @class MBActorMovieView;
-@class MBImportViewController;
+@class MBImportWindowController;
 @class MBActorProfileWindowController;
 @class MBPreferencesWindowController;
 @class MBScreencapsWindowController;
@@ -34,6 +34,7 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (readonly) MBDataManager *dataManager;
 @property (readonly) dispatch_queue_t imageQueue;
 @property (readonly) MBActorProfileWindowController *actorProfileController;
+@property (readonly) MBImportWindowController *importController;
 @property (readonly) MBPreferencesWindowController *preferencesController;
 @property (readonly) MBScreencapsWindowController *screencapsController;
 
@@ -70,12 +71,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (readwrite, strong) IBOutlet NSArrayController *actorsArrayController;
 @property (readwrite, strong) IBOutlet NSArrayController *genresArrayController;
 @property (readwrite, strong) IBOutlet NSArrayController *moviesArrayController;
-
-/**
- * Import
- */
-@property (assign) IBOutlet NSWindow *importWindow;
-@property (assign) IBOutlet MBImportViewController *importController;
 
 /**
  * Find

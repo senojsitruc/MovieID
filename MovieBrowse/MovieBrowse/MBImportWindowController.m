@@ -1,12 +1,12 @@
 //
-//  MBImportViewController.m
+//  MBImportWindowController.m
 //  MovieBrowse
 //
 //  Created by Curtis Jones on 2012.10.24.
 //  Copyright (c) 2012 Curtis Jones. All rights reserved.
 //
 
-#import "MBImportViewController.h"
+#import "MBImportWindowController.h"
 #import "MBStuff.h"
 #import "MBAppDelegate.h"
 #import "MBDataManager.h"
@@ -16,7 +16,7 @@
 #import <MovieID/IDSearch.h>
 #import <MovieID/IDTimecode.h>
 
-@interface MBImportViewController ()
+@interface MBImportWindowController ()
 {
 	NSMutableArray *mMovies;
 	NSInteger mCurrentMovieNdx;
@@ -34,14 +34,31 @@
 }
 @end
 
-@implementation MBImportViewController
+@implementation MBImportWindowController
 
 /**
  *
  *
  */
-- (void)awakeFromNib
+- (id)init
 {
+	self = [super initWithWindowNibName:@"MBImportWindowController"];
+	
+	if (self) {
+		(void)self.window;
+	}
+	
+	return self;
+}
+
+/**
+ *
+ *
+ */
+- (void)windowDidLoad
+{
+	[super windowDidLoad];
+	
 	mImportQueue = dispatch_queue_create("import-queue", DISPATCH_QUEUE_SERIAL);
 	
 	[self.prevBtn setEnabled:FALSE];
@@ -51,6 +68,22 @@
 	self.resultsArray = [[NSMutableArray alloc] init];
 	[self.resultsController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"title" ascending:TRUE]]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doNotificationResultSelectionChanged:) name:NSTableViewSelectionDidChangeNotification object:self.searchResultTbl];
+}
+
+
+
+
+
+#pragma mark - Accessors
+
+/**
+ *
+ *
+ */
+- (void)showInWindow:(NSWindow *)parentWindow
+{
+	[NSApp beginSheet:self.window modalForWindow:parentWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+	[self scanSources];
 }
 
 /**
@@ -65,6 +98,12 @@
 	[self findMissingMovies];
 	[self doActionNext:nil];
 }
+
+
+
+
+
+#pragma mark - Private
 
 /**
  *

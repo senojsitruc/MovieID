@@ -18,7 +18,7 @@
 #import "MBPopUpButtonCell.h"
 #import "MBTableHeaderCell.h"
 #import "MBDownloadQueue.h"
-#import "MBImportViewController.h"
+#import "MBImportWindowController.h"
 #import "MBActorProfileWindowController.h"
 #import "MBPreferencesWindowController.h"
 #import "MBScreencapsWindowController.h"
@@ -57,6 +57,7 @@ static MBAppDelegate *gAppDelegate;
 	
 	MBDataManager *mDataManager;
 	MBActorProfileWindowController *mActorProfileController;
+	MBImportWindowController *mImportController;
 	MBPreferencesWindowController *mPreferencesController;
 	MBScreencapsWindowController *mScreencapsController;
 	BOOL mIsDoneLoading;
@@ -155,6 +156,7 @@ static MBAppDelegate *gAppDelegate;
 
 @synthesize dataManager = mDataManager;
 @synthesize actorProfileController = mActorProfileController;
+@synthesize importController = mImportController;
 @synthesize preferencesController = mPreferencesController;
 @synthesize screencapsController = mScreencapsController;
 
@@ -169,6 +171,7 @@ static MBAppDelegate *gAppDelegate;
 	mIsDoneLoading = FALSE;
 	mDataManager = [[MBDataManager alloc] init];
 	mActorProfileController = [[MBActorProfileWindowController alloc] init];
+	mImportController = [[MBImportWindowController alloc] init];
 	mPreferencesController = [[MBPreferencesWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
 	mGenreSelections = [[NSMutableDictionary alloc] init];
@@ -1505,8 +1508,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  */
 - (IBAction)doActionImport:(id)sender
 {
-	[self.importController scanSources];
-	[NSApp beginSheet:self.importWindow modalForWindow:self.window modalDelegate:self didEndSelector:nil contextInfo:nil];
+	[mImportController showInWindow:self.window];
 }
 
 /**

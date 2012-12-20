@@ -1,5 +1,5 @@
 //
-//  MBImportViewController.h
+//  MBImportWindowController.h
 //  MovieBrowse
 //
 //  Created by Curtis Jones on 2012.10.24.
@@ -8,9 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MBImportViewController : NSViewController
+@interface MBImportWindowController : NSWindowController
 
-@property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSView *mainView;
 @property (assign) IBOutlet NSTextField *sourcePathTxt;
 @property (assign) IBOutlet NSTextField *sourceInfo1Txt;
@@ -24,9 +23,14 @@
 @property (assign) IBOutlet NSButton *applyBtn;
 @property (assign) IBOutlet NSButton *closeBtn;
 
-@property (readwrite, strong) IBOutlet NSMutableArray *resultsArray;
-@property (readwrite, strong) IBOutlet NSIndexSet *resultsSelection;
 @property (assign) IBOutlet NSArrayController *resultsController;
+@property (readwrite, strong) NSMutableArray *resultsArray;
+@property (readwrite, strong) NSIndexSet *resultsSelection;
+
+/**
+ *
+ */
+- (void)showInWindow:(NSWindow *)window;
 
 /**
  *
