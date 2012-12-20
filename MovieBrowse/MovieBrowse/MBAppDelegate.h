@@ -113,6 +113,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 
 - (void)showActor:(MBPerson *)person;
 
+/**
+ * Used to populate the "count" badge for each genre in the genre table.
+ */
 - (NSUInteger)movieCountForGenre:(MBGenre *)genre;
 
 @end

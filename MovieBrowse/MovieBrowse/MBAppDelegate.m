@@ -688,7 +688,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 #pragma mark - Accessors
 
 /**
- *
+ * Used to populate the "count" badge for each genre in the genre table.
  *
  */
 - (NSUInteger)movieCountForGenre:(MBGenre *)mbgenre
@@ -1112,6 +1112,24 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 }
 
 /**
+ * Various things to do after we change the sort order for the movies table.
+ *
+ */
+- (void)updateMoviesPostSort
+{
+	if (mMovieSelection)
+		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
+	else {
+		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
+		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
+	}
+	
+	// our find state is now invalid for doing "find next"
+	if ([mFindType isEqualToString:@"Movies"])
+		mFindIndex = NSNotFound;
+}
+
+/**
  *
  *
  */
@@ -1127,17 +1145,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1156,17 +1164,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"year" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1185,17 +1183,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"score" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1214,17 +1202,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"duration" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1243,17 +1221,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[self updateMoviesHeaderLabel];
 	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"mtime" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:FALSE]]];
-	
-	if (mMovieSelection)
-		[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-	else {
-		((NSScrollView *)self.movieTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.movieTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
-	
-	// our find state is now invalid for doing "find next"
-	if ([mFindType isEqualToString:@"Movies"])
-		mFindIndex = NSNotFound;
+	[self updateMoviesPostSort];
 }
 
 /**
@@ -1442,6 +1410,20 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  *
  *
  */
+- (void)updateActorPostSort
+{
+	if (mActorSelection)
+		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
+	else {
+		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
+		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
+	}
+}
+
+/**
+ *
+ *
+ */
 - (void)doActionActorsShowAll:(id)sender
 {
 	mActorHeaderMenuShowAllItem.state = NSOnState;
@@ -1481,13 +1463,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateActorsHeaderLabel];
 	[[NSUserDefaults standardUserDefaults] setObject:@"Name" forKey:MBDefaultsKeyActorSort];
 	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
-	
-	if (mActorSelection)
-		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
-	else {
-		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
+	[self updateActorPostSort];
 }
 
 /**
@@ -1503,13 +1479,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateActorsHeaderLabel];
 	[[NSUserDefaults standardUserDefaults] setObject:@"Age" forKey:MBDefaultsKeyActorSort];
 	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dob" ascending:FALSE]]];
-	
-	if (mActorSelection)
-		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
-	else {
-		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
+	[self updateActorPostSort];
 }
 
 /**
@@ -1525,13 +1495,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	[self updateActorsHeaderLabel];
 	[[NSUserDefaults standardUserDefaults] setObject:@"Movies" forKey:MBDefaultsKeyActorSort];
 	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"movieCount" ascending:FALSE]]];
-	
-	if (mActorSelection)
-		[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
-	else {
-		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
-		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
-	}
+	[self updateActorPostSort];
 }
 
 
