@@ -699,7 +699,19 @@
  */
 - (void)upgradeTmdbToImdb
 {
-	static BOOL _stop = FALSE;
+	__block BOOL _stop = FALSE;
+	__block NSUInteger current=0, total=0;
+	
+	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+		NSString *tmdbId = mbmovie.tmdbId;
+		NSString *imdbId = mbmovie.imdbId;
+		
+		if (mbmovie.updated)
+			return;
+		
+		if (tmdbId.length && imdbId.length)
+			total += 1;
+	}];
 	
 	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
 		if (_stop) {
@@ -714,7 +726,7 @@
 			return;
 		
 		if (tmdbId.length && imdbId.length) {
-			NSLog(@"%@ [%@, %@]", mbmovie.dbkey, tmdbId, imdbId);
+			NSLog(@"[%04lu of %04lu] %@ [%@, %@]", ++current, total, mbmovie.dbkey, tmdbId, imdbId);
 			
 			NSArray *movies = [IDSearch imdbSearchMovieWithTitle:imdbId andYear:nil andRuntime:nil];
 			

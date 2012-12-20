@@ -584,7 +584,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[NSThread performBlockInBackground:^{
 		
-		//[mDataManager moveImages];
 		//[mDataManager upgradeTmdbToImdb];
 		//[mDataManager ratingsUpdate];
 		//[mDataManager ratingsNormalize];
@@ -1638,9 +1637,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  */
 - (IBAction)doActionPrefsClearCache:(id)sender
 {
-#if !defined DEBUG
 	[[MBImageCache sharedInstance] clearAll];
-#endif
 }
 
 
