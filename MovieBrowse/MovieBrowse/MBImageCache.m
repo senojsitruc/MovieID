@@ -63,17 +63,31 @@ static MBImageCache *gSharedInstance;
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
 	NSString *actors = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
 	NSString *movies = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Movies"];
+	void (^deleteItems)(NSString*);
 	
-	NSArray *actorItems = [fileManager contentsOfDirectoryAtPath:actors error:nil];
-	NSArray *movieItems = [fileManager contentsOfDirectoryAtPath:movies error:nil];
+	deleteItems = ^ (NSString *baseDir) {
+		NSArray *dirs = [fileManager contentsOfDirectoryAtPath:baseDir error:nil];
+		
+		[dirs enumerateObjectsUsingBlock:^ (id dirName, NSUInteger dirNdx, BOOL *dirStop) {
+			NSString *dirPath = [baseDir stringByAppendingPathComponent:dirName];
+			BOOL isDir = FALSE;
+			
+			if (![fileManager fileExistsAtPath:dirPath isDirectory:&isDir] || !isDir)
+				return;
+			
+			NSArray *items = [fileManager contentsOfDirectoryAtPath:dirPath error:nil];
+			
+			[items enumerateObjectsUsingBlock:^ (id fileName, NSUInteger fileNdx, BOOL *fileStop) {
+				if (NSNotFound == [(NSString *)fileName rangeOfString:@"--"].location)
+					return;
+				
+				[fileManager removeItemAtPath:[dirPath stringByAppendingPathComponent:fileName] error:nil];
+			}];
+		}];
+	};
 	
-	[actorItems enumerateObjectsUsingBlock:^ (id fileName, NSUInteger ndx, BOOL *stop) {
-		[fileManager removeItemAtPath:[actors stringByAppendingPathComponent:fileName] error:nil];
-	}];
-	
-	[movieItems enumerateObjectsUsingBlock:^ (id fileName, NSUInteger ndx, BOOL *stop) {
-		[fileManager removeItemAtPath:[movies stringByAppendingPathComponent:fileName] error:nil];
-	}];
+	deleteItems(actors);
+	deleteItems(movies);
 	
 	dispatch_barrier_sync(mDataQueue, ^{
 		[mCache removeAllObjects];
