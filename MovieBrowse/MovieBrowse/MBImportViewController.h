@@ -31,6 +31,6 @@
 /**
  *
  */
-- (void)scanSource:(NSString *)dirPath;
+- (void)scanSources;
 
 @end

@@ -50,7 +50,7 @@
  */
 - (IBAction)doActionSearch:(id)sender
 {
-	[[MBAppDelegate sharedInstance] doActionSearchShow:self.movie];
+	//[[MBAppDelegate sharedInstance] doActionSearchShow:self.movie];
 }
 
 /**

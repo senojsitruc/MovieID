@@ -180,7 +180,6 @@ static MBAppDelegate *gAppDelegate;
 	self.actorsArray = [[NSMutableArray alloc] init];
 	self.genresArray = [[NSMutableArray alloc] init];
 	self.moviesArray = [[NSMutableArray alloc] init];
-	self.searchArray = [[NSMutableArray alloc] init];
 	
 	// user defaults
 	{
@@ -1628,68 +1627,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 
 
 
-#pragma mark - Search
-
-/**
- *
- *
- */
-- (void)doActionSearchShow:(id)sender
-{
-	if ([sender isKindOfClass:[MBMovie class]]) {
-		MBMovie *mbmovie = (MBMovie *)sender;
-		self.searchTxt.stringValue = mbmovie.title;
-	}
-	
-	[NSApp beginSheet:self.searchWin modalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionSearchClose:(id)sender
-{
-	[NSApp endSheet:self.searchWin];
-	[self.searchWin orderOut:sender];
-}
-
-/**
- *
- *
- */
-- (IBAction)doActionSearch:(id)sender
-{
-	NSString *searchTxt = self.searchTxt.stringValue;
-	
-	if (!searchTxt)
-		return;
-	
-	searchTxt = [searchTxt stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	if (!searchTxt.length)
-		return;
-	
-	// clear out the search result table
-	[self.searchArrayController removeObjects:self.searchArray];
-	
-	/*
-	self.searchBtn.stringValue = @"Cancel";
-	
-	[NSThread performBlockInBackground:^{
-		NSArray *results = [IDSearch tmdbSearchMovie:title andYear:year];
-		[[NSThread mainThread] performBlock:^{
-			self.searchBtn.stringValue = @"Search";
-		}];
-	}];
-	*/
-	
-}
-
-
-
-
-
 #pragma mark - Import / Export
 
 /**
@@ -1698,7 +1635,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
  */
 - (IBAction)doActionImport:(id)sender
 {
-	[self.importController scanSource:@"/Volumes/bigger/Media/Movies/O"];
+	[self.importController scanSources];
 	[NSApp beginSheet:self.importWindow modalForWindow:self.window modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
 

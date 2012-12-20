@@ -27,9 +27,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 
 @interface MBAppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
 
-@property (assign) IBOutlet NSSlider *slider;
-@property (assign) IBOutlet NSTextField *slider2;
-
 /**
  * Other
  */
@@ -91,18 +88,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (readwrite, strong) IBOutlet NSArrayController *moviesArrayController;
 
 /**
- * Search
- */
-@property (readwrite, strong) NSMutableArray *searchArray;
-@property (assign) IBOutlet NSArrayController *searchArrayController;
-@property (assign) IBOutlet NSWindow *searchWin;
-@property (assign) IBOutlet NSTextField *searchTxt;
-@property (assign) IBOutlet NSPopUpButton *searchType;
-@property (assign) IBOutlet NSPopUpButton *searchSite;
-@property (assign) IBOutlet NSButton *searchBtn;
-@property (assign) IBOutlet NSTableView *searchTbl;
-
-/**
  * Import
  */
 @property (assign) IBOutlet NSWindow *importWindow;
@@ -125,7 +110,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 - (void)doActionMovieUnhide:(MBMovie *)mbmovie withView:(NSView *)view;
 
 - (void)doActionLinkToTMDb:(MBMovie *)movie;
-- (void)doActionSearchShow:(id)sender;
 
 - (void)showActor:(MBPerson *)person;
 

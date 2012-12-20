@@ -57,7 +57,7 @@
  *
  *
  */
-- (void)scanSource:(NSString *)dirPath
+- (void)scanSources
 {
 	mCurrentMovieNdx = -1;
 	mMovies = [[NSMutableArray alloc] init];
