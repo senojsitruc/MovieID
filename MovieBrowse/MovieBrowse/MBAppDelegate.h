@@ -32,7 +32,6 @@ extern NSString * const MBDefaultsKeyApiRt;
  * Other
  */
 @property (readonly) MBDataManager *dataManager;
-@property (readonly) dispatch_queue_t imageQueue;
 @property (readonly) MBActorProfileWindowController *actorProfileController;
 @property (readonly) MBImportWindowController *importController;
 @property (readonly) MBPreferencesWindowController *preferencesController;

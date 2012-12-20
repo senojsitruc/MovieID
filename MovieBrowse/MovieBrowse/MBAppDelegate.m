@@ -53,8 +53,6 @@ static MBAppDelegate *gAppDelegate;
 
 @interface MBAppDelegate ()
 {
-	dispatch_queue_t mImageQueue;
-	
 	MBDataManager *mDataManager;
 	MBActorProfileWindowController *mActorProfileController;
 	MBImportWindowController *mImportController;
@@ -388,8 +386,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		mActorHeaderMenuSortByAge = sortByAge;
 		mActorHeaderMenuSortByMovies = sortByMovies;
 	}
-	
-	mImageQueue = dispatch_queue_create("image-queue", DISPATCH_QUEUE_CONCURRENT);
 }
 
 /**
@@ -675,15 +671,6 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	}
 	
 	self.window.title = [@"MovieBrowse - " stringByAppendingString:title];
-}
-
-/**
- *
- *
- */
-- (dispatch_queue_t)imageQueue
-{
-	return mImageQueue;
 }
 
 
