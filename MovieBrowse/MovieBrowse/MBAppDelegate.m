@@ -889,11 +889,13 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	// animate the indefinite progress indicator
 	[self.actorImagePrg startAnimation:self];
 	
+	NSSize imageSize = _actorWindowImage.frame.size;
+	
 	// retrieve the actor's image and update the ui when we're done; but don't update the ui if the
 	// user has moved on to another actor between the time that we initiated the download and when
 	// the image actually became avaliable for use.
 	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-		NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId];
+		NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:mbperson.imageId width:imageSize.width height:imageSize.height];
 		
 		if (actorWindowTransId != mActorWindowTransId)
 			return;
