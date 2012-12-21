@@ -65,25 +65,22 @@
 		__block NSUInteger count = 0;
 		
 		[NSThread performBlockInBackground:^{
-			NSLog(@"actors - start");
 			[self loadActors];
-			NSLog(@"actors - done");
 			count += 1;
+			NSLog(@"actors.count = %lu", mActors.count);
 		}];
 		
 		[NSThread performBlockInBackground:^{
-			NSLog(@"movies - start");
 			[self loadMovies];
-			NSLog(@"movies - done");
 			count += 1;
+			NSLog(@"movies.count = %lu", mMovies.count);
 		}];
 		
 		while (count < 2)
 			usleep(100000);
 		
-		NSLog(@"genres - start");
 		[self loadGenres];
-		NSLog(@"genres - done");
+		NSLog(@"genres.count = %lu", mGenres.count);
 	}
 	
 	return self;
