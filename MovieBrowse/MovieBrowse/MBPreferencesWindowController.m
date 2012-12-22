@@ -68,8 +68,7 @@
  */
 - (IBAction)doActionClose:(id)sender
 {
-	[NSApp endSheet:self.window];
-	[self.window orderOut:sender];
+	[self hide];
 }
 
 /**

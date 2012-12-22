@@ -24,6 +24,7 @@ extern NSString * const MBDefaultsKeyApiRt;
 @class MBImportWindowController;
 @class MBActorProfileWindowController;
 @class MBPreferencesWindowController;
+@class MBRenameWindowController;
 @class MBScreencapsWindowController;
 
 @interface MBAppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
@@ -32,6 +33,7 @@ extern NSString * const MBDefaultsKeyApiRt;
  * Other
  */
 @property (readonly) MBDataManager *dataManager;
+@property (readonly) MBRenameWindowController *renameController;
 
 /**
  * Main Window

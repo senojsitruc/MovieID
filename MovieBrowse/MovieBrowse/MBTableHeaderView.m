@@ -12,9 +12,13 @@
 
 @implementation MBTableHeaderView
 
+/**
+ *
+ *
+ */
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	// Figure which column, if any, was clicked
+	// which column (if any) was clicked
 	NSPoint clickedPoint = [self convertPoint:theEvent.locationInWindow fromView:nil];
 	NSInteger columnIndex = [self columnAtPoint:clickedPoint];
 	
@@ -23,14 +27,18 @@
 	
 	NSRect columnRect = [self headerRectOfColumn:columnIndex];
 	
-	// I want to preserve column resizing. If you do not, remove this
+	// preserve column resizing
 	if (![self mouse:clickedPoint inRect:NSInsetRect(columnRect, 3, 0)])
 		return [super mouseDown:theEvent];
 	
-	// Now, pop the cell's menu
+	// pop the cell's menu
 	[[[self.tableView.tableColumns objectAtIndex:columnIndex] headerCell] performClickWithFrame:columnRect inView:self];
 }
 
+/**
+ *
+ *
+ */
 - (BOOL)isOpaque;
 {
 	return FALSE;

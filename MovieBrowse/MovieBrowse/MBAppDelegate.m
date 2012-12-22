@@ -21,6 +21,7 @@
 #import "MBImportWindowController.h"
 #import "MBActorProfileWindowController.h"
 #import "MBPreferencesWindowController.h"
+#import "MBRenameWindowController.h"
 #import "MBScreencapsWindowController.h"
 #import "NSArray+Additions.h"
 #import "NSString+Additions.h"
@@ -57,6 +58,7 @@ static MBAppDelegate *gAppDelegate;
 	MBActorProfileWindowController *mActorProfileController;
 	MBImportWindowController *mImportController;
 	MBPreferencesWindowController *mPreferencesController;
+	MBRenameWindowController *mRenameController;
 	MBScreencapsWindowController *mScreencapsController;
 	BOOL mIsDoneLoading;
 	
@@ -153,6 +155,7 @@ static MBAppDelegate *gAppDelegate;
 @implementation MBAppDelegate
 
 @synthesize dataManager = mDataManager;
+@synthesize renameController = mRenameController;
 
 /**
  *
@@ -167,6 +170,7 @@ static MBAppDelegate *gAppDelegate;
 	mActorProfileController = [[MBActorProfileWindowController alloc] init];
 	mImportController = [[MBImportWindowController alloc] init];
 	mPreferencesController = [[MBPreferencesWindowController alloc] init];
+	mRenameController = [[MBRenameWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
 	mGenreSelections = [[NSMutableArray alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];

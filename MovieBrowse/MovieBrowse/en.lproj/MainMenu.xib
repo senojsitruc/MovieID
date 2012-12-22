@@ -1918,7 +1918,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="925609975">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSPopUpButton" id="267278601">
@@ -2143,6 +2143,7 @@
 						</object>
 					</array>
 					<string key="NSFrameSize">{480, 79}</string>
+					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="267278601"/>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
@@ -3238,7 +3239,7 @@
 									<object class="NSTextFieldCell" key="NSCell" id="873738448">
 										<int key="NSCellFlags">67108928</int>
 										<int key="NSCellFlags2">272631808</int>
-										<string key="NSContents">Table View Cell</string>
+										<string key="NSContents">Genre Name</string>
 										<reference key="NSSupport" ref="610647598"/>
 										<reference key="NSControlView" ref="575985457"/>
 										<reference key="NSBackgroundColor" ref="652449149"/>
@@ -7257,6 +7258,7 @@
 				</array>
 				<boolean value="NO" key="1012.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="1012.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1013.CustomClassName">MBTableView</string>
 				<string key="1013.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="1013.ibExternalAutomaticallyCalculatesRowSizeFromViewHeight"/>
 				<string key="1014.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -7515,6 +7517,8 @@
 				<string key="3111.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="3113.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="3114.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="3116.IBNSWindowAutoPositionCentersHorizontal"/>
+				<boolean value="YES" key="3116.IBNSWindowAutoPositionCentersVertical"/>
 				<string key="3116.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="3116.NSWindowTemplate.visibleAtLaunch"/>
 				<array class="NSMutableArray" key="3117.IBNSViewMetadataConstraints">
@@ -7595,6 +7599,8 @@
 				<string key="350.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="351.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="354.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="371.IBNSWindowAutoPositionCentersHorizontal"/>
+				<boolean value="YES" key="371.IBNSWindowAutoPositionCentersVertical"/>
 				<string key="371.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="371.IBWindowTemplateEditedContentRect">{{380, 496}, {480, 360}}</string>
 				<integer value="1" key="371.NSWindowTemplate.visibleAtLaunch"/>

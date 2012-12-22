@@ -20,6 +20,9 @@
 		F92A7EB216832DB100F04EDF /* MBActorProfileWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F92A7EB016832DB100F04EDF /* MBActorProfileWindowController.m */; };
 		F92A7EB316832DB100F04EDF /* MBActorProfileWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92A7EB116832DB100F04EDF /* MBActorProfileWindowController.xib */; };
 		F92A7EB5168341D900F04EDF /* MBImportWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92A7EB4168341D900F04EDF /* MBImportWindowController.xib */; };
+		F92A7ECB1686319700F04EDF /* MBTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F92A7ECA1686319700F04EDF /* MBTableView.m */; };
+		F92A7ED0168635ED00F04EDF /* MBRenameWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F92A7ECE168635ED00F04EDF /* MBRenameWindowController.m */; };
+		F92A7ED1168635ED00F04EDF /* MBRenameWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92A7ECF168635ED00F04EDF /* MBRenameWindowController.xib */; };
 		F93211EC16327D2C0093E619 /* MBActorMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211EB16327D2C0093E619 /* MBActorMovieView.m */; };
 		F93211FB163310AB0093E619 /* MBActorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211FA163310AB0093E619 /* MBActorCellView.m */; };
 		F93212161635A2B30093E619 /* MBTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212151635A2B30093E619 /* MBTableHeaderView.m */; };
@@ -35,7 +38,6 @@
 		F93212641638EA170093E619 /* MBImportCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212631638EA170093E619 /* MBImportCellView.m */; };
 		F97BF37A15F91FF400444926 /* MBActorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37915F91FF400444926 /* MBActorView.m */; };
 		F97BF37D15F9C20200444926 /* MBGenre.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37C15F9C20200444926 /* MBGenre.m */; };
-		F97BF38015F9C41800444926 /* MBGenreView.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37F15F9C41800444926 /* MBGenreView.m */; };
 		F98A50D1166BE76400749333 /* MovieID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
 		F98A50D2166BE76A00749333 /* MovieID.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
 		F998F27B162F6FEF008AF52D /* MissingMovie.png in Resources */ = {isa = PBXBuildFile; fileRef = F998F27A162F6FEF008AF52D /* MissingMovie.png */; };
@@ -108,6 +110,11 @@
 		F92A7EB016832DB100F04EDF /* MBActorProfileWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorProfileWindowController.m; sourceTree = "<group>"; };
 		F92A7EB116832DB100F04EDF /* MBActorProfileWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBActorProfileWindowController.xib; sourceTree = "<group>"; };
 		F92A7EB4168341D900F04EDF /* MBImportWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBImportWindowController.xib; sourceTree = "<group>"; };
+		F92A7EC91686319700F04EDF /* MBTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBTableView.h; sourceTree = "<group>"; };
+		F92A7ECA1686319700F04EDF /* MBTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBTableView.m; sourceTree = "<group>"; };
+		F92A7ECD168635ED00F04EDF /* MBRenameWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRenameWindowController.h; sourceTree = "<group>"; };
+		F92A7ECE168635ED00F04EDF /* MBRenameWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRenameWindowController.m; sourceTree = "<group>"; };
+		F92A7ECF168635ED00F04EDF /* MBRenameWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBRenameWindowController.xib; sourceTree = "<group>"; };
 		F93211EA16327D2C0093E619 /* MBActorMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorMovieView.h; sourceTree = "<group>"; };
 		F93211EB16327D2C0093E619 /* MBActorMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorMovieView.m; sourceTree = "<group>"; };
 		F93211F9163310AB0093E619 /* MBActorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorCellView.h; sourceTree = "<group>"; };
@@ -134,8 +141,6 @@
 		F97BF37915F91FF400444926 /* MBActorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorView.m; sourceTree = "<group>"; };
 		F97BF37B15F9C20100444926 /* MBGenre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenre.h; sourceTree = "<group>"; };
 		F97BF37C15F9C20200444926 /* MBGenre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenre.m; sourceTree = "<group>"; };
-		F97BF37E15F9C41800444926 /* MBGenreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreView.h; sourceTree = "<group>"; };
-		F97BF37F15F9C41800444926 /* MBGenreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreView.m; sourceTree = "<group>"; };
 		F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MovieIDFramework.xcodeproj; path = ../MovieIDFramework/MovieIDFramework.xcodeproj; sourceTree = "<group>"; };
 		F998F27A162F6FEF008AF52D /* MissingMovie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingMovie.png; sourceTree = "<group>"; };
 		F998F27C162F7335008AF52D /* MBMovieCastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieCastView.h; sourceTree = "<group>"; };
@@ -242,6 +247,16 @@
 			name = "Actor Profile";
 			sourceTree = "<group>";
 		};
+		F92A7ECC168635D400F04EDF /* Rename */ = {
+			isa = PBXGroup;
+			children = (
+				F92A7ECD168635ED00F04EDF /* MBRenameWindowController.h */,
+				F92A7ECE168635ED00F04EDF /* MBRenameWindowController.m */,
+				F92A7ECF168635ED00F04EDF /* MBRenameWindowController.xib */,
+			);
+			name = Rename;
+			sourceTree = "<group>";
+		};
 		F932125E1638C4F10093E619 /* Import */ = {
 			isa = PBXGroup;
 			children = (
@@ -257,6 +272,7 @@
 		F97BF37415F91F8200444926 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				F92A7ECC168635D400F04EDF /* Rename */,
 				F92A7EAE16832D9800F04EDF /* Actor Profile */,
 				F92A7EA716831FB600F04EDF /* Preferences */,
 				F923206E167E60DA00D14519 /* Screencaps */,
@@ -285,8 +301,6 @@
 		F97BF37615F91FBE00444926 /* Genre */ = {
 			isa = PBXGroup;
 			children = (
-				F97BF37E15F9C41800444926 /* MBGenreView.h */,
-				F97BF37F15F9C41800444926 /* MBGenreView.m */,
 				F9232068167D147400D14519 /* MBGenreCellView.h */,
 				F9232069167D147400D14519 /* MBGenreCellView.m */,
 				F923206B167D155E00D14519 /* MBGenreBadgeView.h */,
@@ -417,6 +431,8 @@
 				F9F30CF816306E25006C4F17 /* MBImageView.m */,
 				F93212171635B4060093E619 /* MBPopUpButtonCell.h */,
 				F93212181635B4060093E619 /* MBPopUpButtonCell.m */,
+				F92A7EC91686319700F04EDF /* MBTableView.h */,
+				F92A7ECA1686319700F04EDF /* MBTableView.m */,
 				F932121E1635DE090093E619 /* MBTableHeaderCell.h */,
 				F932121F1635DE090093E619 /* MBTableHeaderCell.m */,
 				F93212141635A2B30093E619 /* MBTableHeaderView.h */,
@@ -506,6 +522,7 @@
 				F92A7EAD16831FFA00F04EDF /* MBPreferencesWindowController.xib in Resources */,
 				F92A7EB316832DB100F04EDF /* MBActorProfileWindowController.xib in Resources */,
 				F92A7EB5168341D900F04EDF /* MBImportWindowController.xib in Resources */,
+				F92A7ED1168635ED00F04EDF /* MBRenameWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,7 +542,6 @@
 				F9B902BC15F7A8F10089BB17 /* NSThread+Additions.m in Sources */,
 				F97BF37A15F91FF400444926 /* MBActorView.m in Sources */,
 				F97BF37D15F9C20200444926 /* MBGenre.m in Sources */,
-				F97BF38015F9C41800444926 /* MBGenreView.m in Sources */,
 				F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */,
 				F998F27E162F7335008AF52D /* MBMovieCastView.m in Sources */,
 				F998F2C2162F85EF008AF52D /* MBMovieCellView.m in Sources */,
@@ -549,6 +565,8 @@
 				F923207B167E623A00D14519 /* MBScreencapsWindowController.m in Sources */,
 				F92A7EAC16831FFA00F04EDF /* MBPreferencesWindowController.m in Sources */,
 				F92A7EB216832DB100F04EDF /* MBActorProfileWindowController.m in Sources */,
+				F92A7ECB1686319700F04EDF /* MBTableView.m in Sources */,
+				F92A7ED0168635ED00F04EDF /* MBRenameWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

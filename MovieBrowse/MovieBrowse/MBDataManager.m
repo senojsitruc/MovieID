@@ -192,7 +192,7 @@
 	__block NSMutableDictionary *genres = nil;
 	__block NSMutableArray *languages = nil;
 	
-	[mMovieDb enumerateKeys:^ (NSString *key, BOOL *stop) {
+	[mMovieDb enumerateKeysAndValuesAsStrings:^ (NSString *key, NSString *value, BOOL *stop) {
 		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
 		
 		if (keyParts.count < 3)
@@ -201,7 +201,7 @@
 		NSString *title = keyParts[0];
 		NSNumber *year  = @(((NSString *)keyParts[1]).integerValue);
 		NSString *label = keyParts[2];
-		NSString *value = mMovieDb[key];
+//	NSString *value = mMovieDb[key];
 		
 		if (mbmovie && (![curTitle isEqualToString:title] || ![mbmovie.year isEqual:year])) {
 			/*
@@ -366,6 +366,79 @@
 - (MBGenre *)genreWithKey:(NSString *)dbkey
 {
 	return mGenres[dbkey];
+}
+
+/**
+ *
+ *
+ */
+- (void)genre:(MBGenre *)mbgenre updateWithName:(NSString *)newName
+{
+	if (!newName.length || [mbgenre.name isEqualToString:newName])
+		return;
+	
+	NSString *oldName = mbgenre.name;
+	MBGenre *newGenre = [self genreWithKey:newName];
+	
+	if (!newGenre)
+		mGenres[newName] = (newGenre = [[MBGenre alloc] initWithGenre:newName]);
+	
+	[mMovieDb enumerateKeys:^ (NSString *key, BOOL *stop) {
+		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
+		
+		if (keyParts.count < 4)
+			return;
+		
+		NSString *title = keyParts[0];
+		NSNumber *year  = @(((NSString *)keyParts[1]).integerValue);
+		NSString *label = keyParts[2];
+		NSString *genre = keyParts[3];
+		
+		if ([label isEqualToString:@"genre"] && [genre isEqualToString:oldName]) {
+			NSString *dbkey = [[title stringByAppendingString:@"--"] stringByAppendingString:year.stringValue];
+			NSString *genreKey = [[dbkey stringByAppendingString:@"--genre--"] stringByAppendingString:newName];
+			MBMovie *mbmovie = [self movieWithKey:dbkey];
+			
+			if (mbmovie) {
+				[mbmovie.genres removeObjectForKey:oldName];
+				mbmovie.genres[newName] = newGenre;
+			}
+			
+			[mMovieDb removeKey:key];
+			mMovieDb[genreKey] = @"";
+			
+			NSLog(@"  Removing '%@'", key);
+			NSLog(@"  Adding '%@'", genreKey);
+		}
+	}];
+	
+	mbgenre.name = newName;
+}
+
+/**
+ *
+ *
+ */
+- (void)genreDelete:(MBGenre *)mbgenre
+{
+	NSString *name = mbgenre.name;
+	
+	[mMovieDb enumerateKeys:^ (NSString *key, BOOL *stop) {
+		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
+		
+		if (keyParts.count < 4)
+			return;
+		
+//	NSString *title = keyParts[0];
+//	NSNumber *year  = @(((NSString *)keyParts[1]).integerValue);
+		NSString *label = keyParts[2];
+		NSString *genre = keyParts[3];
+		
+		if ([label isEqualToString:@"genre"] && [genre isEqualToString:name]) {
+			[mMovieDb removeKey:key];
+			NSLog(@"  Removing '%@'", key);
+		}
+	}];
 }
 
 

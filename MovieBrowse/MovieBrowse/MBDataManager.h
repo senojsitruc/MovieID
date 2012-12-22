@@ -44,6 +44,8 @@
 - (MBMovie *)movieWithKey:(NSString *)dbkey;
 - (MBPerson *)personWithKey:(NSString *)dbkey;
 - (MBGenre *)genreWithKey:(NSString *)dbkey;
+- (void)genre:(MBGenre *)mbgenre updateWithName:(NSString *)newName;
+- (void)genreDelete:(MBGenre *)genre;
 
 - (void)addMovie:(IDMovie *)idmovie withDirPath:(NSString *)dirPath duration:(NSNumber *)duration filesize:(NSNumber *)filesize width:(NSNumber *)width height:(NSNumber *)height bitrate:(NSNumber *)bitrate mtime:(NSDate *)mtime languages:(NSArray *)languages;
 
