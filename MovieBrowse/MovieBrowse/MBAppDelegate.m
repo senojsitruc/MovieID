@@ -588,6 +588,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		//[mDataManager upgradeTmdbToImdb];
 		//[mDataManager ratingsUpdate];
 		//[mDataManager ratingsNormalize];
+		//[mDataManager findDuplicateMovies];
 		
 		/*
 		[[mDataManager findMissingFiles] enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {

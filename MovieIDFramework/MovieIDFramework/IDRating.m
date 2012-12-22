@@ -48,6 +48,9 @@ static NSMutableDictionary *gRatings;
 	gRatings[@"m/4"] = @"G";
 	
 	gRatings[@"pg"] = @"PG";
+	gRatings[@"approved"] = @"PG";
+	gRatings[@"passed"] = @"PG";
+	gRatings[@"e"] = @"PG";
 	gRatings[@"m/6"] = @"PG";
 	gRatings[@"7"] = @"PG";
 	gRatings[@"8"] = @"PG";
@@ -83,6 +86,7 @@ static NSMutableDictionary *gRatings;
 	gRatings[@"m"] = @"PG-13";
 	gRatings[@"iia"] = @"PG-13";
 	gRatings[@"k-13"] = @"PG-13";
+	gRatings[@"k-14"] = @"PG-13";
 	gRatings[@"k-15"] = @"PG-13";
 	gRatings[@"r15"] = @"PG-13";
 	gRatings[@"r15+"] = @"PG-13";
