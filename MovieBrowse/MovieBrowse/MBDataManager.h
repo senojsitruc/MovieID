@@ -19,7 +19,9 @@
 
 - (void)addSource:(NSString *)sourcePath;
 - (void)scanSource:(NSString *)sourcePath;
+
 - (NSArray *)findMissingMovies;
+- (void)findDuplicateMovies;
 - (NSArray *)findMissingFiles;
 - (void)ratingsNormalize;
 - (void)updateFileStats;

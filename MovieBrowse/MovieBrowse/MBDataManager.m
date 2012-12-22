@@ -624,6 +624,25 @@
  *
  *
  */
+- (void)findDuplicateMovies
+{
+	NSMutableDictionary *movies = [[NSMutableDictionary alloc] init];
+	
+	[mMovies.allValues enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+		MBMovie *mbmovie1 = movieObj;
+		MBMovie *mbmovie2 = movies[mbmovie1.dirpath];
+		
+		if (mbmovie2)
+			NSLog(@"  [%@] dir path already in use! [%@, %@]", mbmovie1.dirpath, mbmovie1.title, mbmovie2.title);
+		else
+			movies[mbmovie1.dirpath] = mbmovie1;
+	}];
+}
+
+/**
+ *
+ *
+ */
 - (NSArray *)findMissingFiles
 {
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -710,8 +729,9 @@
 		
 		IDMovie *idmovie = movies[0];
 		NSURL *imageUrl = idmovie.imageUrl;
-		NSURL *anonUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.absoluteString]];
-		NSData *imageData = [NSData dataWithContentsOfURL:anonUrl];
+//	NSURL *anonUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.absoluteString]];
+//	NSData *imageData = [NSData dataWithContentsOfURL:anonUrl];
+		NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 		NSImage *image = [[NSImage alloc] initWithData:imageData];
 		
 		if (!image)
@@ -741,8 +761,9 @@
 		if ([fileManager fileExistsAtPath:imagePath])
 			return;
 		
-		NSURL *anonUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.absoluteString]];
-		NSData *imageData = [NSData dataWithContentsOfURL:anonUrl];
+//	NSURL *anonUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.absoluteString]];
+//	NSData *imageData = [NSData dataWithContentsOfURL:anonUrl];
+		NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 		NSImage *image = [[NSImage alloc] initWithData:imageData];
 		
 		if (!image)
@@ -1250,7 +1271,7 @@
 		mMovieDb[[dbkey stringByAppendingString:@"--path"    ]] = dirPath;
 		mMovieDb[[dbkey stringByAppendingString:@"--title"   ]] = idmovie.title;
 		mMovieDb[[dbkey stringByAppendingString:@"--year"    ]] = idmovie.year.stringValue;
-		mMovieDb[[dbkey stringByAppendingString:@"--rating"  ]] = idmovie.rating;
+		mMovieDb[[dbkey stringByAppendingString:@"--rating"  ]] = [IDRating normalizedRating:idmovie.rating];
 		mMovieDb[[dbkey stringByAppendingString:@"--score"   ]] = idmovie.score.stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--synopsis"]] = idmovie.synopsis;
 		mMovieDb[[dbkey stringByAppendingString:@"--duration"]] = duration.stringValue;
