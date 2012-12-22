@@ -159,14 +159,18 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	
 	CGColorSpaceRef cs = CGImageGetColorSpace(cgimage);
 	
-	if (!cs)
+	if (!cs) {
+		NSLog(@"%s.. failed to CGImageGetColorSpace()", __PRETTY_FUNCTION__);
 		return nil;
+	}
 	
 	CGContextRef context = CGBitmapContextCreate(NULL, width, height, CGImageGetBitsPerComponent(cgimage), CGImageGetBytesPerRow(cgimage), cs, CGImageGetAlphaInfo(cgimage));
 	CGColorSpaceRelease(cs);
 	
-	if (!context)
+	if (!context) {
+		NSLog(@"%s.. failed to CGBitmapContextCreate()", __PRETTY_FUNCTION__);
 		return nil;
+	}
 	
 	CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgimage);
 	CGImageRef newImage = CGBitmapContextCreateImage(context);
@@ -186,6 +190,12 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	
 	NSMutableData *imageData = [[NSMutableData alloc] init];
 	CGImageDestinationRef idRef = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
+	
+	if (!idRef) {
+		NSLog(@"%s.. failed to CGImageDestinationCreateWithData()", __PRETTY_FUNCTION__);
+		return nil;
+	}
+	
 	CGImageDestinationSetProperties(idRef, (__bridge CFDictionaryRef)@{(NSString *)kCGImageDestinationLossyCompressionQuality: @(0.5)});
 	CGImageDestinationAddImage(idRef, cgimage, NULL);
 	
