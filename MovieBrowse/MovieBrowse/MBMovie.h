@@ -11,7 +11,7 @@
 @interface MBMovie : NSObject
 
 @property (readwrite, strong, nonatomic) NSString *dbkey;
-@property (readwrite, nonatomic, setter=setTitle:) NSString *title;
+@property (readwrite, strong, nonatomic, setter=setTitle:) NSString *title;
 @property (readwrite, strong, nonatomic) NSNumber *year;
 @property (readwrite, strong, nonatomic) NSString *rating;
 @property (readwrite, strong, nonatomic) NSNumber *score;

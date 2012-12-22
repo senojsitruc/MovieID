@@ -21,7 +21,6 @@
 - (void)scanSource:(NSString *)sourcePath;
 - (NSArray *)findMissingMovies;
 - (NSArray *)findMissingFiles;
-- (void)ratingsUpdate;
 - (void)ratingsNormalize;
 - (void)updateFileStats;
 - (void)upgradeTmdbToImdb;

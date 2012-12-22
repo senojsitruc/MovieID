@@ -8,8 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MBPreferencesWindowController : NSWindowController
+@interface MBPreferencesWindowController : NSWindowController <NSTableViewDelegate, NSOpenSavePanelDelegate>
 
+/**
+ * Sources
+ */
+@property (readwrite, assign, nonatomic) IBOutlet NSTableView *sourcesTbl;
 @property (readwrite, assign, nonatomic) IBOutlet NSButton *sourcesAddBtn;
 @property (readwrite, assign, nonatomic) IBOutlet NSButton *sourcesDelBtn;
 
