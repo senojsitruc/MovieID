@@ -364,6 +364,11 @@
 		return nil;
 }
 
+- (void)setTitle:(NSString *)title
+{
+	mInfo[@"title"] = title;
+}
+
 - (NSNumber *)year
 {
 	if (!mInfo[@"year"] && !mGotMovie)
@@ -373,6 +378,11 @@
 		return @(((NSString *)mInfo[@"year"]).integerValue);
 	else
 		return nil;
+}
+
+- (void)setYear:(NSNumber *)year
+{
+	mInfo[@"year"] = year.stringValue;
 }
 
 - (NSString *)rating

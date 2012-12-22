@@ -291,7 +291,7 @@
 			mbmovie.dirpath = value;
 		else if ([label isEqualToString:@"updated"]) {
 			if (value.integerValue)
-				mbmovie.updated = [NSDate dateWithTimeIntervalSinceReferenceDate:value.doubleValue];
+				mbmovie.updated = [NSDate dateWithTimeIntervalSinceReferenceDate:value.integerValue];
 		}
 		else if ([label isEqualToString:@"title"])
 			mbmovie.title = value;
@@ -789,6 +789,12 @@
 				return;
 			
 			IDMovie *idmovie = movies[0];
+			
+			if (!idmovie.title || !idmovie.year.integerValue)
+				return;
+			
+			idmovie.title = mbmovie.title;
+			idmovie.year = mbmovie.year;
 			
 			[self addMovie:idmovie
 				 withDirPath:mbmovie.dirpath
@@ -1322,6 +1328,8 @@
 			
 			if (imageData) {
 				NSLog(@"[DM]           Assigning new image id [%@]", imageId);
+				
+				imageId = [NSString randomStringOfLength:32];
 				
 //			NSString *dataPath = [movieBaseDir stringByAppendingPathComponent:imageId];
 				NSString *dataDir = [movieBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
