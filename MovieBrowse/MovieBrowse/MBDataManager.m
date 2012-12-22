@@ -30,7 +30,6 @@
 	NSMutableDictionary *mSources;
 	
 	APLevelDB *mMovieDb;
-	APLevelDB *mGenreDb;
 	APLevelDB *mActorDb;
 	
 	NSMutableDictionary *mActors;
@@ -67,20 +66,18 @@
 		[NSThread performBlockInBackground:^{
 			[self loadActors];
 			count += 1;
-			NSLog(@"actors.count = %lu", mActors.count);
 		}];
 		
 		[NSThread performBlockInBackground:^{
 			[self loadMovies];
 			count += 1;
-			NSLog(@"movies.count = %lu", mMovies.count);
 		}];
 		
 		while (count < 2)
 			usleep(100000);
 		
-		[self loadGenres];
-		NSLog(@"genres.count = %lu", mGenres.count);
+		NSLog(@"movies.count = %lu", mMovies.count);
+		NSLog(@"actors.count = %lu", mActors.count);
 	}
 	
 	return self;
@@ -100,11 +97,6 @@
 	else
 		mActorDb = [APLevelDB levelDBWithPath:[desktop stringByAppendingPathComponent:@"MovieBrowse-Actors.db"] error:nil];
 	
-	if ((path = [[NSBundle mainBundle] pathForResource:@"MovieBrowse-Genres" ofType:@"db"]))
-		mGenreDb = [APLevelDB levelDBWithPath:path error:nil];
-	else
-		mGenreDb = [APLevelDB levelDBWithPath:[desktop stringByAppendingPathComponent:@"MovieBrowse-Genres.db"] error:nil];
-	
 	if ((path = [[NSBundle mainBundle] pathForResource:@"MovieBrowse-Movies" ofType:@"db"]))
 		mMovieDb = [APLevelDB levelDBWithPath:path error:nil];
 	else
@@ -119,7 +111,6 @@
 {
 #ifdef DEBUG
 	[mMovieDb compact];
-	[mGenreDb compact];
 	[mActorDb compact];
 #endif
 }
@@ -193,56 +184,12 @@
  *
  *
  */
-- (void)loadGenres
-{
-	__block MBGenre *mbgenre = nil;
-	
-	[mGenreDb enumerateKeys:^ (NSString *key, BOOL *stop) {
-		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
-		
-		if (keyParts.count < 3)
-			return;
-		
-		NSString *genre = keyParts[0];
-		NSString *label = keyParts[1];
-		NSString *title = keyParts[2];
-		
-#ifndef DEBUG
-		if ([genre isEqualToString:@"Adult"] || [genre isEqualToString:@"Erotic"])
-			return;
-#endif
-		
-		if (mbgenre && ![genre isEqualToString:mbgenre.name]) {
-			mGenres[mbgenre.name] = mbgenre;
-			mbgenre = nil;
-		}
-		
-		if (!mbgenre) {
-			mbgenre = [[MBGenre alloc] init];
-			mbgenre.name = genre;
-		}
-		
-		if ([label isEqualToString:@"actor"])
-			; // actors[title] = @"";
-		else if ([label isEqualToString:@"movie"]) {
-			NSMutableString *key = [[NSMutableString alloc] init];
-			[key appendString:title];
-			[key appendString:@"--"];
-			[key appendString:keyParts[3]];
-			((MBMovie *)mMovies[key]).genres[genre] = @"";
-		}
-	}];
-}
-
-/**
- *
- *
- */
 - (void)loadMovies
 {
 	__block MBMovie *mbmovie = nil;
 	__block NSString *curTitle = nil;
 	__block NSMutableDictionary *actors = nil;
+	__block NSMutableDictionary *genres = nil;
 	__block NSMutableArray *languages = nil;
 	
 	[mMovieDb enumerateKeys:^ (NSString *key, BOOL *stop) {
@@ -257,6 +204,7 @@
 		NSString *value = mMovieDb[key];
 		
 		if (mbmovie && (![curTitle isEqualToString:title] || ![mbmovie.year isEqual:year])) {
+			/*
 			NSString *_yearPath = [mbmovie.dirpath stringByMatching:@"\\((\\d\\d\\d\\d)\\)"];
 			_yearPath = [_yearPath substringWithRange:NSMakeRange(1, 4)];
 			
@@ -264,10 +212,12 @@
 				NSLog(@"Year Mismatch for '%@' [%@ vs %@]", mbmovie.title, mbmovie.year, _yearPath);
 				//[self deleteMovie:mbmovie];
 			}
+			*/
 			
 			mMovies[mbmovie.dbkey] = mbmovie;
 			mbmovie = nil;
 			actors = nil;
+			genres = nil;
 			languages = nil;
 		}
 		
@@ -279,8 +229,8 @@
 			curTitle = title;
 			mbmovie = [[MBMovie alloc] init];
 			mbmovie.actors = (actors = [[NSMutableDictionary alloc] init]);
+			mbmovie.genres = (genres = [[NSMutableDictionary alloc] init]);
 			mbmovie.languages = (languages = [[NSMutableArray alloc] init]);
-			mbmovie.genres = [[NSMutableDictionary alloc] init];
 			mbmovie.dbkey = key;
 			mbmovie.year = year;
 		}
@@ -327,8 +277,19 @@
 			mbmovie.posterId = value;
 		else if ([label isEqualToString:@"actor"])
 			actors[value] = @"";
-		else if ([label isEqualToString:@"language"] && keyParts.count >= 4)
-			[languages addObject:keyParts[3]];
+		else if ([label isEqualToString:@"language"]) {
+			if (keyParts.count >= 4)
+				[languages addObject:keyParts[3]];
+		}
+		else if ([label isEqualToString:@"genre"]) {
+			if (keyParts.count >= 4) {
+				NSString *genre = keyParts[3];
+				MBGenre *mbgenre = mGenres[genre];
+				if (!mbgenre)
+					mGenres[genre] = (mbgenre = [[MBGenre alloc] initWithGenre:genre]);
+				genres[genre] = mbgenre;
+			}
+		}
 	}];
 	
 	if (mbmovie)
@@ -340,20 +301,6 @@
 
 
 #pragma mark - Queries
-
-/**
- *
- *
- */
-/*
-- (BOOL)doesGenre:(MBGenre *)mbgenre haveActor:(MBPerson *)mbperson
-{
-	if (!mbgenre || !mbperson)
-		return FALSE;
-	else
-		return nil != mbgenre.actors[mbperson.name];
-}
-*/
 
 /**
  *
@@ -454,21 +401,6 @@
 	}
 	
 	//
-	// genre
-	//
-	{
-		APLevelDBIterator *iter = [APLevelDBIterator iteratorWithLevelDB:mGenreDb];
-		NSString *key=nil, *suffix = [@"--movie--" stringByAppendingString:dbkey];
-		
-		while (nil != (key = [iter nextKey])) {
-			if ([key hasSuffix:suffix]) {
-				NSLog(@"  GENRE [%@]", key);
-				[mGenreDb removeKey:key];
-			}
-		}
-	}
-	
-	//
 	// actor
 	//
 	{
@@ -542,10 +474,10 @@
  *
  *
  */
-- (void)enumerateGenres:(void (^)(MBGenre*, NSUInteger, BOOL*))handler
+- (void)enumerateGenres:(void (^)(MBGenre*, BOOL*))handler
 {
 	[[mGenres allValues] enumerateObjectsUsingBlock:^ (id obj, NSUInteger ndx, BOOL *stop) {
-		handler((MBGenre *)obj, ((MBGenre *)obj).movies.count, stop);
+		handler(obj, stop);
 	}];
 }
 
@@ -576,6 +508,24 @@
 
 
 #pragma mark - Import
+
+/**
+ *
+ *
+ */
+- (void)moveGenresToMovies
+{
+	[mMovies.allValues enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+		MBMovie *mbmovie = movieObj;
+		NSString *dbkey = mbmovie.dbkey;
+		NSString *genreKey = [dbkey stringByAppendingString:@"--genre--"];
+		
+		[mbmovie.genres.allKeys enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
+			NSLog(@" [%@] adding genre for key '%@'", mbmovie.title, [genreKey stringByAppendingString:genreObj]);
+			mMovieDb[[genreKey stringByAppendingString:genreObj]] = @"";
+		}];
+	}];
+}
 
 /**
  *
@@ -652,46 +602,6 @@
  *
  *
  */
-/*
-- (void)moveImages
-{
-	NSString *actorsPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
-	NSString *moviesPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Movies"];
-	NSFileManager *fileManager = [[NSFileManager alloc] init];
-	void (^moveImages)(NSString*);
-	
-	moveImages = ^ (NSString *baseDir) {
-		NSArray *files = [fileManager contentsOfDirectoryAtPath:baseDir error:nil];
-		
-		[files enumerateObjectsUsingBlock:^ (id fileName, NSUInteger fileNdx, BOOL *fileStop) {
-			if (NSNotFound != [(NSString *)fileName rangeOfString:@"--"].location)
-				return;
-			
-			BOOL isDir = FALSE;
-			NSString *srcPath = [baseDir stringByAppendingPathComponent:fileName];
-			
-			if (![fileManager fileExistsAtPath:srcPath isDirectory:&isDir] || isDir)
-				return;
-			
-			NSString *subdir = [(NSString *)fileName substringToIndex:2].lowercaseString;
-			NSString *dstPath = [baseDir stringByAppendingPathComponent:subdir];
-			
-			[fileManager createDirectoryAtPath:dstPath withIntermediateDirectories:FALSE attributes:nil error:nil];
-			
-			dstPath = [dstPath stringByAppendingPathComponent:fileName];
-			
-			NSLog(@"%@ ---> %@", srcPath, dstPath);
-			
-			if (![fileManager moveItemAtPath:srcPath toPath:dstPath error:nil])
-				NSLog(@"  failed!");
-		}];
-	};
-	
-	moveImages(actorsPath);
-	moveImages(moviesPath);
-}
-*/
-
 - (void)getMissingImages
 {
 	NSString *moviesDir = [[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByAppendingPathComponent:@"Movies"];
@@ -1236,7 +1146,6 @@
 	[dbkey appendString:idmovie.year.stringValue];
 	
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
-//NSString *dbkey = [NSString stringWithFormat:@"%@--%@", idmovie.title, idmovie.year];
 	NSString *dirName = [dirPath lastPathComponent];
 	NSString *movieBaseDir=nil, *actorBaseDir=nil;
 	NSString *baseDir = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache];
@@ -1299,7 +1208,6 @@
 				
 				imageId = [NSString randomStringOfLength:32];
 				
-//			NSString *dataPath = [movieBaseDir stringByAppendingPathComponent:imageId];
 				NSString *dataDir = [movieBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
 				NSString *dataPath = [dataDir stringByAppendingPathComponent:imageId];
 				
@@ -1318,31 +1226,14 @@
 	// genres
 	//
 	{
+		NSString *genreKey = [dbkey stringByAppendingString:@"--genre--"];
 		NSArray *genres = idmovie.genres;
-		NSArray *casts = idmovie.cast;
 		
 		NSLog(@"[DM]       Got %lu genre(s)", genres.count);
 		
 		[genres enumerateObjectsUsingBlock:^ (id obj1, NSUInteger ndx1, BOOL *stop1) {
 			NSLog(@"[DM]       [%lu] %@", ndx1, obj1);
-			
-			NSMutableString *key = [[NSMutableString alloc] init];
-			[key appendString:obj1];
-			[key appendString:@"--movie--"];
-			[key appendString:dbkey];
-			
-			mGenreDb[key] = @"";
-//		mGenreDb[[NSString stringWithFormat:@"%@--movie--%@", obj1, dbkey]] = @"";
-			
-			[casts enumerateObjectsUsingBlock:^ (id obj2, NSUInteger ndx2, BOOL *stop2) {
-				NSMutableString *_key = [[NSMutableString alloc] init];
-				[_key appendString:obj1];
-				[_key appendString:@"--actor--"];
-				[_key appendString:((IDPerson *)obj2).name];
-				
-				mGenreDb[_key] = @"";
-//			[mGenreDb setString:@"" forKey:[NSString stringWithFormat:@"%@--actor--%@", obj1, ((IDPerson *)obj2).name]];
-			}];
+			mMovieDb[[genreKey stringByAppendingString:obj1]] = @"";
 		}];
 	}
 	
@@ -1382,9 +1273,7 @@
 				[key appendString:name];
 				[key appendString:@"--movie--"];
 				[key appendString:dbkey];
-				
 				mActorDb[key] = @(ndx1).stringValue;
-//			mActorDb[[NSString stringWithFormat:@"%@--movie--%@", name, dbkey]] = @(ndx1).stringValue;
 			}
 			
 			// for each CAST member for this MOVIE, map the person to the movie
@@ -1393,9 +1282,7 @@
 				[key appendString:dbkey];
 				[key appendString:@"--actor--"];
 				[key appendString:name];
-				
 				mMovieDb[key] = name;
-//			mMovieDb[[NSString stringWithFormat:@"%@--actor--%@", dbkey, name]] = name;
 			}
 			
 			NSString *imageId = mActorDb[[name stringByAppendingString:@"--image--id"]];
@@ -1406,7 +1293,6 @@
 				NSLog(@"[DM]         Found image at %@", value);
 				
 				NSURL *imageUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:((NSURL *)value).absoluteString]];
-//			NSData *imageData = [NSData dataWithContentsOfURL:(NSURL *)value];
 				NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 				
 				NSLog(@"[DM]           %@", imageUrl);

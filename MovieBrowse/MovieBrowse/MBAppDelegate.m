@@ -87,7 +87,7 @@ static MBAppDelegate *gAppDelegate;
 	 * Selections
 	 */
 	MBPerson *mActorSelection;
-	NSMutableDictionary *mGenreSelections;
+	NSMutableArray *mGenreSelections;
 	MBMovie *mMovieSelection;
 	NSString *mLanguageSelection;
 	NSString *mRatingSelection;
@@ -168,7 +168,7 @@ static MBAppDelegate *gAppDelegate;
 	mImportController = [[MBImportWindowController alloc] init];
 	mPreferencesController = [[MBPreferencesWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
-	mGenreSelections = [[NSMutableDictionary alloc] init];
+	mGenreSelections = [[NSMutableArray alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];
 	mLanguagesSorted = [[NSMutableArray alloc] init];
 	mRatingsByName = [[NSMutableDictionary alloc] init];
@@ -504,7 +504,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		NSMutableArray *genresArray = [[NSMutableArray alloc] init];
 		NSMutableArray *moviesArray = [[NSMutableArray alloc] init];
 		
-		[mDataManager enumerateGenres:^ (MBGenre *mbgenre, NSUInteger count, BOOL *stop) { [genresArray addObject:mbgenre]; }];
+		[mDataManager enumerateGenres:^ (MBGenre *mbgenre, BOOL *stop) { [genresArray addObject:mbgenre]; }];
 		[mDataManager enumerateActors:^ (MBPerson *mbactor, NSUInteger count, BOOL *stop) { [actorsArray addObject:mbactor]; }];
 		[mDataManager enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) { [moviesArray addObject:mbmovie]; }];
 		
@@ -551,15 +551,15 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 				MBGenre *mbgenre = [mDataManager genreWithKey:genreKey];
 				
 				if (mbgenre)
-					mGenreSelections[mbgenre.name] = mbgenre;
+					[mGenreSelections addObject:mbgenre];
 			}];
 			
 			if (mGenreSelections.count == 1)
-				mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections.allValues[0]).name];
+				mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections[0]).name];
 			else
 				mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%lu selected)", mGenreSelections.count];
 			
-			[self.genresArrayController setSelectedObjects:mGenreSelections.allValues];
+			[self.genresArrayController setSelectedObjects:mGenreSelections];
 		}
 		else
 			mGenreHeaderCell.label = @"Genre";
@@ -584,6 +584,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	
 	[NSThread performBlockInBackground:^{
 		
+		//[mDataManager moveGenresToMovies];
 		//[mDataManager getMissingImages];
 		//[mDataManager upgradeTmdbToImdb];
 		//[mDataManager ratingsUpdate];
@@ -642,7 +643,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		if (title.length)
 			[title appendString:@", "];
 		if (mGenreSelections.count == 1)
-			[title appendString:((MBGenre *)mGenreSelections.allValues[0]).name];
+			[title appendString:((MBGenre *)mGenreSelections[0]).name];
 		else
 			[title appendFormat:@"%lu genres", mGenreSelections.count];
 	}
@@ -811,13 +812,17 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	}
 	else {
 		[selectedObjects enumerateObjectsUsingBlock:^ (id obj, NSUInteger ndx, BOOL *stop) {
-			mGenreSelections[((MBGenre *)obj).name] = obj;
+			[mGenreSelections addObject:obj];
 		}];
 		if (selectedObjects.count == 1)
-			mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections.allValues[0]).name];
+			mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections[0]).name];
 		else
 			mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%lu selected)", selectedObjects.count];
-		[defaults setObject:[NSArray arrayWithArray:mGenreSelections.allKeys] forKey:MBDefaultsKeyGenreSelection];
+		NSMutableArray *genres = [[NSMutableArray alloc] init];
+		[mGenreSelections enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
+			[genres addObject:((MBGenre *)genreObj).name];
+		}];
+		[defaults setObject:genres forKey:MBDefaultsKeyGenreSelection];
 	}
 	
 	[self.genreTable.headerView setNeedsDisplay:TRUE];
@@ -1809,8 +1814,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		}];
 	}
 	else {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return nil != mGenresByName[((MBGenre *)object).name];
+		predicate = [NSPredicate predicateWithBlock:^ BOOL (id genreObj, NSDictionary *bindings) {
+			return nil != mGenresByName[genreObj];
 		}];
 	}
 	
@@ -1828,14 +1833,14 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 	if (!mIsDoneLoading)
 		return;
 	
-	NSLog(@"%s.. mActor=%@, mGenre=%@, mMovie=%@, mLanguage=%@, mRating=%@", __PRETTY_FUNCTION__, mActorSelection.name, [mGenreSelections.allKeys componentsJoinedByString:@", "], mMovieSelection.title, mLanguageSelection, mRatingSelection);
+	NSLog(@"%s.. mActor=%@, mGenre=%@, mMovie=%@, mLanguage=%@, mRating=%@", __PRETTY_FUNCTION__, mActorSelection.name, [mGenreSelections componentsJoinedByString:@", "], mMovieSelection.title, mLanguageSelection, mRatingSelection);
 	
 	NSPredicate *predicate = nil;
 	BOOL (^genreMatches)(id) = nil;
 	NSUInteger genreSelectionCount = mGenreSelections.count;
 	
 	if (genreSelectionCount == 1) {
-		MBGenre *mbgenre = mGenreSelections.allValues[0];
+		MBGenre *mbgenre = mGenreSelections[0];
 		BOOL x = ((NSOnState == mGenreHeaderMenuMultiOrItem.state) | (NSOnState == mGenreHeaderMenuMultiAndItem.state));
 		genreMatches = ^ BOOL (id movie) {
 			return x == [mDataManager doesMovie:movie haveGenre:mbgenre];
@@ -1850,7 +1855,7 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 			
 			genreMatches = ^ BOOL (id movie) {
 				__block BOOL match = FALSE;
-				[mGenreSelections.allValues enumerateObjectsUsingBlock:^ (id mbgenre, NSUInteger ndx, BOOL *stop) {
+				[mGenreSelections enumerateObjectsUsingBlock:^ (id mbgenre, NSUInteger ndx, BOOL *stop) {
 					if (TRUE == [mDataManager doesMovie:movie haveGenre:mbgenre]) {
 						match = TRUE;
 						*stop = TRUE;
@@ -1867,8 +1872,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 			
 			genreMatches = ^ BOOL (id movie) {
 				__block BOOL match = TRUE;
-				[mGenreSelections.allValues enumerateObjectsUsingBlock:^ (id mbgenre, NSUInteger ndx, BOOL *stop) {
-					if (FALSE == [mDataManager doesMovie:movie haveGenre:mbgenre]) {
+				[mGenreSelections enumerateObjectsUsingBlock:^ (id genre, NSUInteger ndx, BOOL *stop) {
+					if (FALSE == [mDataManager doesMovie:movie haveGenre:genre]) {
 						match = FALSE;
 						*stop = TRUE;
 					}

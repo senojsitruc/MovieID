@@ -20,6 +20,7 @@
 - (void)addSource:(NSString *)sourcePath;
 - (void)scanSource:(NSString *)sourcePath;
 
+- (void)moveGenresToMovies;
 - (NSArray *)findMissingMovies;
 - (void)findDuplicateMovies;
 - (NSArray *)findMissingFiles;
@@ -30,14 +31,13 @@
 
 - (void)enumerateMovies:(void (^)(MBMovie*, BOOL*))handler;
 - (void)enumerateMoviesForPerson:(MBPerson *)mbperson handler:(void (^)(MBMovie*, BOOL*))handler;
-- (void)enumerateGenres:(void (^)(MBGenre*, NSUInteger, BOOL*))handler;
+- (void)enumerateGenres:(void (^)(MBGenre*, BOOL*))handler;
 - (void)enumerateActors:(void (^)(MBPerson*, NSUInteger, BOOL*))handler;
 - (void)enumerateActorsForMovie:(MBMovie *)mbmovie handler:(void (^)(MBPerson*, BOOL*))handler;
 
 - (void)deleteMovie:(MBMovie *)movie;
 - (void)saveMovie:(MBMovie *)movie;
 
-//- (BOOL)doesGenre:(MBGenre *)mbgenre haveActor:(MBPerson *)mbperson;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveActor:(MBPerson *)mbperson;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveGenre:(MBGenre *)mbgenre;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveLanguage:(NSString *)language;

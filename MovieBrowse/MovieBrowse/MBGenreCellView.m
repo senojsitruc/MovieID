@@ -8,8 +8,8 @@
 
 #import "MBGenreCellView.h"
 #import "MBGenreBadgeView.h"
-#import "MBGenre.h"
 #import "MBAppDelegate.h"
+#import "MBGenre.h"
 
 @interface MBGenreCellView ()
 {
