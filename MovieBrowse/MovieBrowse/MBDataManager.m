@@ -196,9 +196,6 @@
 - (void)loadGenres
 {
 	__block MBGenre *mbgenre = nil;
-	__block NSMutableDictionary *actors = nil;
-	__block NSMutableDictionary *movies = nil;
-	__block NSMutableDictionary *years = nil;
 	
 	[mGenreDb enumerateKeys:^ (NSString *key, BOOL *stop) {
 		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
@@ -218,29 +215,21 @@
 		if (mbgenre && ![genre isEqualToString:mbgenre.name]) {
 			mGenres[mbgenre.name] = mbgenre;
 			mbgenre = nil;
-			actors = nil;
-			movies = nil;
-			years = nil;
 		}
 		
 		if (!mbgenre) {
 			mbgenre = [[MBGenre alloc] init];
 			mbgenre.name = genre;
-			mbgenre.actors = (actors = [[NSMutableDictionary alloc] init]);
-			mbgenre.movies = (movies = [[NSMutableDictionary alloc] init]);
-			mbgenre.years =  (years  = [[NSMutableDictionary alloc] init]);
 		}
 		
 		if ([label isEqualToString:@"actor"])
-			actors[title] = @"";
+			; // actors[title] = @"";
 		else if ([label isEqualToString:@"movie"]) {
 			NSMutableString *key = [[NSMutableString alloc] init];
 			[key appendString:title];
 			[key appendString:@"--"];
 			[key appendString:keyParts[3]];
-			movies[key] = @"";
 			((MBMovie *)mMovies[key]).genres[genre] = @"";
-			years[@(((NSString *)keyParts[3]).integerValue)] = @"";
 		}
 	}];
 }
@@ -356,6 +345,7 @@
  *
  *
  */
+/*
 - (BOOL)doesGenre:(MBGenre *)mbgenre haveActor:(MBPerson *)mbperson
 {
 	if (!mbgenre || !mbperson)
@@ -363,6 +353,7 @@
 	else
 		return nil != mbgenre.actors[mbperson.name];
 }
+*/
 
 /**
  *
@@ -385,7 +376,8 @@
 	if (!mbmovie || !mbgenre)
 		return FALSE;
 	else
-		return nil != mbgenre.movies[mbmovie.dbkey];
+		return nil != mbmovie.genres[mbgenre.name];
+//	return nil != mbgenre.movies[mbmovie.dbkey];
 }
 
 /**

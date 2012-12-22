@@ -35,7 +35,7 @@
 - (void)deleteMovie:(MBMovie *)movie;
 - (void)saveMovie:(MBMovie *)movie;
 
-- (BOOL)doesGenre:(MBGenre *)mbgenre haveActor:(MBPerson *)mbperson;
+//- (BOOL)doesGenre:(MBGenre *)mbgenre haveActor:(MBPerson *)mbperson;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveActor:(MBPerson *)mbperson;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveGenre:(MBGenre *)mbgenre;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveLanguage:(NSString *)language;
