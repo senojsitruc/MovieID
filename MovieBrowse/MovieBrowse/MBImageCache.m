@@ -55,6 +55,12 @@ static MBImageCache *gSharedInstance;
 	return self;
 }
 
+
+
+
+
+#pragma mark - Clear
+
 /**
  *
  *
@@ -94,6 +100,55 @@ static MBImageCache *gSharedInstance;
 		[mCache removeAllObjects];
 	});
 }
+
+/**
+ *
+ *
+ */
+- (void)clearMovieCacheForId:(NSString *)imageId
+{
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	NSString *movies = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Movies"];
+	void (^deleteItems)(NSString*);
+	
+	deleteItems = ^ (NSString *dirPath) {
+		BOOL isDir = FALSE;
+		
+		if (![fileManager fileExistsAtPath:dirPath isDirectory:&isDir] || !isDir)
+			return;
+		
+		NSArray *items = [fileManager contentsOfDirectoryAtPath:dirPath error:nil];
+		
+		[items enumerateObjectsUsingBlock:^ (id fileName, NSUInteger fileNdx, BOOL *fileStop) {
+			if (NSNotFound == [(NSString *)fileName rangeOfString:@"--"].location)
+				return;
+			
+			if (![(NSString *)fileName hasPrefix:imageId])
+				return;
+			
+			[fileManager removeItemAtPath:[dirPath stringByAppendingPathComponent:fileName] error:nil];
+		}];
+	};
+	
+	deleteItems([movies stringByAppendingString:[imageId substringToIndex:2].lowercaseString]);
+	
+	dispatch_barrier_sync(mDataQueue, ^{
+		NSMutableArray *keys = [[NSMutableArray alloc] init];
+		
+		[mCache enumerateKeysAndObjectsUsingBlock:^ (id key, id val, BOOL *stop) {
+			if ([(NSString *)key hasPrefix:imageId])
+				[keys addObject:key];
+		}];
+		
+		[mCache removeObjectsForKeys:keys];
+	});
+}
+
+
+
+
+
+#pragma mark - Disk / Server Cache
 
 /**
  *
@@ -239,6 +294,12 @@ static MBImageCache *gSharedInstance;
 	
 	return image;
 }
+
+
+
+
+
+#pragma mark - Memory Cache
 
 /**
  *

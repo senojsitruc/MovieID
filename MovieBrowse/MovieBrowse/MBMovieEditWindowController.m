@@ -321,8 +321,7 @@
 	
 	[_posterImg setToolTip:mMovie.posterId];
 	[mMovie updateInfoText];
-	
-	// TODO: clear out on-disk and in-memory cache for the poster image (if any)
+	[[MBImageCache sharedInstance] clearMovieCacheForId:mMovie.posterId];
 	
 	[self hide];
 }
