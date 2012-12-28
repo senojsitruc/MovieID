@@ -24,5 +24,6 @@
  * Clears all of the on-disk and in-memory cache
  */
 - (void)clearAll;
+- (void)clearMovieCacheForId:(NSString *)imageId;
 
 @end
