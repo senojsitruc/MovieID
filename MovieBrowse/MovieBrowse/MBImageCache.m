@@ -175,7 +175,6 @@ static MBImageCache *gSharedInstance;
 	
 	NSImage *image = nil;
 	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:@"Movies"] stringByAppendingPathComponent:imageId]];
-//NSString *localPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByAppendingPathComponent:@"Movies"] stringByAppendingPathComponent:imageId];
 	NSString *localPath = [[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByAppendingPathComponent:@"Movies"];
 	
 	localPath = [localPath stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];

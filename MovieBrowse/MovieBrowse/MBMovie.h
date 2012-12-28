@@ -42,4 +42,10 @@
 @property (readonly, getter=info1) NSString *info1;
 @property (readonly, getter=info2) NSString *info2;
 
+/**
+ * If you modify any of the values that are used to assemble the info text, then call this after-
+ * wards, so that the info text will be recreated with the new values.
+ */
+- (void)updateInfoText;
+
 @end

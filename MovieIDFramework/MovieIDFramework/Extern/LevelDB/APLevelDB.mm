@@ -144,7 +144,21 @@ NSString * const APLevelDBErrorDomain = @"APLevelDBErrorDomain";
 
 - (void)setObject:(id)object forKeyedSubscript:(id <NSCopying>)key
 {
-	[self setString:object forKey:(NSString *)key];
+	// string
+	if ([object isKindOfClass:NSString.class])
+		[self setString:object forKey:(NSString *)key];
+	
+	// number
+	else if ([object isKindOfClass:NSNumber.class])
+		[self setString:((NSNumber *)object).stringValue forKey:(NSString *)key];
+	
+	// date
+	else if ([object isKindOfClass:NSDate.class])
+		[self setString:@(((NSDate *)object).timeIntervalSinceReferenceDate).stringValue forKey:(NSString *)key];
+	
+	// data
+	else if ([object isKindOfClass:NSData.class])
+		[self setData:object forKey:(NSString *)key];
 }
 
 - (NSData *)dataForKey:(NSString *)key

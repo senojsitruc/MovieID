@@ -68,6 +68,12 @@
 	return mSortTitle;
 }
 
+- (void)updateInfoText
+{
+	mInfo1 = nil;
+	mInfo2 = nil;
+}
+
 - (NSString *)info1
 {
 	if (!mInfo1) {

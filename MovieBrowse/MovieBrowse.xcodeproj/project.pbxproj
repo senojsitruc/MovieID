@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F90E4633168DAA5E005DAF44 /* MBMovieEditWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F90E4631168DAA5E005DAF44 /* MBMovieEditWindowController.m */; };
 		F90E4634168DAA5E005DAF44 /* MBMovieEditWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F90E4632168DAA5E005DAF44 /* MBMovieEditWindowController.xib */; };
+		F90E4637168E2B50005DAF44 /* MBGoogleImageSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = F90E4636168E2B50005DAF44 /* MBGoogleImageSearch.m */; };
 		F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914FC6115FCF11400B960D0 /* MBMovieView.m */; };
 		F923205A167962D300D14519 /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232059167962D300D14519 /* NSArray+Additions.m */; };
 		F923206A167D147400D14519 /* MBGenreCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232069167D147400D14519 /* MBGenreCellView.m */; };
@@ -92,6 +93,8 @@
 		F90E4630168DAA5E005DAF44 /* MBMovieEditWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieEditWindowController.h; sourceTree = "<group>"; };
 		F90E4631168DAA5E005DAF44 /* MBMovieEditWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieEditWindowController.m; sourceTree = "<group>"; };
 		F90E4632168DAA5E005DAF44 /* MBMovieEditWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBMovieEditWindowController.xib; sourceTree = "<group>"; };
+		F90E4635168E2B4F005DAF44 /* MBGoogleImageSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGoogleImageSearch.h; sourceTree = "<group>"; };
+		F90E4636168E2B50005DAF44 /* MBGoogleImageSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGoogleImageSearch.m; sourceTree = "<group>"; };
 		F914FC6015FCF11400B960D0 /* MBMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieView.h; sourceTree = "<group>"; };
 		F914FC6115FCF11400B960D0 /* MBMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieView.m; sourceTree = "<group>"; };
 		F91FD3121653E85E0060E4FC /* MovieID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MovieID.framework; path = "/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug/MovieID.framework"; sourceTree = "<absolute>"; };
@@ -391,6 +394,8 @@
 				F998F2CD162FBDD3008AF52D /* MBImageCache.m */,
 				F998F2CF16305B27008AF52D /* MBStuff.h */,
 				F998F2D016305B28008AF52D /* MBStuff.m */,
+				F90E4635168E2B4F005DAF44 /* MBGoogleImageSearch.h */,
+				F90E4636168E2B50005DAF44 /* MBGoogleImageSearch.m */,
 				F9B902B315F7A8C60089BB17 /* Categories */,
 				F9B902AF15F7A7E80089BB17 /* Model */,
 				F97BF37415F91F8200444926 /* Interface */,
@@ -585,6 +590,7 @@
 				F92A7ECB1686319700F04EDF /* MBTableView.m in Sources */,
 				F92A7ED0168635ED00F04EDF /* MBRenameWindowController.m in Sources */,
 				F90E4633168DAA5E005DAF44 /* MBMovieEditWindowController.m in Sources */,
+				F90E4637168E2B50005DAF44 /* MBGoogleImageSearch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

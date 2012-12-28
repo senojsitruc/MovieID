@@ -39,6 +39,8 @@
 @property (readwrite, assign, nonatomic) IBOutlet NSButton *actorDelBtn;
 @property (readwrite, assign, nonatomic) IBOutlet NSArrayController *actorArrayController;
 
+@property (readwrite, assign, nonatomic) IBOutlet NSScrollView *postersView;
+
 /**
  *
  */

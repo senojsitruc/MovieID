@@ -10,15 +10,19 @@
 #import "MBAppDelegate.h"
 #import "MBDataManager.h"
 #import "MBDownloadQueue.h"
+#import "MBGoogleImageSearch.h"
 #import "MBImageCache.h"
 #import "MBGenre.h"
 #import "MBMovie.h"
 #import "MBPerson.h"
 #import "NSThread+Additions.h"
+#import <objc/runtime.h>
 
 @interface MBMovieEditWindowController ()
 {
 	MBMovie *mMovie;
+	NSData *mImageData;
+	MBGoogleImageSearch *mImageSearch;
 	NSMutableArray *mGenres;
 	NSMutableArray *mLanguages;
 	NSMutableArray *mActors;
@@ -36,6 +40,8 @@
 	self = [super initWithWindowNibName:@"MBMovieEditWindowController"];
 	
 	if (self) {
+		mImageSearch = [[MBGoogleImageSearch alloc] init];
+		
 		mGenres = [[NSMutableArray alloc] init];
 		mLanguages = [[NSMutableArray alloc] init];
 		mActors = [[NSMutableArray alloc] init];
@@ -68,6 +74,7 @@
 {
 	if (mbmovie != mMovie) {
 		mMovie = mbmovie;
+		mImageData = nil;
 		[self loadPosterForMovie:mMovie];
 	}
 	
@@ -81,7 +88,9 @@
 	{
 		NSInteger hours, minutes, seconds;
 		
-		seconds = mMovie.duration.integerValue;
+		if (!(seconds = mMovie.duration.integerValue))
+			seconds = mMovie.runtime.integerValue;
+		
 		hours = seconds / 60 / 60;
 		seconds -= (hours * 60 * 60);
 		minutes = seconds / 60;
@@ -136,34 +145,104 @@
 	CGFloat height = _posterImg.frame.size.height;
 	NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
 	
-	[_posterPrg stopAnimation:self];
+	_posterImg.image = nil;
 	
-	if (!image) {
-		_posterImg.image = nil;
-		[_posterPrg startAnimation:self];
+	//
+	// load current image
+	//
+	if (imageId.length) {
+		[_posterImg setToolTip:imageId];
+		[_posterPrg stopAnimation:self];
+		
+		if (!image) {
+			[_posterPrg startAnimation:self];
+			
+			[[MBDownloadQueue sharedInstance] dispatchBeg:^{
+				NSImage *image = [[MBImageCache sharedInstance] movieImageWithId:imageId width:0 height:height];
+				
+				if (!image) {
+					[[NSThread mainThread] performBlock:^{
+						if (mbmovie == mMovie)
+							[_posterPrg stopAnimation:self];
+					}];
+					return;
+				}
+				
+				image.size = NSMakeSize((NSUInteger)(image.size.width * (height / image.size.height)), height);
+				[[MBImageCache sharedInstance] cacheImage:image withId:imageId andHeight:height];
+				
+				if (mbmovie != mMovie)
+					return;
+				
+				[[NSThread mainThread] performBlock:^{
+					if (mbmovie == mMovie) {
+						[_posterPrg stopAnimation:self];
+						_posterImg.image = image;
+					}
+				}];
+			}];
+		}
+		else
+			_posterImg.image = image;
+	}
+	
+	//
+	// find alternate images
+	//
+	{
+		NSString *query = [mbmovie.title stringByAppendingString:@" movie poster"];
+		CGRect myFrame = _postersView.frame;
+		NSView *documentView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
+		
+		_postersView.documentView = documentView;
 		
 		[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-			NSImage *image = [[MBImageCache sharedInstance] movieImageWithId:imageId width:0 height:height];
+			__block CGFloat hoffset = 0.;
 			
-			if (!image)
-				return;
-			
-			image.size = NSMakeSize((NSUInteger)(image.size.width * (height / image.size.height)), height);
-			[[MBImageCache sharedInstance] cacheImage:image withId:imageId andHeight:height];
-			
-			if (mbmovie != mMovie)
-				return;
-			
-			[[NSThread mainThread] performBlock:^{
-				if (mbmovie == mMovie) {
-					[_posterPrg stopAnimation:self];
-					_posterImg.image = image;
+			[mImageSearch imagesForQuery:query offset:0 count:10 handler:^ (NSURL *url, NSInteger _width, NSInteger _height, BOOL *_stop) {
+				NSLog(@"url=%@, width=%ld, height=%ld", url, _width, _height);
+				
+				if (mMovie != mbmovie) {
+					*_stop = TRUE;
+					return;
 				}
+				
+				NSData *imageData = [NSData dataWithContentsOfURL:url];
+				
+				if (!imageData) {
+					NSLog(@"%s.. [%@] no image data", __PRETTY_FUNCTION__, url);
+					return;
+				}
+				
+				NSImage *image = [[NSImage alloc] initWithData:imageData];
+				
+				if (!image) {
+					NSLog(@"%s.. [%@] no image", __PRETTY_FUNCTION__, url);
+					return;
+				}
+				
+				CGSize fullImageSize = image.size;
+				CGFloat width = (NSUInteger)(image.size.width * (myFrame.size.height / image.size.height));
+				image.size = NSMakeSize(width, myFrame.size.height);
+				
+				NSButton *imageBtn = [[NSButton alloc] initWithFrame:NSMakeRect(hoffset, 0, image.size.width, image.size.height)];
+				[imageBtn setButtonType:NSMomentaryPushInButton];
+				[imageBtn setBordered:FALSE];
+				[imageBtn setImage:image];
+				[imageBtn setToolTip:[NSString stringWithFormat:@"%@ [w=%d, h=%d]", url, (int)fullImageSize.width, (int)fullImageSize.height]];
+				[imageBtn setTarget:self];
+				[imageBtn setAction:@selector(doActionPosterSelect:)];
+				objc_setAssociatedObject(imageBtn, "imageData", imageData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+				
+				[[NSThread mainThread] performBlock:^{
+					documentView.frame = NSMakeRect(0, 0, hoffset, myFrame.size.height);
+					[documentView addSubview:imageBtn];
+				}];
+				
+				hoffset += image.size.width;
 			}];
 		}];
 	}
-	else
-		_posterImg.image = image;
 }
 
 /**
@@ -183,7 +262,33 @@
 #pragma mark - Actions
 
 /**
- * TODO: modify the stored data. [mMovie save] ?
+ *
+ *
+ */
+- (IBAction)doActionPosterSelect:(NSButton *)posterBtn
+{
+	CGFloat height = _posterImg.frame.size.height;
+	NSData *imageData = objc_getAssociatedObject(posterBtn, "imageData");
+	
+	if (!imageData) {
+		NSLog(@"%s.. no image data!", __PRETTY_FUNCTION__);
+		return;
+	}
+	
+	NSImage *image = [[NSImage alloc] initWithData:imageData];
+	
+	if (!image) {
+		NSLog(@"%s.. no image!", __PRETTY_FUNCTION__);
+		return;
+	}
+	
+	mImageData = imageData;
+	image.size = NSMakeSize((NSUInteger)(image.size.width * (height / image.size.height)), height);
+	_posterImg.image = image;
+}
+
+/**
+ *
  *
  */
 - (IBAction)doActionSave:(id)sender
@@ -199,12 +304,17 @@
 	if (title.length && ![mMovie.title isEqualToString:title])
 		[dataManager movie:mMovie updateWithTitle:title];
 	
-	mMovie.year = @(_yearTxt.integerValue);
-	mMovie.rating = _ratingTxt.stringValue;
-	mMovie.dirpath = _pathTxt.stringValue;
-	mMovie.synopsis = _descriptionTxt.stringValue;
-	mMovie.duration = @((hours*60*60) + (minutes*60) + seconds);
-	mMovie.score = @(_scoreBtn.indexOfSelectedItem);
+	[dataManager movie:mMovie updateWithValues:@{
+	      @"year": @(_yearTxt.integerValue),
+	    @"rating": _ratingTxt.stringValue,
+	   @"dirpath": _pathTxt.stringValue,
+	  @"synopsis": _descriptionTxt.stringValue,
+	  @"duration": @((hours*60*60) + (minutes*60) + seconds),
+	     @"score": @(_scoreBtn.indexOfSelectedItem),
+	    @"poster": mImageData.length ? mImageData : [NSNull null]
+	}];
+	
+	[mMovie updateInfoText];
 	
 	[self hide];
 }

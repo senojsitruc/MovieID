@@ -411,6 +411,76 @@
  *
  *
  */
+- (void)movie:(MBMovie *)mbmovie updateWithValues:(NSDictionary *)values
+{
+	id value = nil;
+	NSString *dbkey = mbmovie.dbkey;
+	
+	// year
+	if (nil != (value = values[@"year"]) && [value isKindOfClass:NSNumber.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--year"]] = value;
+		mbmovie.year = value;
+	}
+	
+	// rating
+	if (nil != (value = values[@"rating"]) && [value isKindOfClass:NSString.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--rating"]] = value;
+		mbmovie.rating = value;
+	}
+	
+	// dirpath
+	if (nil != (value = values[@"dirpath"]) && [value isKindOfClass:NSString.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--dirpath"]] = value;
+		[mMovieDb removeKey:mbmovie.dirpath.lastPathComponent];
+		mMovieDb[((NSString *)value).lastPathComponent] = dbkey;
+		mbmovie.dirpath = value;
+	}
+	
+	// synopsis
+	if (nil != (value = values[@"synopsis"]) && [value isKindOfClass:NSString.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--synopsis"]] = value;
+		mbmovie.synopsis = value;
+	}
+	
+	// duration
+	if (nil != (value = values[@"duration"]) && [value isKindOfClass:NSNumber.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--duration"]] = value;
+		mbmovie.duration = value;
+	}
+	
+	// score
+	if (nil != (value = values[@"score"]) && [value isKindOfClass:NSNumber.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--score"]] = value;
+		mbmovie.score = value;
+	}
+	
+	// poster
+	if (nil != (value = values[@"poster"]) && [value isKindOfClass:NSData.class]) {
+		NSString *imageId = mbmovie.posterId;
+		NSFileManager *fileManager = [[NSFileManager alloc] init];
+		NSString *baseDir = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache];
+		NSString *movieBaseDir = [baseDir stringByAppendingPathComponent:@"Movies"];
+		
+		if (!imageId.length) {
+			imageId = [NSString randomStringOfLength:32];
+			mbmovie.posterId = imageId;
+		}
+		
+		NSString *dataDir = [movieBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
+		NSString *dataPath = [dataDir stringByAppendingPathComponent:imageId];
+		
+		[fileManager createDirectoryAtPath:dataDir withIntermediateDirectories:TRUE attributes:nil error:nil];
+		
+		mMovieDb[[dbkey stringByAppendingString:@"--poster"]] = imageId;
+		
+		[(NSData *)value writeToFile:dataPath atomically:FALSE];
+	}
+}
+
+/**
+ *
+ *
+ */
 - (MBGenre *)genreWithKey:(NSString *)dbkey
 {
 	return mGenres[dbkey];
