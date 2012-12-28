@@ -1277,9 +1277,8 @@
 			NSLog(@"[DM]           Got %lu bytes", imageData.length);
 			
 			if (imageData) {
-				NSLog(@"[DM]           Assigning new image id [%@]", imageId);
-				
 				imageId = [NSString randomStringOfLength:32];
+				NSLog(@"[DM]           Assigning new image id [%@]", imageId);
 				
 				NSString *dataDir = [movieBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
 				NSString *dataPath = [dataDir stringByAppendingPathComponent:imageId];

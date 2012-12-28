@@ -592,8 +592,8 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 		//[mDataManager getMissingImages];
 		//[mDataManager upgradeTmdbToImdb];
 		//[mDataManager ratingsUpdate];
-		//[mDataManager ratingsNormalize];
 		//[mDataManager findDuplicateMovies];
+		//[mDataManager updateFileStats];
 		
 		/*
 		[[mDataManager findMissingFiles] enumerateObjectsUsingBlock:^ (id movie, NSUInteger movieNdx, BOOL *movieStop) {
@@ -601,12 +601,10 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 			
 			if ([mbmovie.dirpath rangeOfString:@"Varg "].location == NSNotFound) {
 				NSLog(@"%@", mbmovie.dirpath);
-				[mDataManager deleteMovie:mbmovie];
+			[mDataManager deleteMovie:mbmovie];
 			}
 		}];
 		*/
-		
-		//[mDataManager updateFileStats];
 		
 	}];
 }
