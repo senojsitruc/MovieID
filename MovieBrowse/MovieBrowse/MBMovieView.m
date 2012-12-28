@@ -48,15 +48,6 @@
  *
  *
  */
-- (IBAction)doActionSearch:(id)sender
-{
-	
-}
-
-/**
- *
- *
- */
 - (IBAction)doActionScreencaps:(id)sender
 {
 	[((MBAppDelegate *)[NSApp delegate]) showScreencapsForMovie:self.movie];
@@ -66,9 +57,9 @@
  *
  *
  */
-- (IBAction)doActionRename:(id)sender
+- (IBAction)doActionEdit:(id)sender
 {
-	
+	[((MBAppDelegate *)[NSApp delegate]) editMovie:self.movie];
 }
 
 /*

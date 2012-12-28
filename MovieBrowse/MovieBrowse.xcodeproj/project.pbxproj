@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F90E4633168DAA5E005DAF44 /* MBMovieEditWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F90E4631168DAA5E005DAF44 /* MBMovieEditWindowController.m */; };
+		F90E4634168DAA5E005DAF44 /* MBMovieEditWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F90E4632168DAA5E005DAF44 /* MBMovieEditWindowController.xib */; };
 		F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914FC6115FCF11400B960D0 /* MBMovieView.m */; };
 		F923205A167962D300D14519 /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232059167962D300D14519 /* NSArray+Additions.m */; };
 		F923206A167D147400D14519 /* MBGenreCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232069167D147400D14519 /* MBGenreCellView.m */; };
@@ -87,6 +89,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F90E4630168DAA5E005DAF44 /* MBMovieEditWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieEditWindowController.h; sourceTree = "<group>"; };
+		F90E4631168DAA5E005DAF44 /* MBMovieEditWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieEditWindowController.m; sourceTree = "<group>"; };
+		F90E4632168DAA5E005DAF44 /* MBMovieEditWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBMovieEditWindowController.xib; sourceTree = "<group>"; };
 		F914FC6015FCF11400B960D0 /* MBMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieView.h; sourceTree = "<group>"; };
 		F914FC6115FCF11400B960D0 /* MBMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieView.m; sourceTree = "<group>"; };
 		F91FD3121653E85E0060E4FC /* MovieID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MovieID.framework; path = "/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug/MovieID.framework"; sourceTree = "<absolute>"; };
@@ -198,6 +203,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F90E462E168DA9CB005DAF44 /* Edit - Movie */ = {
+			isa = PBXGroup;
+			children = (
+				F90E4630168DAA5E005DAF44 /* MBMovieEditWindowController.h */,
+				F90E4631168DAA5E005DAF44 /* MBMovieEditWindowController.m */,
+				F90E4632168DAA5E005DAF44 /* MBMovieEditWindowController.xib */,
+			);
+			name = "Edit - Movie";
+			sourceTree = "<group>";
+		};
 		F914FC5F15FCEAC100B960D0 /* Movie */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +287,7 @@
 		F97BF37415F91F8200444926 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				F90E462E168DA9CB005DAF44 /* Edit - Movie */,
 				F92A7ECC168635D400F04EDF /* Rename */,
 				F92A7EAE16832D9800F04EDF /* Actor Profile */,
 				F92A7EA716831FB600F04EDF /* Preferences */,
@@ -523,6 +539,7 @@
 				F92A7EB316832DB100F04EDF /* MBActorProfileWindowController.xib in Resources */,
 				F92A7EB5168341D900F04EDF /* MBImportWindowController.xib in Resources */,
 				F92A7ED1168635ED00F04EDF /* MBRenameWindowController.xib in Resources */,
+				F90E4634168DAA5E005DAF44 /* MBMovieEditWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,6 +584,7 @@
 				F92A7EB216832DB100F04EDF /* MBActorProfileWindowController.m in Sources */,
 				F92A7ECB1686319700F04EDF /* MBTableView.m in Sources */,
 				F92A7ED0168635ED00F04EDF /* MBRenameWindowController.m in Sources */,
+				F90E4633168DAA5E005DAF44 /* MBMovieEditWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

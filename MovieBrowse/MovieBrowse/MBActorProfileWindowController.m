@@ -117,6 +117,10 @@
 
 #pragma mark - Actions
 
+/**
+ *
+ *
+ */
 - (IBAction)doActionClose:(id)sender
 {
 	[NSApp endSheet:self.window];

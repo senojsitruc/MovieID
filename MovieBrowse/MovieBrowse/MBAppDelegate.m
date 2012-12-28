@@ -20,6 +20,7 @@
 #import "MBDownloadQueue.h"
 #import "MBImportWindowController.h"
 #import "MBActorProfileWindowController.h"
+#import "MBMovieEditWindowController.h"
 #import "MBPreferencesWindowController.h"
 #import "MBRenameWindowController.h"
 #import "MBScreencapsWindowController.h"
@@ -57,6 +58,7 @@ static MBAppDelegate *gAppDelegate;
 	MBDataManager *mDataManager;
 	MBActorProfileWindowController *mActorProfileController;
 	MBImportWindowController *mImportController;
+	MBMovieEditWindowController *mMovieEditController;
 	MBPreferencesWindowController *mPreferencesController;
 	MBRenameWindowController *mRenameController;
 	MBScreencapsWindowController *mScreencapsController;
@@ -169,6 +171,7 @@ static MBAppDelegate *gAppDelegate;
 	mDataManager = [[MBDataManager alloc] init];
 	mActorProfileController = [[MBActorProfileWindowController alloc] init];
 	mImportController = [[MBImportWindowController alloc] init];
+	mMovieEditController = [[MBMovieEditWindowController alloc] init];
 	mPreferencesController = [[MBPreferencesWindowController alloc] init];
 	mRenameController = [[MBRenameWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
@@ -706,6 +709,15 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 - (void)showScreencapsForMovie:(MBMovie *)mbmovie
 {
 	[mScreencapsController showInWindow:self.window forMovie:mbmovie];
+}
+
+/**
+ *
+ *
+ */
+- (void)editMovie:(MBMovie *)mbmovie
+{
+	[mMovieEditController showInWindow:self.window forMovie:mbmovie];
 }
 
 /**

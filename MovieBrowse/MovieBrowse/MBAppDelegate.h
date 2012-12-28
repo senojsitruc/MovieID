@@ -102,6 +102,11 @@ extern NSString * const MBDefaultsKeyApiRt;
 - (void)showScreencapsForMovie:(MBMovie *)movie;
 
 /**
+ * Edit movie details.
+ */
+- (void)editMovie:(MBMovie *)movie;
+
+/**
  * Used to populate the "count" badge for each genre in the genre table.
  */
 - (NSUInteger)movieCountForGenre:(MBGenre *)genre;
