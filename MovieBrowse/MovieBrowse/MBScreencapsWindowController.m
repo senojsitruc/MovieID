@@ -154,7 +154,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	
 	[self clearThumbnails];
 	
-	_infoTxt.stringValue = [NSString stringWithFormat:@"Page %lu of %lu", mCurPage, mNumOfPages];
+	_infoTxt.stringValue = [NSString stringWithFormat:@"%@ (Page %lu of %lu)", _movie.title, mCurPage, mNumOfPages];
 	
 	[mImageViews enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^ (id imageViewObj, NSUInteger imageViewNdx, BOOL *imageViewStop) {
 		if (timeOffset < duration) {

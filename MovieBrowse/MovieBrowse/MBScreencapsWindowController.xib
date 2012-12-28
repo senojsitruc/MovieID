@@ -56,7 +56,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{775, 13}, {75, 32}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
-							<reference key="NSNextKeyView"/>
+							<reference key="NSWindow"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="293111787">
@@ -84,6 +84,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{81, 13}, {70, 32}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="224072623"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
@@ -108,6 +109,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{14, 13}, {67, 32}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="992175972"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
@@ -132,6 +134,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{20, 535}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="751070334"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -141,6 +144,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{228, 535}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="587421275"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -150,6 +154,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{436, 535}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="189346747"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -159,6 +164,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{644, 535}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="350573165"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -168,6 +174,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{20, 377}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="636136523"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -177,6 +184,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{228, 377}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="453344768"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -186,6 +194,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{436, 377}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="91407090"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -195,6 +204,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{644, 377}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="421765495"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -204,6 +214,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{20, 219}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="201697187"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -213,6 +224,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{228, 219}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="957297195"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -222,6 +234,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{436, 219}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="347066979"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -231,6 +244,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{644, 219}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="217034108"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -240,6 +254,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{20, 61}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="570052641"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -249,6 +264,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{228, 61}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="176114772"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -258,6 +274,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{436, 61}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="460612732"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -267,6 +284,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{644, 61}, {200, 150}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="561850668"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MBScreencapsThumbnailView</string>
@@ -276,6 +294,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{150, 20}, {564, 17}}</string>
 							<reference key="NSSuperview" ref="550373082"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="46347502"/>
 							<string key="NSReuseIdentifierKey">_NS:1535</string>
 							<bool key="NSEnabled">YES</bool>
@@ -310,6 +329,7 @@
 					</array>
 					<string key="NSFrameSize">{864, 705}</string>
 					<reference key="NSSuperview"/>
+					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="431577822"/>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
@@ -1901,28 +1921,13 @@
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">28</int>
-						<reference key="object" ref="1000917154"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">29</int>
 						<reference key="object" ref="259117902"/>
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">30</int>
-						<reference key="object" ref="904317118"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">31</int>
 						<reference key="object" ref="647748780"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">32</int>
-						<reference key="object" ref="305464404"/>
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -1961,11 +1966,6 @@
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">40</int>
-						<reference key="object" ref="683118422"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">41</int>
 						<reference key="object" ref="373711528"/>
 						<reference key="parent" ref="550373082"/>
@@ -1988,11 +1988,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">45</int>
 						<reference key="object" ref="387136468"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">46</int>
-						<reference key="object" ref="658077885"/>
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -2033,11 +2028,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">54</int>
 						<reference key="object" ref="236350178"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">55</int>
-						<reference key="object" ref="617220314"/>
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -2106,11 +2096,6 @@
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">69</int>
-						<reference key="object" ref="1055509833"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">70</int>
 						<reference key="object" ref="131229839"/>
 						<reference key="parent" ref="550373082"/>
@@ -2156,18 +2141,8 @@
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">79</int>
-						<reference key="object" ref="234232340"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">80</int>
 						<reference key="object" ref="989107612"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">81</int>
-						<reference key="object" ref="390917872"/>
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -2188,11 +2163,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">85</int>
 						<reference key="object" ref="461619004"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">86</int>
-						<reference key="object" ref="44803805"/>
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -2256,11 +2226,6 @@
 						<reference key="parent" ref="550373082"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">99</int>
-						<reference key="object" ref="995157155"/>
-						<reference key="parent" ref="550373082"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">100</int>
 						<reference key="object" ref="293111787"/>
 						<reference key="parent" ref="46347502"/>
@@ -2289,6 +2254,61 @@
 						<int key="objectID">105</int>
 						<reference key="object" ref="245312693"/>
 						<reference key="parent" ref="224072623"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">55</int>
+						<reference key="object" ref="617220314"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">46</int>
+						<reference key="object" ref="658077885"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">40</int>
+						<reference key="object" ref="683118422"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">28</int>
+						<reference key="object" ref="1000917154"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">30</int>
+						<reference key="object" ref="904317118"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">69</int>
+						<reference key="object" ref="1055509833"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">32</int>
+						<reference key="object" ref="305464404"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">86</int>
+						<reference key="object" ref="44803805"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">99</int>
+						<reference key="object" ref="995157155"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">81</int>
+						<reference key="object" ref="390917872"/>
+						<reference key="parent" ref="550373082"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">79</int>
+						<reference key="object" ref="234232340"/>
+						<reference key="parent" ref="550373082"/>
 					</object>
 				</array>
 			</object>
@@ -2504,9 +2524,164 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">130</int>
+			<int key="maxID">142</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">MBScreencapsThumbnailView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/MBScreencapsThumbnailView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">MBScreencapsWindowController</string>
+					<string key="superclassName">NSWindowController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="doActionClose:">id</string>
+						<string key="doActionNext:">id</string>
+						<string key="doActionPrev:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="doActionClose:">
+							<string key="name">doActionClose:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="doActionNext:">
+							<string key="name">doActionNext:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="doActionPrev:">
+							<string key="name">doActionPrev:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="closeBtn">NSButton</string>
+						<string key="infoTxt">NSTextField</string>
+						<string key="nextBtn">NSButton</string>
+						<string key="prevBtn">NSButton</string>
+						<string key="thumbnailRow0Col0">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow0Col1">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow0Col2">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow0Col3">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow1Col0">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow1Col1">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow1Col2">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow1Col3">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow2Col0">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow2Col1">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow2Col2">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow2Col3">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow3Col0">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow3Col1">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow3Col2">MBScreencapsThumbnailView</string>
+						<string key="thumbnailRow3Col3">MBScreencapsThumbnailView</string>
+						<string key="titleTxt">NSTextField</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="closeBtn">
+							<string key="name">closeBtn</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="infoTxt">
+							<string key="name">infoTxt</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="nextBtn">
+							<string key="name">nextBtn</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="prevBtn">
+							<string key="name">prevBtn</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow0Col0">
+							<string key="name">thumbnailRow0Col0</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow0Col1">
+							<string key="name">thumbnailRow0Col1</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow0Col2">
+							<string key="name">thumbnailRow0Col2</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow0Col3">
+							<string key="name">thumbnailRow0Col3</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow1Col0">
+							<string key="name">thumbnailRow1Col0</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow1Col1">
+							<string key="name">thumbnailRow1Col1</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow1Col2">
+							<string key="name">thumbnailRow1Col2</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow1Col3">
+							<string key="name">thumbnailRow1Col3</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow2Col0">
+							<string key="name">thumbnailRow2Col0</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow2Col1">
+							<string key="name">thumbnailRow2Col1</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow2Col2">
+							<string key="name">thumbnailRow2Col2</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow2Col3">
+							<string key="name">thumbnailRow2Col3</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow3Col0">
+							<string key="name">thumbnailRow3Col0</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow3Col1">
+							<string key="name">thumbnailRow3Col1</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow3Col2">
+							<string key="name">thumbnailRow3Col2</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="thumbnailRow3Col3">
+							<string key="name">thumbnailRow3Col3</string>
+							<string key="candidateClassName">MBScreencapsThumbnailView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="titleTxt">
+							<string key="name">titleTxt</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/MBScreencapsWindowController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSLayoutConstraint</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSLayoutConstraint.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
