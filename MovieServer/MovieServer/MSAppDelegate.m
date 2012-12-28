@@ -172,20 +172,6 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	size_t cgheight = CGImageGetWidth(cgimage);
 	CGImageAlphaInfo ai = CGImageGetAlphaInfo(cgimage);
 	
-	/*
-	if (bpc != 1 && bpc != 2 && bpc != 4 && bpc != 8) {
-		NSLog(@"%s.. failed to CGImageGetBitsPerComponent() [bpc=%lu]", __PRETTY_FUNCTION__, bpc);
-		return nil;
-	}
-	*/
-	
-	/*
-	if (bpr < cgwidth * (bpp / 8)) {
-		NSLog(@"%s.. invalid data bytes/row [bpc=%lu, bpr=%lu, bpp=%lu, ai=%d, cgwidth=%lu]", __PRETTY_FUNCTION__, bpc, bpr, bpp, (int)ai, cgwidth);
-		return nil;
-	}
-	*/
-	
 //CGContextRef context = CGBitmapContextCreate(NULL, width, height, CGImageGetBitsPerComponent(cgimage), CGImageGetBytesPerRow(cgimage), cs, CGImageGetAlphaInfo(cgimage));
 //CGContextRef context = CGBitmapContextCreate(NULL, width, height, bpc, bpr, cs, ai);
 	CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, width*4, cs, kCGImageAlphaNoneSkipLast);

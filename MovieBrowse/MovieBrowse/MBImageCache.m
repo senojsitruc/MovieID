@@ -8,6 +8,7 @@
 
 #import "MBImageCache.h"
 #import "MBAppDelegate.h"
+#import "NSImage+Additions.h"
 
 static MBImageCache *gSharedInstance;
 
@@ -165,8 +166,10 @@ static MBImageCache *gSharedInstance;
  *
  *
  */
-- (NSImage *)movieImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height
+- (NSImage *)movieImageWithId:(NSString *)_imageId width:(NSUInteger)width height:(NSUInteger)height
 {
+	NSString *imageId = _imageId;
+	
 	if (!imageId.length)
 		return nil;
 	
@@ -187,6 +190,34 @@ static MBImageCache *gSharedInstance;
 		
 		if (data)
 			image = [[NSImage alloc] initWithData:data];
+	}
+	
+	// look for the original-size image in the on-disk cache; if we find it, resize it and save the
+	// resized version back to the on-disk cache.
+	if (!image) {
+		NSString *_localPath = [[localPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:_imageId];
+		NSData *data = [NSData dataWithContentsOfFile:_localPath];
+		
+		if (data) {
+			image = [[NSImage alloc] initWithData:data];
+			
+			if (image) {
+				CGImageRef cgimage = [[self class] resizeCGImage:image.CGImage width:width height:height];
+				NSData *imageData = [[self class] pngDataFromCGImage:cgimage];
+				
+				if (imageData.length) {
+					NSFileManager *fileManager = [[NSFileManager alloc] init];
+					NSString *parentDir = [localPath stringByDeletingLastPathComponent];
+					NSError *nserror = nil;
+					
+					if (FALSE == [fileManager fileExistsAtPath:parentDir])
+						if (FALSE == [fileManager createDirectoryAtPath:parentDir withIntermediateDirectories:TRUE attributes:nil error:&nserror])
+							NSLog(@"%s.. failed to create directory because %@ [%@]", __PRETTY_FUNCTION__, nserror.localizedDescription, parentDir);
+					
+					[imageData writeToFile:localPath atomically:TRUE];
+				}
+			}
+		}
 	}
 	
 	// get the image from the remote server
@@ -249,6 +280,78 @@ static MBImageCache *gSharedInstance;
 	dispatch_barrier_sync(mDataQueue, ^{
 		mCache[key] = image;
 	});
+}
+
+
+
+
+
+#pragma mark - Private
+
+/**
+ *
+ *
+ */
++ (CGImageRef)resizeCGImage:(CGImageRef)cgimage width:(NSUInteger)width height:(NSUInteger)height
+{
+	if (!cgimage || !width || !height)
+		return nil;
+	
+	CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
+	
+	if (!cs) {
+		NSLog(@"%s.. failed to CGImageGetColorSpace()", __PRETTY_FUNCTION__);
+		return nil;
+	}
+	
+	size_t bpp = CGImageGetBitsPerPixel(cgimage);
+	size_t bpc = CGImageGetBitsPerComponent(cgimage);
+	size_t bpr = CGImageGetBytesPerRow(cgimage);
+	CGImageAlphaInfo ai = CGImageGetAlphaInfo(cgimage);
+	
+	CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, width*4, cs, kCGImageAlphaNoneSkipLast);
+	CGColorSpaceRelease(cs);
+	
+	if (!context) {
+		NSLog(@"%s.. failed to CGBitmapContextCreate() [bpc=%lu, bpr=%lu, bpp=%lu, ai=%d, width=%lu, height=%lu]", __PRETTY_FUNCTION__, bpc, bpr, bpp, (int)ai, width, height);
+		return nil;
+	}
+	
+	CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgimage);
+	CGImageRef newImage = CGBitmapContextCreateImage(context);
+	CGContextRelease(context);
+	
+	return newImage;
+}
+
+/**
+ *
+ *
+ */
++ (NSData *)pngDataFromCGImage:(CGImageRef)cgimage
+{
+	if (!cgimage)
+		return nil;
+	
+	NSMutableData *imageData = [[NSMutableData alloc] init];
+	CGImageDestinationRef idRef = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
+	
+	if (!idRef) {
+		NSLog(@"%s.. failed to CGImageDestinationCreateWithData()", __PRETTY_FUNCTION__);
+		return nil;
+	}
+	
+	CGImageDestinationSetProperties(idRef, (__bridge CFDictionaryRef)@{(NSString *)kCGImageDestinationLossyCompressionQuality: @(0.5)});
+	CGImageDestinationAddImage(idRef, cgimage, NULL);
+	
+	if (!CGImageDestinationFinalize(idRef)) {
+		CFRelease(idRef);
+		return nil;
+	}
+	
+	CFRelease(idRef);
+	
+	return imageData;
 }
 
 @end

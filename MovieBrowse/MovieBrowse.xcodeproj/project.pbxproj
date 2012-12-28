@@ -11,6 +11,7 @@
 		F90E4634168DAA5E005DAF44 /* MBMovieEditWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F90E4632168DAA5E005DAF44 /* MBMovieEditWindowController.xib */; };
 		F90E4637168E2B50005DAF44 /* MBGoogleImageSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = F90E4636168E2B50005DAF44 /* MBGoogleImageSearch.m */; };
 		F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914FC6115FCF11400B960D0 /* MBMovieView.m */; };
+		F922D192168E47560018B5D1 /* NSImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F922D191168E47560018B5D1 /* NSImage+Additions.m */; };
 		F923205A167962D300D14519 /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232059167962D300D14519 /* NSArray+Additions.m */; };
 		F923206A167D147400D14519 /* MBGenreCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232069167D147400D14519 /* MBGenreCellView.m */; };
 		F923206D167D155F00D14519 /* MBGenreBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F923206C167D155E00D14519 /* MBGenreBadgeView.m */; };
@@ -98,6 +99,8 @@
 		F914FC6015FCF11400B960D0 /* MBMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieView.h; sourceTree = "<group>"; };
 		F914FC6115FCF11400B960D0 /* MBMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieView.m; sourceTree = "<group>"; };
 		F91FD3121653E85E0060E4FC /* MovieID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MovieID.framework; path = "/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug/MovieID.framework"; sourceTree = "<absolute>"; };
+		F922D190168E47560018B5D1 /* NSImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Additions.h"; sourceTree = "<group>"; };
+		F922D191168E47560018B5D1 /* NSImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Additions.m"; sourceTree = "<group>"; };
 		F9232058167962D300D14519 /* NSArray+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Additions.h"; sourceTree = "<group>"; };
 		F9232059167962D300D14519 /* NSArray+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Additions.m"; sourceTree = "<group>"; };
 		F9232068167D147400D14519 /* MBGenreCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreCellView.h; sourceTree = "<group>"; };
@@ -441,6 +444,8 @@
 				F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */,
 				F9232058167962D300D14519 /* NSArray+Additions.h */,
 				F9232059167962D300D14519 /* NSArray+Additions.m */,
+				F922D190168E47560018B5D1 /* NSImage+Additions.h */,
+				F922D191168E47560018B5D1 /* NSImage+Additions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -591,6 +596,7 @@
 				F92A7ED0168635ED00F04EDF /* MBRenameWindowController.m in Sources */,
 				F90E4633168DAA5E005DAF44 /* MBMovieEditWindowController.m in Sources */,
 				F90E4637168E2B50005DAF44 /* MBGoogleImageSearch.m in Sources */,
+				F922D192168E47560018B5D1 /* NSImage+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

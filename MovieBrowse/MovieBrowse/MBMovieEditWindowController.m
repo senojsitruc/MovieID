@@ -146,6 +146,7 @@
 	NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
 	
 	_posterImg.image = nil;
+	[_posterImg setToolTip:@""];
 	
 	//
 	// load current image
@@ -190,9 +191,12 @@
 	// find alternate images
 	//
 	{
-		NSString *query = [mbmovie.title stringByAppendingString:@" movie poster"];
+		NSString *query = [mbmovie.title stringByAppendingString:@" movie poster "];
 		CGRect myFrame = _postersView.frame;
 		NSView *documentView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
+		
+		if (mbmovie.year.integerValue)
+			query = [query stringByAppendingString:mbmovie.year.stringValue];
 		
 		_postersView.documentView = documentView;
 		
@@ -314,7 +318,10 @@
 	    @"poster": mImageData.length ? mImageData : [NSNull null]
 	}];
 	
+	[_posterImg setToolTip:mMovie.posterId];
 	[mMovie updateInfoText];
+	
+	// TODO: clear out on-disk and in-memory cache for the poster image (if any)
 	
 	[self hide];
 }
