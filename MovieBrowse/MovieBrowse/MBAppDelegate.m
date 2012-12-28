@@ -2134,6 +2134,11 @@ MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
 			}];
 		}];
 	}
+	
+#if !defined DEBUG
+	[mGenresByName removeObjectForKey:@"Adult"];
+	[mGenresByName removeObjectForKey:@"Erotic"];
+#endif
 }
 
 /**
