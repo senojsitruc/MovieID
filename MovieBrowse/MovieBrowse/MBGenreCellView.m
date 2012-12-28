@@ -49,8 +49,8 @@
 {
 	NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Genre Menu"];
 	NSMenuItem *genreItem = [menu addItemWithTitle:mGenre.name action:nil keyEquivalent:@""];
-	NSMenuItem *renameItem = [menu addItemWithTitle:@"  Rename" action:@selector(doActionRename:) keyEquivalent:@""];
-	NSMenuItem *deleteItem = [menu addItemWithTitle:@"  Delete" action:@selector(doActionDelete:) keyEquivalent:@""];
+	NSMenuItem *renameItem = [menu addItemWithTitle:@"  Rename..." action:@selector(doActionRename:) keyEquivalent:@""];
+	NSMenuItem *deleteItem = [menu addItemWithTitle:@"  Delete..." action:@selector(doActionDelete:) keyEquivalent:@""];
 	
 	genreItem.target = nil;
 	renameItem.target = self;

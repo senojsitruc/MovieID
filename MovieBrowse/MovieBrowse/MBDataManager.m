@@ -294,6 +294,11 @@
 	
 	if (mbmovie)
 		mMovies[mbmovie.dbkey] = mbmovie;
+	
+#if !defined DEBUG
+	[mGenres removeObjectForKey:@"Adult"];
+	[mGenres removeObjectForKey:@"Erotic"];
+#endif
 }
 
 
