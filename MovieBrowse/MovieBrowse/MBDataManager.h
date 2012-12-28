@@ -42,6 +42,7 @@
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveGenre:(MBGenre *)mbgenre;
 - (BOOL)doesMovie:(MBMovie *)mbmovie haveLanguage:(NSString *)language;
 - (MBMovie *)movieWithKey:(NSString *)dbkey;
+- (void)movie:(MBMovie *)mbmovie updateWithTitle:(NSString *)newTitle;
 - (MBPerson *)personWithKey:(NSString *)dbkey;
 - (MBGenre *)genreWithKey:(NSString *)dbkey;
 - (void)genre:(MBGenre *)mbgenre updateWithName:(NSString *)newName;

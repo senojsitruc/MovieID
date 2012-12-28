@@ -368,6 +368,49 @@
  *
  *
  */
+- (void)movie:(MBMovie *)mbmovie updateWithTitle:(NSString *)newTitle
+{
+	NSString *dbkeyOld = mbmovie.dbkey;
+	NSString *dbkeyNew = [[newTitle stringByAppendingString:@"--"] stringByAppendingString:mbmovie.year.stringValue];
+	NSMutableDictionary *keys = [[NSMutableDictionary alloc] init];
+	
+	NSLog(@"%s.. %@ ===> %@", __PRETTY_FUNCTION__, dbkeyOld, dbkeyNew);
+	
+	// get all of the old keys/values
+	{
+		NSString *keyOld = dbkeyOld;
+		
+		APLevelDBIterator *iter = [APLevelDBIterator iteratorWithLevelDB:mMovieDb];
+		
+		if (![iter seekToKey:keyOld]) {
+			NSLog(@"%s.. could not find starting point [%@]", __PRETTY_FUNCTION__, dbkeyOld);
+			return;
+		}
+		
+		do {
+			if (![keyOld hasPrefix:dbkeyOld])
+				break;
+			keys[keyOld] = [iter valueAsString];
+		}
+		while (nil != (keyOld = [iter nextKey]));
+	}
+	
+	[keys enumerateKeysAndObjectsUsingBlock:^ (id keyOld, id value, BOOL *stop) {
+		NSString *keyNew = [dbkeyNew stringByAppendingString:[keyOld substringFromIndex:dbkeyOld.length]];
+		[mMovieDb removeKey:keyOld];
+		mMovieDb[keyNew] = value;
+	}];
+	
+	mMovieDb[[dbkeyNew stringByAppendingString:@"--title"]] = newTitle;
+	mMovieDb[mbmovie.dirpath.lastPathComponent] = dbkeyNew;
+	
+	mbmovie.title = newTitle;
+}
+
+/**
+ *
+ *
+ */
 - (MBGenre *)genreWithKey:(NSString *)dbkey
 {
 	return mGenres[dbkey];

@@ -109,7 +109,9 @@
 	}];
 	
 	[_genreArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
+	[_genreArrayController rearrangeObjects];
 	[_actorArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
+	[_actorArrayController rearrangeObjects];
 	
 	[_genreTbl reloadData];
 	[_languageTbl reloadData];
@@ -164,6 +166,16 @@
 		_posterImg.image = image;
 }
 
+/**
+ *
+ *
+ */
+- (void)hide
+{
+	[NSApp endSheet:self.window];
+	[self.window orderOut:self];
+}
+
 
 
 
@@ -176,17 +188,25 @@
  */
 - (IBAction)doActionSave:(id)sender
 {
+	MBAppDelegate *appDelegate = (MBAppDelegate *)[NSApp delegate];
+	MBDataManager *dataManager = appDelegate.dataManager;
+	
 	NSInteger hours = _durationHrBtn.indexOfSelectedItem;
 	NSInteger minutes = _durationMinBtn.indexOfSelectedItem;
 	NSInteger seconds = _durationSecBtn.indexOfSelectedItem;
+	NSString *title = _titleTxt.stringValue;
 	
-	mMovie.title = _titleTxt.stringValue;
+	if (title.length && ![mMovie.title isEqualToString:title])
+		[dataManager movie:mMovie updateWithTitle:title];
+	
 	mMovie.year = @(_yearTxt.integerValue);
 	mMovie.rating = _ratingTxt.stringValue;
 	mMovie.dirpath = _pathTxt.stringValue;
 	mMovie.synopsis = _descriptionTxt.stringValue;
 	mMovie.duration = @((hours*60*60) + (minutes*60) + seconds);
 	mMovie.score = @(_scoreBtn.indexOfSelectedItem);
+	
+	[self hide];
 }
 
 /**
@@ -195,8 +215,7 @@
  */
 - (IBAction)doActionClose:(id)sender
 {
-	[NSApp endSheet:self.window];
-	[self.window orderOut:sender];
+	[self hide];
 }
 
 /**
