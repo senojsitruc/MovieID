@@ -83,6 +83,8 @@ static NSString * const gBaseDir = @"/Volumes/Stuart Little/MovieBrowse/Actors";
 		
 		if (data)
 			[response.dataBuffer appendData:data];
+		else
+			[connection responseDidAbort:response];
 		
 		response->mIsDone = TRUE;
 		[connection responseHasAvailableData:response];
