@@ -37,17 +37,6 @@
  *
  *
  */
-- (IBAction)doActionRemove:(id)sender
-{
-	MBMovie *mbmovie = self.movie;
-	MBDataManager *dataManager = [MBAppDelegate sharedInstance].dataManager;
-	[dataManager deleteMovie:mbmovie];
-}
-
-/**
- *
- *
- */
 - (IBAction)doActionScreencaps:(id)sender
 {
 	[((MBAppDelegate *)[NSApp delegate]) showScreencapsForMovie:self.movie];
