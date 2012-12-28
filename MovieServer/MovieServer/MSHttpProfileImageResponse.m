@@ -67,18 +67,20 @@ static NSString * const gBaseDir = @"/Volumes/Stuart Little/MovieBrowse/Actors";
 			CGImageRef cgimage = [image CGImageForProposedRect:NULL context:nil hints:nil];
 			CGSize imageSize = image.size;
 			
-			if (!width)
-				width = imageSize.width * (height / imageSize.height);
-			else if (!height)
-				height = imageSize.height * (width / imageSize.width);
-			
-			if (imageSize.width > imageSize.height)
-				width = imageSize.width * (height / imageSize.height);
-			else if (imageSize.height > imageSize.width)
-				height = imageSize.height * (width / imageSize.width);
-			
-			cgimage = [MSAppDelegate resizeCGImage:cgimage width:width height:height];
-			data = [MSAppDelegate pngDataFromCGImage:cgimage];
+			if (imageSize.width != INFINITY && imageSize.width != NAN && imageSize.height != INFINITY && imageSize.height != NAN) {
+				if (!width)
+					width = imageSize.width * (height / imageSize.height);
+				else if (!height)
+					height = imageSize.height * (width / imageSize.width);
+				
+				if (imageSize.width > imageSize.height)
+					width = imageSize.width * (height / imageSize.height);
+				else if (imageSize.height > imageSize.width)
+					height = imageSize.height * (width / imageSize.width);
+				
+				cgimage = [MSAppDelegate resizeCGImage:cgimage width:width height:height];
+				data = [MSAppDelegate pngDataFromCGImage:cgimage];
+			}
 		}
 		
 		if (data)
