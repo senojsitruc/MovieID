@@ -168,8 +168,8 @@ NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
 	size_t bpp = CGImageGetBitsPerPixel(cgimage);
 	size_t bpc = CGImageGetBitsPerComponent(cgimage);
 	size_t bpr = CGImageGetBytesPerRow(cgimage);
-	size_t cgwidth = CGImageGetWidth(cgimage);
-	size_t cgheight = CGImageGetWidth(cgimage);
+//size_t cgwidth = CGImageGetWidth(cgimage);
+//size_t cgheight = CGImageGetWidth(cgimage);
 	CGImageAlphaInfo ai = CGImageGetAlphaInfo(cgimage);
 	
 //CGContextRef context = CGBitmapContextCreate(NULL, width, height, CGImageGetBitsPerComponent(cgimage), CGImageGetBytesPerRow(cgimage), cs, CGImageGetAlphaInfo(cgimage));

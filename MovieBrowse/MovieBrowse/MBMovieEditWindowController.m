@@ -147,6 +147,7 @@
 	
 	_posterImg.image = nil;
 	[_posterImg setToolTip:@""];
+	[_posterPrg stopAnimation:self];
 	
 	//
 	// load current image
