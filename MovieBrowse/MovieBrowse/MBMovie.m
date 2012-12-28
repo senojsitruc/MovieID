@@ -146,7 +146,7 @@
 		//
 		// rating
 		//
-		if (rating.length) {
+		if (rating.length && ![rating isEqualToString:@"Unknown"] && ![rating isEqualToString:@"Unrated"]) {
 			if (info.length)
 				[info appendString:@", "];
 			
@@ -154,6 +154,9 @@
 			[info appendString:rating];
 		}
 		
+		//
+		// languages
+		//
 		if (languages.count) {
 			if (info.length)
 				[info appendString:@", "];
