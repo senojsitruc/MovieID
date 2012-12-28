@@ -341,7 +341,7 @@
  */
 - (IBAction)doActionDelete:(id)sender
 {
-	
+	[[MBAppDelegate sharedInstance].dataManager deleteMovie:mMovie];
 }
 
 /**
