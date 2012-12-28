@@ -108,22 +108,7 @@
 		[_actorArrayController addObject:[dataManager personWithKey:actorObj]];
 	}];
 	
-	/*
-	[mGenres setArray:[mMovie.genres.allValues sortedArrayUsingComparator:^ NSComparisonResult (id genre1, id genre2) {
-		return [((MBGenre *)genre1).name caseInsensitiveCompare:((MBGenre *)genre2).name];
-	}]];
-	
-	[mLanguages setArray:[mMovie.languages sortedArrayUsingComparator:^ NSComparisonResult (id language1, id language2) {
-		return [language1 compare:language2];
-	}]];
-	
-	[mActors setArray:[mMovie.actors.allValues sortedArrayUsingComparator:^ NSComparisonResult (id actor1, id actor2) {
-		return [((MBPerson *)actor1).name compare:((MBPerson *)actor2).name];
-	}]];
-	*/
-	
 	[_genreArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
-//[_languageArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
 	[_actorArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
 	
 	[_genreTbl reloadData];
@@ -185,37 +170,93 @@
 
 #pragma mark - Actions
 
+/**
+ * TODO: modify the stored data. [mMovie save] ?
+ *
+ */
+- (IBAction)doActionSave:(id)sender
+{
+	NSInteger hours = _durationHrBtn.indexOfSelectedItem;
+	NSInteger minutes = _durationMinBtn.indexOfSelectedItem;
+	NSInteger seconds = _durationSecBtn.indexOfSelectedItem;
+	
+	mMovie.title = _titleTxt.stringValue;
+	mMovie.year = @(_yearTxt.integerValue);
+	mMovie.rating = _ratingTxt.stringValue;
+	mMovie.dirpath = _pathTxt.stringValue;
+	mMovie.synopsis = _descriptionTxt.stringValue;
+	mMovie.duration = @((hours*60*60) + (minutes*60) + seconds);
+	mMovie.score = @(_scoreBtn.indexOfSelectedItem);
+}
+
+/**
+ *
+ *
+ */
 - (IBAction)doActionClose:(id)sender
 {
 	[NSApp endSheet:self.window];
 	[self.window orderOut:sender];
 }
 
+/**
+ *
+ *
+ */
+- (IBAction)doActionDelete:(id)sender
+{
+	
+}
+
+/**
+ *
+ *
+ */
 - (IBAction)doActionGenreAdd:(id)sender
 {
 	
 }
 
+/**
+ *
+ *
+ */
 - (IBAction)doActionGenreDel:(id)sender
 {
 	
 }
 
+/**
+ *
+ *
+ */
 - (IBAction)doActionLanguageAdd:(id)sender
 {
 	
 }
 
+/**
+ *
+ *
+ */
 - (IBAction)doActionLanguageDel:(id)sender
 {
 	
 }
 
+/**
+ *
+ *
+ */
 - (IBAction)doActionActorAdd:(id)sender
 {
 	
 }
 
+/**
+ *
+ *
+ */
 - (IBAction)doActionActorDel:(id)sender
 {
 	
