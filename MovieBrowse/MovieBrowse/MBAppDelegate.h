@@ -89,12 +89,17 @@ extern NSString * const MBDefaultsKeyApiRt;
  * Used by the MBMovieView to toggle whether a movie is hidden.
  */
 - (void)movie:(MBMovie *)mbmovie hideWithView:(NSView *)view;
-- (void)movie:(MBMovie *)mbmovie UnhideWithView:(NSView *)view;
+- (void)movie:(MBMovie *)mbmovie unhideWithView:(NSView *)view;
 
 /**
  * Display a modal sheet with the actor profile.
  */
 - (void)showActor:(MBPerson *)person;
+
+/**
+ * Edit actor.
+ */
+- (void)editActor:(MBPerson *)person;
 
 /**
  * Display a modal sheet with the screencaps for given movie.

@@ -368,6 +368,89 @@
  *
  *
  */
+- (void)person:(MBPerson *)person updateWithName:(NSString *)name
+{
+	
+}
+
+/**
+ *
+ *
+ */
+- (void)person:(MBPerson *)mbperson updateWithValues:(NSDictionary *)values
+{
+	id value = nil;
+	NSString *dbkey = mbperson.name;
+	
+	// bio
+	if (nil != (value = values[@"bio"]) && [value isKindOfClass:NSString.class]) {
+		mActorDb[[dbkey stringByAppendingString:@"--bio"]] = value;
+		mbperson.bio = value;
+	}
+	
+	// dob
+	if (nil != (value = values[@"dob"]) && [value isKindOfClass:NSString.class]) {
+		mActorDb[[dbkey stringByAppendingString:@"--dob"]] = value;
+		mbperson.dob = value;
+	}
+	
+	// dod
+	if (nil != (value = values[@"dod"]) && [value isKindOfClass:NSString.class]) {
+		mActorDb[[dbkey stringByAppendingString:@"--dod"]] = value;
+		mbperson.dod = value;
+	}
+	
+	// web
+	if (nil != (value = values[@"web"]) && [value isKindOfClass:NSString.class]) {
+		mActorDb[[dbkey stringByAppendingString:@"--web"]] = value;
+		mbperson.web = value;
+	}
+	
+	// imdb
+	if (nil != (value = values[@"imdb"]) && [value isKindOfClass:NSString.class]) {
+		mActorDb[[dbkey stringByAppendingString:@"--imdbid"]] = value;
+		mbperson.imdbId = value;
+	}
+	
+	// tmdb
+	if (nil != (value = values[@"tmdb"]) && [value isKindOfClass:NSString.class]) {
+		mActorDb[[dbkey stringByAppendingString:@"--tmdbid"]] = value;
+		mbperson.tmdbId = value;
+	}
+	
+	// rtid
+	if (nil != (value = values[@"rtid"]) && [value isKindOfClass:NSString.class]) {
+		mActorDb[[dbkey stringByAppendingString:@"--rtid"]] = value;
+		mbperson.rtId = value;
+	}
+	
+	// poster
+	if (nil != (value = values[@"poster"]) && [value isKindOfClass:NSData.class]) {
+		NSString *imageId = mbperson.imageId;
+		NSFileManager *fileManager = [[NSFileManager alloc] init];
+		NSString *baseDir = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache];
+		NSString *actorBaseDir = [baseDir stringByAppendingPathComponent:@"Actors"];
+		
+		if (!imageId.length) {
+			imageId = [NSString randomStringOfLength:32];
+			mbperson.imageId = imageId;
+		}
+		
+		NSString *dataDir = [actorBaseDir stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
+		NSString *dataPath = [dataDir stringByAppendingPathComponent:imageId];
+		
+		[fileManager createDirectoryAtPath:dataDir withIntermediateDirectories:TRUE attributes:nil error:nil];
+		
+		mActorDb[[dbkey stringByAppendingString:@"--image--id"]] = imageId;
+		
+		[(NSData *)value writeToFile:dataPath atomically:FALSE];
+	}
+}
+
+/**
+ *
+ *
+ */
 - (void)movie:(MBMovie *)mbmovie updateWithTitle:(NSString *)newTitle
 {
 	NSString *dbkeyOld = mbmovie.dbkey;
@@ -452,6 +535,24 @@
 	if (nil != (value = values[@"score"]) && [value isKindOfClass:NSNumber.class]) {
 		mMovieDb[[dbkey stringByAppendingString:@"--score"]] = value;
 		mbmovie.score = value;
+	}
+	
+	// imdb
+	if (nil != (value = values[@"imdb"]) && [value isKindOfClass:NSString.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--imdbid"]] = value;
+		mbmovie.imdbId = value;
+	}
+	
+	// tmdb
+	if (nil != (value = values[@"tmdb"]) && [value isKindOfClass:NSString.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--tmdbid"]] = value;
+		mbmovie.tmdbId = value;
+	}
+	
+	// rtid
+	if (nil != (value = values[@"rtid"]) && [value isKindOfClass:NSString.class]) {
+		mMovieDb[[dbkey stringByAppendingString:@"--rtid"]] = value;
+		mbmovie.rtId = value;
 	}
 	
 	// poster

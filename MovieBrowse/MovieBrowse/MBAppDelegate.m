@@ -19,6 +19,7 @@
 #import "MBTableHeaderCell.h"
 #import "MBDownloadQueue.h"
 #import "MBImportWindowController.h"
+#import "MBActorEditWindowController.h"
 #import "MBActorProfileWindowController.h"
 #import "MBMovieEditWindowController.h"
 #import "MBPreferencesWindowController.h"
@@ -56,6 +57,7 @@ static MBAppDelegate *gAppDelegate;
 @interface MBAppDelegate ()
 {
 	MBDataManager *mDataManager;
+	MBActorEditWindowController *mActorEditController;
 	MBActorProfileWindowController *mActorProfileController;
 	MBImportWindowController *mImportController;
 	MBMovieEditWindowController *mMovieEditController;
@@ -170,6 +172,7 @@ static MBAppDelegate *gAppDelegate;
 	mIsDoneLoading = FALSE;
 	
 	mDataManager = [[MBDataManager alloc] init];
+	mActorEditController = [[MBActorEditWindowController alloc] init];
 	mActorProfileController = [[MBActorProfileWindowController alloc] init];
 	mImportController = [[MBImportWindowController alloc] init];
 	mMovieEditController = [[MBMovieEditWindowController alloc] init];
@@ -672,6 +675,16 @@ static MBAppDelegate *gAppDelegate;
  *
  *
  */
+- (void)editActor:(MBPerson *)mbperson
+{
+	if (mbperson)
+		[mActorEditController showInWindow:self.window forPerson:mbperson];
+}
+
+/**
+ *
+ *
+ */
 - (void)showScreencapsForMovie:(MBMovie *)mbmovie
 {
 	[mScreencapsController showInWindow:self.window forMovie:mbmovie];
@@ -713,7 +726,7 @@ static MBAppDelegate *gAppDelegate;
  *
  *
  */
-- (void)movie:(MBMovie *)mbmovie UnhideWithView:(NSView *)view
+- (void)movie:(MBMovie *)mbmovie unhideWithView:(NSView *)view
 {
 	mbmovie.hidden = @(FALSE);
 	[mDataManager saveMovie:mbmovie];

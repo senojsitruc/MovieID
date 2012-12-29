@@ -7,6 +7,8 @@
 //
 
 #import "MBActorProfileWindowController.h"
+#import "MBAppDelegate.h"
+#import "MBActorEditWindowController.h"
 #import "MBActorMovieView.h"
 #import "MBDownloadQueue.h"
 #import "MBImageCache.h"
@@ -48,6 +50,7 @@
 	_descScroll.frame = NSMakeRect(423, 49, 425, 400);
 	[self.window.contentView addSubview:_descScroll];
 }
+
 
 
 
@@ -116,6 +119,18 @@
 
 
 #pragma mark - Actions
+
+/**
+ *
+ *
+ */
+- (IBAction)doActionEdit:(id)sender
+{
+	[NSApp endSheet:self.window];
+	[self.window orderOut:sender];
+	
+	[[MBAppDelegate sharedInstance] editActor:mPerson];
+}
 
 /**
  *

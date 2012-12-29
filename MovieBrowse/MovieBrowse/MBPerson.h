@@ -25,4 +25,9 @@
 @property (readonly, getter=movieCount) NSNumber *movieCount;
 @property (readonly, getter=info) NSString *info;
 
+/**
+ *
+ */
+- (void)updateInfoText;
+
 @end

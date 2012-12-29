@@ -62,4 +62,9 @@
 	return @(self.movies.count);
 }
 
+- (void)updateInfoText
+{
+	mInfo = nil;
+}
+
 @end
