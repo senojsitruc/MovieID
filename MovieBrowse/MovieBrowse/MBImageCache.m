@@ -246,6 +246,20 @@ static MBImageCache *gSharedInstance;
 			image = [[NSImage alloc] initWithData:data];
 			
 			if (image) {
+				CGSize imageSize = image.size;
+				
+				if (imageSize.width != INFINITY && imageSize.width != NAN && imageSize.height != INFINITY && imageSize.height != NAN) {
+					if (!width)
+						width = imageSize.width * (height / imageSize.height);
+					else if (!height)
+						height = imageSize.height * (width / imageSize.width);
+					
+					if (imageSize.width > imageSize.height)
+						width = imageSize.width * (height / imageSize.height);
+					else if (imageSize.height > imageSize.width)
+						height = imageSize.height * (width / imageSize.width);
+				}
+				
 				CGImageRef cgimage = [[self class] resizeCGImage:image.CGImage width:width height:height];
 				NSData *imageData = [[self class] pngDataFromCGImage:cgimage];
 				
