@@ -163,8 +163,10 @@ static MBImageCache *gSharedInstance;
  *
  *
  */
-- (NSImage *)actorImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height
+- (NSImage *)actorImageWithId:(NSString *)_imageId width:(NSUInteger)width height:(NSUInteger)height
 {
+	NSString *imageId = _imageId;
+	
 	if (!imageId.length)
 		return nil;
 	
@@ -173,7 +175,6 @@ static MBImageCache *gSharedInstance;
 	
 	NSImage *image = nil;
 	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:@"Actors"] stringByAppendingPathComponent:imageId]];
-//NSString *localPath = [[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"] stringByAppendingPathComponent:imageId];
 	NSString *localPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
 	
 	localPath = [localPath stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
@@ -186,6 +187,34 @@ static MBImageCache *gSharedInstance;
 		
 		if (data)
 			image = [[NSImage alloc] initWithData:data];
+	}
+	
+	// look for the original-size image in the on-disk cache; if we find it, resize it and save the
+	// resized version back to the on-disk cache.
+	if (!image) {
+		NSString *_localPath = [[localPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:_imageId];
+		NSData *data = [NSData dataWithContentsOfFile:_localPath];
+		
+		if (data) {
+			image = [[NSImage alloc] initWithData:data];
+			
+			if (image) {
+				CGImageRef cgimage = [[self class] resizeCGImage:image.CGImage width:width height:height];
+				NSData *imageData = [[self class] pngDataFromCGImage:cgimage];
+				
+				if (imageData.length) {
+					NSFileManager *fileManager = [[NSFileManager alloc] init];
+					NSString *parentDir = [localPath stringByDeletingLastPathComponent];
+					NSError *nserror = nil;
+					
+					if (FALSE == [fileManager fileExistsAtPath:parentDir])
+						if (FALSE == [fileManager createDirectoryAtPath:parentDir withIntermediateDirectories:TRUE attributes:nil error:&nserror])
+							NSLog(@"%s.. failed to create directory because %@ [%@]", __PRETTY_FUNCTION__, nserror.localizedDescription, parentDir);
+					
+					[imageData writeToFile:localPath atomically:TRUE];
+				}
+			}
+		}
 	}
 	
 	// get the image from the remote server
