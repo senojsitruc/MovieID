@@ -346,22 +346,27 @@ static NSString *gRtApiKey;
 {
 	NSMutableString *searchQuery = [[NSMutableString alloc] init];
 	
+	if (!gImdbApiKey.length) {
+		NSLog(@"%s.. can't use IMDB without an api key!", __PRETTY_FUNCTION__);
+		return nil;
+	}
+	
 	if (anonymous)
 		[searchQuery appendString:@"http://anonymouse.org/cgi-bin/anon-www.cgi/"];
 	
 	[searchQuery appendString:@"https://app.imdb.com/"];
 	[searchQuery appendString:action];
-	[searchQuery appendString:@"?api=1&appid=iphone1_1&apiPolicy=app1_1&apiKey=2wex6aeu6a8q9e49k7sfvufd6rhh0n&locale=en_US&timestamp="];
-	[searchQuery appendString:[[NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]] stringValue]];
+	[searchQuery appendString:@"?api=1&appid=iphone1_1&apiPolicy=app1_1&apiKey="];
+	[searchQuery appendString:gImdbApiKey];
+	[searchQuery appendString:@"&locale=en_US&timestamp="];
+	[searchQuery appendString:@((unsigned long long)[[NSDate date] timeIntervalSince1970]).stringValue];
 	[searchQuery appendString:@"&"];
 	[searchQuery appendString:method];
 	[searchQuery appendString:@"="];
 	[searchQuery appendString:[query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	
 	{
-		NSString *key = @"2wex6aeu6a8q9e49k7sfvufd6rhh0n";
-		
-		const char *cKey  = [key cStringUsingEncoding:NSASCIIStringEncoding];
+		const char *cKey  = [gImdbApiKey cStringUsingEncoding:NSASCIIStringEncoding];
 		const char *cData = [searchQuery cStringUsingEncoding:NSASCIIStringEncoding];
 		unsigned char cHMAC[CC_SHA1_DIGEST_LENGTH];
 		
@@ -372,8 +377,6 @@ static NSString *gRtApiKey;
 		[searchQuery appendString:@"&sig=app1-"];
 		[searchQuery appendString:hash];
 	}
-	
-	//NSLog(@"%@", searchQuery);
 	
 	return searchQuery;
 }
