@@ -168,6 +168,7 @@ static MBAppDelegate *gAppDelegate;
 	gAppDelegate = self;
 	mShowHiddenMovies = FALSE;
 	mIsDoneLoading = FALSE;
+	
 	mDataManager = [[MBDataManager alloc] init];
 	mActorProfileController = [[MBActorProfileWindowController alloc] init];
 	mImportController = [[MBImportWindowController alloc] init];
@@ -175,6 +176,7 @@ static MBAppDelegate *gAppDelegate;
 	mPreferencesController = [[MBPreferencesWindowController alloc] init];
 	mRenameController = [[MBRenameWindowController alloc] init];
 	mScreencapsController = [[MBScreencapsWindowController alloc] init];
+	
 	mGenreSelections = [[NSMutableArray alloc] init];
 	mLanguagesByName = [[NSMutableDictionary alloc] init];
 	mLanguagesSorted = [[NSMutableArray alloc] init];
@@ -194,61 +196,25 @@ static MBAppDelegate *gAppDelegate;
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
 		[defaults registerDefaults:@{
-				MBDefaultsKeyImageHost: @"http://home.stygian.net:20080",
-			 MBDefaultsKeyImageCache: @"~/Library/Application Support/MovieBrowse/Cache",
-					MBDefaultsKeySources: [[NSMutableArray alloc] initWithArray:@[
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/1"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/2"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/3"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/4"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/5"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/6"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/7"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/8"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/9"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/A"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/B"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/C"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/D"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/E"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/F"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/G"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/H"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/I"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/J"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/K"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/L"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/M"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/N"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/O"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/P"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/Q"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/R"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/S"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/T"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/U"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/V"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/W"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/X"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/Y"},
-																 @{MBDefaultsKeySourcesPath:@"/Volumes/bigger/Media/Movies/Z"}
-																]],
-					MBDefaultsKeyApiTmdb: @"",
-					MBDefaultsKeyApiImdb: @"",
-						MBDefaultsKeyApiRt: @"",
-			 MBDefaultsKeyMoviesSort: @"Title",
- MBDefaultsKeyMoviesShowHidden: @(0),
-			 MBDefaultsKeyGenreMulti: @"Or",
-				MBDefaultsKeyActorShow: @"Popular",
-				MBDefaultsKeyActorSort: @"Name",
-	 MBDefaultsKeyActorSelection: @[],
-	 MBDefaultsKeyGenreSelection: @[],
-	 MBDefaultsKeyMovieSelection: @[],
-				MBDefaultsKeyFindQuery:@"",
-				 MBDefaultsKeyFindType:@"Movies",
- MBDefaultsKeyFindTitleEnabled:@(TRUE),
-MBDefaultsKeyFindFileNameEnabled:@(FALSE),
-MBDefaultsKeyFindDescriptionEnabled:@(FALSE)
+								MBDefaultsKeyImageHost: @"http://home.stygian.net:20080",
+							 MBDefaultsKeyImageCache: @"~/Library/Application Support/MovieBrowse/Cache",
+									MBDefaultsKeySources: @[],
+									MBDefaultsKeyApiTmdb: @"",
+									MBDefaultsKeyApiImdb: @"2wex6aeu6a8q9e49k7sfvufd6rhh0n",
+										MBDefaultsKeyApiRt: @"",
+							 MBDefaultsKeyMoviesSort: @"Title",
+				 MBDefaultsKeyMoviesShowHidden: @(0),
+							 MBDefaultsKeyGenreMulti: @"Or",
+								MBDefaultsKeyActorShow: @"Popular",
+								MBDefaultsKeyActorSort: @"Name",
+					 MBDefaultsKeyActorSelection: @[],
+					 MBDefaultsKeyGenreSelection: @[],
+					 MBDefaultsKeyMovieSelection: @[],
+								MBDefaultsKeyFindQuery: @"",
+								 MBDefaultsKeyFindType: @"Movies",
+         MBDefaultsKeyFindTitleEnabled: @(TRUE),
+      MBDefaultsKeyFindFileNameEnabled: @(FALSE),
+   MBDefaultsKeyFindDescriptionEnabled: @(FALSE)
 		}];
 	}
 	
