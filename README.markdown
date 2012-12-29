@@ -22,8 +22,8 @@ Redistribution and use in source and binary forms, with or without modification,
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-  [1]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Main.png
-  [2]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Find.png
-  [3]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Actor-Profile.png
-  [4]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Movie-Edit.png
-  [5]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Screencaps.png
+  [1]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Main.png "Main interface - actors, genres, movies"
+  [2]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Find.png "Find by actor name/bio or movie title/file name/synopsis"
+  [3]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Actor-Profile.png "Actor profile"
+  [4]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Movie-Edit.png "Edit movie details"
+  [5]: https://raw.github.com/senojsitruc/MovieID/master/MovieBrowse/Screenshots/Screencaps.png "Screencaps"
