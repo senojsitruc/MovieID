@@ -21,9 +21,10 @@
 - (void)cacheImage:(NSImage *)image withId:(NSString *)imageId andHeight:(CGFloat)height;
 
 /**
- * Clears all of the on-disk and in-memory cache
+ * Clears cached data.
  */
 - (void)clearAll;
+- (void)clearActorCacheForId:(NSString *)imageId;
 - (void)clearMovieCacheForId:(NSString *)imageId;
 
 @end

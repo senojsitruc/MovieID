@@ -105,10 +105,29 @@ static MBImageCache *gSharedInstance;
  *
  *
  */
+- (void)clearActorCacheForId:(NSString *)imageId
+{
+	NSString *actors = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
+	[self clearCacheForId:imageId inDir:actors];
+}
+
+/**
+ *
+ *
+ */
 - (void)clearMovieCacheForId:(NSString *)imageId
 {
-	NSFileManager *fileManager = [[NSFileManager alloc] init];
 	NSString *movies = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Movies"];
+	[self clearCacheForId:imageId inDir:movies];
+}
+
+/**
+ *
+ *
+ */
+- (void)clearCacheForId:(NSString *)imageId inDir:(NSString *)basedir
+{
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
 	void (^deleteItems)(NSString*);
 	
 	deleteItems = ^ (NSString *dirPath) {
@@ -130,7 +149,7 @@ static MBImageCache *gSharedInstance;
 		}];
 	};
 	
-	deleteItems([movies stringByAppendingString:[imageId substringToIndex:2].lowercaseString]);
+	deleteItems([basedir stringByAppendingString:[imageId substringToIndex:2].lowercaseString]);
 	
 	dispatch_barrier_sync(mDataQueue, ^{
 		NSMutableArray *keys = [[NSMutableArray alloc] init];
@@ -163,78 +182,9 @@ static MBImageCache *gSharedInstance;
  *
  *
  */
-- (NSImage *)actorImageWithId:(NSString *)_imageId width:(NSUInteger)width height:(NSUInteger)height
+- (NSImage *)actorImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height
 {
-	NSString *imageId = _imageId;
-	
-	if (!imageId.length)
-		return nil;
-	
-	if (width || height)
-		imageId = [imageId stringByAppendingFormat:@"--%lu--%lu", width, height];
-	
-	NSImage *image = nil;
-	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:@"Actors"] stringByAppendingPathComponent:imageId]];
-	NSString *localPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
-	
-	localPath = [localPath stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
-	localPath = [localPath stringByAppendingPathComponent:imageId];
-	localPath = [localPath stringByExpandingTildeInPath];
-	
-	// get the image from the local on-disk cache
-	{
-		NSData *data = [NSData dataWithContentsOfFile:localPath];
-		
-		if (data)
-			image = [[NSImage alloc] initWithData:data];
-	}
-	
-	// look for the original-size image in the on-disk cache; if we find it, resize it and save the
-	// resized version back to the on-disk cache.
-	if (!image) {
-		NSString *_localPath = [[localPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:_imageId];
-		NSData *data = [NSData dataWithContentsOfFile:_localPath];
-		
-		if (data) {
-			image = [[NSImage alloc] initWithData:data];
-			
-			if (image) {
-				CGImageRef cgimage = [[self class] resizeCGImage:image.CGImage width:width height:height];
-				NSData *imageData = [[self class] pngDataFromCGImage:cgimage];
-				
-				if (imageData.length) {
-					NSFileManager *fileManager = [[NSFileManager alloc] init];
-					NSString *parentDir = [localPath stringByDeletingLastPathComponent];
-					NSError *nserror = nil;
-					
-					if (FALSE == [fileManager fileExistsAtPath:parentDir])
-						if (FALSE == [fileManager createDirectoryAtPath:parentDir withIntermediateDirectories:TRUE attributes:nil error:&nserror])
-							NSLog(@"%s.. failed to create directory because %@ [%@]", __PRETTY_FUNCTION__, nserror.localizedDescription, parentDir);
-					
-					[imageData writeToFile:localPath atomically:TRUE];
-				}
-			}
-		}
-	}
-	
-	// get the image from the remote server
-	if (!image) {
-		NSData *data = [NSData dataWithContentsOfURL:remoteUrl];
-		
-		if (data && nil != (image = [[NSImage alloc] initWithData:data])) {
-			NSFileManager *fileManager = [[NSFileManager alloc] init];
-			NSString *parentDir = [localPath stringByDeletingLastPathComponent];
-			NSError *nserror = nil;
-			
-			if (FALSE == [fileManager fileExistsAtPath:parentDir])
-				if (FALSE == [fileManager createDirectoryAtPath:parentDir withIntermediateDirectories:TRUE attributes:nil error:&nserror])
-					NSLog(@"%s.. failed to create directory because %@ [%@]", __PRETTY_FUNCTION__, nserror.localizedDescription, parentDir);
-			
-			[data writeToFile:localPath atomically:TRUE];
-		}
-	}
-	
-	return image;
+	return [self imageWithId:imageId width:width height:height inDir:@"Actors"];
 }
 
 /**
@@ -250,7 +200,16 @@ static MBImageCache *gSharedInstance;
  *
  *
  */
-- (NSImage *)movieImageWithId:(NSString *)_imageId width:(NSUInteger)width height:(NSUInteger)height
+- (NSImage *)movieImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height
+{
+	return [self imageWithId:imageId width:width height:height inDir:@"Movies"];
+}
+
+/**
+ *
+ *
+ */
+- (NSImage *)imageWithId:(NSString *)_imageId width:(NSUInteger)width height:(NSUInteger)height inDir:(NSString *)cacheDir
 {
 	NSString *imageId = _imageId;
 	
@@ -261,8 +220,8 @@ static MBImageCache *gSharedInstance;
 		imageId = [imageId stringByAppendingFormat:@"--%lu--%lu", width, height];
 	
 	NSImage *image = nil;
-	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:@"Movies"] stringByAppendingPathComponent:imageId]];
-	NSString *localPath = [[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByAppendingPathComponent:@"Movies"];
+	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:cacheDir] stringByAppendingPathComponent:imageId]];
+	NSString *localPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:cacheDir];
 	
 	localPath = [localPath stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
 	localPath = [localPath stringByAppendingPathComponent:imageId];
