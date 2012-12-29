@@ -82,6 +82,9 @@
 	_yearTxt.stringValue = mMovie.year.integerValue ? mMovie.year.stringValue : @"";
 	_ratingTxt.stringValue = mMovie.rating ? mMovie.rating : @"";
 	_pathTxt.stringValue = mMovie.dirpath ? mMovie.dirpath : @"";
+	_imdbTxt.stringValue = mMovie.imdbId ? mMovie.imdbId : @"";
+	_tmdbTxt.stringValue = mMovie.tmdbId ? mMovie.tmdbId : @"";
+	_rtidTxt.stringValue = mMovie.rtId ? mMovie.rtId : @"";
 	_descriptionTxt.stringValue = mMovie.synopsis ? mMovie.synopsis : @"";
 	
 	// duration
@@ -316,6 +319,9 @@
 	  @"synopsis": _descriptionTxt.stringValue,
 	  @"duration": @((hours*60*60) + (minutes*60) + seconds),
 	     @"score": @(_scoreBtn.indexOfSelectedItem),
+	      @"imdb": _imdbTxt.stringValue,
+				@"tmdb": _tmdbTxt.stringValue,
+				@"rtid": _rtidTxt.stringValue,
 	    @"poster": mImageData.length ? mImageData : [NSNull null]
 	}];
 	

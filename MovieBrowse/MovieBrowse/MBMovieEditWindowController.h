@@ -10,7 +10,7 @@
 
 @class MBMovie;
 
-@interface MBMovieEditWindowController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource>
+@interface MBMovieEditWindowController : NSWindowController
 
 @property (readwrite, assign, nonatomic) IBOutlet NSImageView *posterImg;
 @property (readwrite, assign, nonatomic) IBOutlet NSProgressIndicator *posterPrg;
@@ -18,6 +18,9 @@
 @property (readwrite, assign, nonatomic) IBOutlet NSTextField *pathTxt;
 @property (readwrite, assign, nonatomic) IBOutlet NSTextField *yearTxt;
 @property (readwrite, assign, nonatomic) IBOutlet NSTextField *ratingTxt;
+@property (readwrite, assign, nonatomic) IBOutlet NSTextField *imdbTxt;
+@property (readwrite, assign, nonatomic) IBOutlet NSTextField *tmdbTxt;
+@property (readwrite, assign, nonatomic) IBOutlet NSTextField *rtidTxt;
 @property (readwrite, assign, nonatomic) IBOutlet NSPopUpButton *durationHrBtn;
 @property (readwrite, assign, nonatomic) IBOutlet NSPopUpButton *durationMinBtn;
 @property (readwrite, assign, nonatomic) IBOutlet NSPopUpButton *durationSecBtn;

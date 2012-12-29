@@ -25,7 +25,7 @@
 	
 	if (hidden) {
 		((NSMenuItem *)sender).state = NSOffState;
-		[[MBAppDelegate sharedInstance] movie:mbmovie UnhideWithView:self.superview];
+		[[MBAppDelegate sharedInstance] movie:mbmovie unhideWithView:self.superview];
 	}
 	else {
 		((NSMenuItem *)sender).state = NSOnState;
