@@ -220,7 +220,8 @@ static MBImageCache *gSharedInstance;
 		imageId = [imageId stringByAppendingFormat:@"--%lu--%lu", width, height];
 	
 	NSImage *image = nil;
-	NSURL *remoteUrl = [NSURL URLWithString:[[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost] stringByAppendingPathComponent:cacheDir] stringByAppendingPathComponent:imageId]];
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	NSURL *remoteUrl = [NSURL URLWithString:[[imageHost stringByAppendingPathComponent:cacheDir] stringByAppendingPathComponent:imageId]];
 	NSString *localPath = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:cacheDir];
 	
 	localPath = [localPath stringByAppendingPathComponent:[imageId substringToIndex:2].lowercaseString];
@@ -264,7 +265,7 @@ static MBImageCache *gSharedInstance;
 	}
 	
 	// get the image from the remote server
-	if (!image) {
+	if (!image && imageHost.length) {
 		NSData *data = [NSData dataWithContentsOfURL:remoteUrl];
 		
 		if (data && nil != (image = [[NSImage alloc] initWithData:data])) {

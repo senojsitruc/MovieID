@@ -214,27 +214,40 @@ NSString * const MBScreencapsKeyHeight = @"height";
 - (void)serverGetScreencapsInfo
 {
 	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
-	NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
 	
-	[urlString appendString:@"/Screencaps/"];
-	[urlString appendString:[_movie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	[urlString appendString:@"/info"];
-	
-	NSURL *url = [NSURL URLWithString:urlString];
-	NSData *data = [NSData dataWithContentsOfURL:url];
-	NSDictionary *info = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-	
-	mInfoDuration = ((NSNumber *)info[MBScreencapsKeyDuration]).integerValue;
-	mInfoWidth = ((NSNumber *)info[MBScreencapsKeyWidth]).integerValue;
-	mInfoHeight = ((NSNumber *)info[MBScreencapsKeyHeight]).integerValue;
-	
-	mNumOfImages = mInfoDuration / mGranularity;
-	mNumOfPages = mNumOfImages / 16;
-	
-	if (mNumOfPages * 16 < mNumOfImages)
-		mNumOfPages += 1;
-	
-	_infoTxt.stringValue = [NSString stringWithFormat:@"Page 0 of %lu", mNumOfPages];
+	if (imageHost.length) {
+		NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
+		
+		[urlString appendString:@"/Screencaps/"];
+		[urlString appendString:[_movie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		[urlString appendString:@"/info"];
+		
+		NSURL *url = [NSURL URLWithString:urlString];
+		NSData *data = [NSData dataWithContentsOfURL:url];
+		NSDictionary *info = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+		
+		mInfoDuration = ((NSNumber *)info[MBScreencapsKeyDuration]).integerValue;
+		mInfoWidth = ((NSNumber *)info[MBScreencapsKeyWidth]).integerValue;
+		mInfoHeight = ((NSNumber *)info[MBScreencapsKeyHeight]).integerValue;
+		
+		mNumOfImages = mInfoDuration / mGranularity;
+		mNumOfPages = mNumOfImages / 16;
+		
+		if (mNumOfPages * 16 < mNumOfImages)
+			mNumOfPages += 1;
+		
+		_infoTxt.stringValue = [NSString stringWithFormat:@"Page 0 of %lu", mNumOfPages];
+	}
+	else {
+		mInfoDuration = 0;
+		mInfoWidth = 0;
+		mInfoHeight = 0;
+		
+		mNumOfImages = 0;
+		mNumOfPages = 0;
+		
+		_infoTxt.stringValue = @"Error: no image host.";
+	}
 }
 
 /**
@@ -251,19 +264,22 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	}
 	
 	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
-	NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
 	
-	[urlString appendString:@"/Screencaps/"];
-	[urlString appendString:[_movie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	[urlString appendString:@"/image--"];
-	[urlString appendFormat:@"%lu", offset];
-	[urlString appendString:@"--png--200--150"];
-	
-	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
-	
-	@synchronized (self) {
-		if (image)
-			mImageCache[@(offset)] = image;
+	if (imageHost.length) {
+		NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
+		
+		[urlString appendString:@"/Screencaps/"];
+		[urlString appendString:[_movie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		[urlString appendString:@"/image--"];
+		[urlString appendFormat:@"%lu", offset];
+		[urlString appendString:@"--png--200--150"];
+		
+		image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
+		
+		@synchronized (self) {
+			if (image)
+				mImageCache[@(offset)] = image;
+		}
 	}
 	
 	return image;

@@ -196,7 +196,7 @@ static MBAppDelegate *gAppDelegate;
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
 		[defaults registerDefaults:@{
-								MBDefaultsKeyImageHost: @"http://home.stygian.net:20080",
+								MBDefaultsKeyImageHost: @"",
 							 MBDefaultsKeyImageCache: @"~/Library/Application Support/MovieBrowse/Cache",
 									MBDefaultsKeySources: @[],
 									MBDefaultsKeyApiTmdb: @"",
