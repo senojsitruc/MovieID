@@ -69,7 +69,7 @@ static NSString *gRtApiKey;
 	
 	NSString *_name = [name lowercaseString];
 	
-	// remave the year
+	// remove the year
 	_name = [_name stringByReplacingOccurrencesOfRegex:@"\\(\\d\\d\\d\\d\\)" withString:@""];
 	_name = [_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 	_name = [_name stringByReplacingOccurrencesOfRegex:@"  " withString:@" "];
@@ -143,38 +143,12 @@ static NSString *gRtApiKey;
  */
 + (NSString *)titleForName:(NSString *)aName
 {
-	__block NSString *name = aName;
+	NSArray *titles = [self titlesForName:aName];
 	
-	// remave the year
-	name = [name stringByReplacingOccurrencesOfRegex:@"\\(\\d\\d\\d\\d\\)" withString:@""];
-	name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	name = [name stringByReplacingOccurrencesOfRegex:@"  " withString:@" "];
-	name = [name stringByReplacingOccurrencesOfRegex:@" \\- " withString:@": "];
-	
-	// move articles from the end to the beginning of the title
-	{
-		NSArray *parts = [name componentsSeparatedByString:@": "];
-		NSMutableString *tmp = [[NSMutableString alloc] init];
-		
-		[parts enumerateObjectsUsingBlock:^ (id obj, NSUInteger ndx, BOOL *stop) {
-			NSString *part = [(NSString *)obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-			
-			if ([part hasSuffix:@", A"])
-				part = [@"A " stringByAppendingString:[part substringToIndex:part.length-3]];
-			else if ([part hasSuffix:@", An"])
-				part = [@"An " stringByAppendingString:[part substringToIndex:part.length-4]];
-			else if ([part hasSuffix:@", The"])
-				part = [@"The " stringByAppendingString:[part substringToIndex:part.length-5]];
-			
-			if (tmp.length)
-				[tmp appendString:@": "];
-			
-			name = part;
-			*stop = TRUE;
-		}];
-	}
-	
-	return name;
+	if (titles.count)
+		return titles[0];
+	else
+		return aName;
 }
 
 /**
@@ -393,7 +367,7 @@ static NSString *gRtApiKey;
  */
 + (NSData *)doUrlQuery:(NSString *)query
 {
-	//NSLog(@"%@", query);
+	NSLog(@"%@", query);
 	
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
 	request.HTTPMethod = @"GET";

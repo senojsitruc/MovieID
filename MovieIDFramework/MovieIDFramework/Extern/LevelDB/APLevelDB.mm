@@ -132,7 +132,7 @@ NSString * const APLevelDBErrorDomain = @"APLevelDBErrorDomain";
 
 - (BOOL)setString:(NSString *)str forKey:(NSString *)key
 {
-	if ([str isKindOfClass:[NSNull class]])
+	if (!str || [str isKindOfClass:[NSNull class]])
 		return [self removeKey:key];
 	else {
 		leveldb::Slice keySlice = SliceFromString(key);

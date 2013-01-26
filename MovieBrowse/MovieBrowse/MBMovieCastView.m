@@ -49,6 +49,8 @@ static NSMutableDictionary *gActorViews;
 	}];
 	
 	CGRect myFrame = self.frame;
+	
+	/*
 	NSView *actorsView = gActorViews[mbmovie.dbkey];
 	
 	if (actorsView) {
@@ -57,10 +59,12 @@ static NSMutableDictionary *gActorViews;
 	}
 	else
 		gActorViews[mbmovie.dbkey] = (actorsView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)]);
+	*/
 	
 	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
 		__block CGFloat hoffset = 0;
 		NSMutableArray *actors = [[NSMutableArray alloc] init];
+		NSView *actorsView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
 		
 		[[MBAppDelegate sharedInstance].dataManager enumerateActorsForMovie:mMovie handler:^ (MBPerson *mbperson, BOOL *stop) {
 			if (!mbperson.imageId)
@@ -100,7 +104,11 @@ static NSMutableDictionary *gActorViews;
 			objc_setAssociatedObject(imageBtn, "mbperson", mbperson, OBJC_ASSOCIATION_ASSIGN);
 			
 			[actorsView addSubview:imageBtn];
+			
 			hoffset += image.size.width;
+			
+			if (hoffset >= myFrame.size.width)
+				*personStop = TRUE;
 		}];
 		
 		actorsView.frame = NSMakeRect(0, 0, hoffset, myFrame.size.height);

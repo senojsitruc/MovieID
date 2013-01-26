@@ -50,39 +50,49 @@ static NSImage *gMissingImg;
 			NSString *imageId = mPerson.imageId;
 			CGFloat width = self.actorImg.frame.size.width;
 			CGFloat height = self.actorImg.frame.size.height;
-			NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
+//		NSImage *image = nil;
 			
-			if (!image && !imageId.length) {
-				if (nil == (image = [[MBImageCache sharedInstance] cachedImageWithId:@"missing-actor" andHeight:height])) {
+			/*
+			if (!imageId.length)
+				image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
+			*/
+			
+			if (/* !image &&*/ !imageId.length) {
+				NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:@"missing-actor" andHeight:height];
+				
+				if (!image) {
 					image = [gMissingImg copy];
 					image.size = NSMakeSize((NSUInteger)(image.size.width * (height / image.size.height)), height);
 					[[MBImageCache sharedInstance] cacheImage:image withId:@"missing-actor" andHeight:height];
 				}
+				
+				self.actorImg.image = image;
 			}
 			
-			if (!image) {
+			else {
+//		if (!image) {
 				self.actorImg.image = nil;
 				
 				[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-					NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:imageId width:width height:height];
+					NSImage *_image = [[MBImageCache sharedInstance] actorImageWithId:imageId width:width height:height];
 					
-					if (!image)
+					if (!_image)
 						return;
 					
-					image.size = NSMakeSize((NSUInteger)(image.size.width * (height / image.size.height)), height);
-					[[MBImageCache sharedInstance] cacheImage:image withId:imageId andHeight:height];
+					_image.size = NSMakeSize((NSUInteger)(_image.size.width * (height / _image.size.height)), height);
+//				[[MBImageCache sharedInstance] cacheImage:_image withId:imageId andHeight:height];
 					
 					if (transId != mTransId)
 						return;
 					
 					[[NSThread mainThread] performBlock:^{
 						if (transId == mTransId)
-							self.actorImg.image = image;
+							self.actorImg.image = _image;
 					}];
 				}];
 			}
-			else
-				self.actorImg.image = image;
+//		else
+//			self.actorImg.image = image;
 		}
 	}
 	

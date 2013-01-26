@@ -12,8 +12,11 @@
 
 - (CGImageRef)CGImage
 {
-	CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)self.TIFFRepresentation, NULL);
-	CGImageRef maskRef =  CGImageSourceCreateImageAtIndex(source, 0, NULL);
+	NSData *data = self.TIFFRepresentation;
+	CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+	CGImageRef maskRef = CGImageSourceCreateImageAtIndex(source, 0, NULL);
+	
+	CFRelease(source);
 	
 	return maskRef;
 }

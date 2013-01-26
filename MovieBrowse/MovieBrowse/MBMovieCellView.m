@@ -54,41 +54,47 @@ static NSImage *gMissingImg;
 		{
 			NSString *imageId = mMovie.posterId;
 			CGFloat height = self.movieImg.frame.size.height;
-			NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
+//		NSImage *image = nil;
 			
-			if (!image && !imageId.length) {
-				image = [[MBImageCache sharedInstance] cachedImageWithId:@"missing-movie" andHeight:height];
+			/*
+			if (imageId.length)
+				image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
+			*/
+			
+			if (/* !image && */ !imageId.length) {
+				NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:@"missing-movie" andHeight:height];
 				
 				if (!image) {
 					image = [gMissingImg copy];
 					image.size = NSMakeSize((NSUInteger)(image.size.width * (height / image.size.height)), height);
 					[[MBImageCache sharedInstance] cacheImage:image withId:@"missing-movie" andHeight:height];
 				}
+				self.movieImg.image = image;
 			}
-			
-			if (!image) {
+			else {
+//		if (!image) {
 				self.movieImg.image = nil;
 				
 				[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-					NSImage *image = [[MBImageCache sharedInstance] movieImageWithId:imageId width:0 height:height];
+					NSImage *_image = [[MBImageCache sharedInstance] movieImageWithId:imageId width:0 height:height];
 					
-					if (!image)
+					if (!_image)
 						return;
 					
-					image.size = NSMakeSize((NSUInteger)(image.size.width * (height / image.size.height)), height);
-					[[MBImageCache sharedInstance] cacheImage:image withId:imageId andHeight:height];
+					_image.size = NSMakeSize((NSUInteger)(_image.size.width * (height / _image.size.height)), height);
+//				[[MBImageCache sharedInstance] cacheImage:_image withId:imageId andHeight:height];
 					
 					if (transId != mTransId)
 						return;
 					
 					[[NSThread mainThread] performBlock:^{
 						if (transId == mTransId)
-							self.movieImg.image = image;
+							self.movieImg.image = _image;
 					}];
 				}];
 			}
-			else
-				self.movieImg.image = image;
+//		else
+//			self.movieImg.image = image;
 		}
 	}
 	

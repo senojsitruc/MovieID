@@ -96,19 +96,21 @@ static MBDownloadQueue *gQueue;
 - (void)worker
 {
 	while (TRUE) {
-		__block void (^block)() = nil;
-		
-		dispatch_semaphore_wait(mSem, dispatch_time(DISPATCH_TIME_NOW,5000000000LL));
-		
-		dispatch_sync(mDispatch, ^{
-			if (mQueue.count) {
-				block = mQueue[0];
-				[mQueue removeObjectAtIndex:0];
-			}
-		});
-		
-		if (block)
-			block();
+		@autoreleasepool {
+			__block void (^block)() = nil;
+			
+			dispatch_semaphore_wait(mSem, dispatch_time(DISPATCH_TIME_NOW,5000000000LL));
+			
+			dispatch_sync(mDispatch, ^{
+				if (mQueue.count) {
+					block = mQueue[0];
+					[mQueue removeObjectAtIndex:0];
+				}
+			});
+			
+			if (block)
+				block();
+		}
 	}
 }
 

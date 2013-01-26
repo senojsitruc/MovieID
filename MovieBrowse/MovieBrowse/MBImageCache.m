@@ -230,20 +230,25 @@ static MBImageCache *gSharedInstance;
 	
 	// get the image from the local on-disk cache
 	{
+		/*
 		NSData *data = [NSData dataWithContentsOfFile:localPath];
 		
 		if (data)
 			image = [[NSImage alloc] initWithData:data];
+		*/
+		
+		image = [[NSImage alloc] initWithContentsOfFile:localPath];
 	}
 	
 	// look for the original-size image in the on-disk cache; if we find it, resize it and save the
 	// resized version back to the on-disk cache.
 	if (!image) {
 		NSString *_localPath = [[localPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:_imageId];
-		NSData *data = [NSData dataWithContentsOfFile:_localPath];
+//	NSData *data = [NSData dataWithContentsOfFile:_localPath];
 		
-		if (data) {
-			image = [[NSImage alloc] initWithData:data];
+//	if (data) {
+//		image = [[NSImage alloc] initWithData:data];
+		image = [[NSImage alloc] initWithContentsOfFile:_localPath];
 			
 			if (image) {
 				CGSize imageSize = image.size;
@@ -260,8 +265,12 @@ static MBImageCache *gSharedInstance;
 						height = imageSize.height * (width / imageSize.width);
 				}
 				
-				CGImageRef cgimage = [[self class] resizeCGImage:image.CGImage width:width height:height];
-				NSData *imageData = [[self class] pngDataFromCGImage:cgimage];
+				CGImageRef originalImage = image.CGImage;
+				CGImageRef resizedImage = [[self class] resizeCGImage:originalImage width:width height:height];
+				NSData *imageData = [[self class] pngDataFromCGImage:resizedImage];
+				
+				CGImageRelease(originalImage);
+				CGImageRelease(resizedImage);
 				
 				if (imageData.length) {
 					NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -275,14 +284,15 @@ static MBImageCache *gSharedInstance;
 					[imageData writeToFile:localPath atomically:TRUE];
 				}
 			}
-		}
+//	}
 	}
 	
 	// get the image from the remote server
 	if (!image && imageHost.length) {
 		NSData *data = [NSData dataWithContentsOfURL:remoteUrl];
+//	image = [[NSImage alloc] initWithContentsOfURL:remoteUrl];
 		
-		if (data && nil != (image = [[NSImage alloc] initWithData:data])) {
+		if ( /*image*/ data && nil != (image = [[NSImage alloc] initWithData:data])) {
 			NSFileManager *fileManager = [[NSFileManager alloc] init];
 			NSString *parentDir = [localPath stringByDeletingLastPathComponent];
 			NSError *nserror = nil;
@@ -372,7 +382,6 @@ static MBImageCache *gSharedInstance;
 	size_t bpc = CGImageGetBitsPerComponent(cgimage);
 	size_t bpr = CGImageGetBytesPerRow(cgimage);
 	CGImageAlphaInfo ai = CGImageGetAlphaInfo(cgimage);
-	
 	CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, width*4, cs, kCGImageAlphaNoneSkipLast);
 	CGColorSpaceRelease(cs);
 	

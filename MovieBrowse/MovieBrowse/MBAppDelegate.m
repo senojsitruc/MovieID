@@ -573,7 +573,7 @@ static MBAppDelegate *gAppDelegate;
 			
 			if ([mbmovie.dirpath rangeOfString:@"Varg "].location == NSNotFound) {
 				NSLog(@"%@", mbmovie.dirpath);
-			[mDataManager deleteMovie:mbmovie];
+//			[mDataManager deleteMovie:mbmovie];
 			}
 		}];
 		*/

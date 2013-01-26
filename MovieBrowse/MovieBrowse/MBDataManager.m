@@ -201,7 +201,6 @@
 		NSString *title = keyParts[0];
 		NSNumber *year  = @(((NSString *)keyParts[1]).integerValue);
 		NSString *label = keyParts[2];
-//	NSString *value = mMovieDb[key];
 		
 		if (mbmovie && (![curTitle isEqualToString:title] || ![mbmovie.year isEqual:year])) {
 			/*
@@ -1159,6 +1158,11 @@
 		NSLog(@"[DM]   [new] runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@, languages=%@", runtime, filesize, bitrate, width, height, [languages.allValues componentsJoinedByString:@", "]);
 		NSLog(@"[DM]   [old] runtime=%@, filesize=%@, bitrate=%@, width=%@, height=%@", mbmovie.duration, mbmovie.filesize, mbmovie.bitrate, mbmovie.width, mbmovie.height);
 		
+		if (!runtime.integerValue || !filesize.integerValue) {
+			NSLog(@"[DM]         skipping because there's no runtime or filesize");
+			return;
+		}
+		
 		[languages.allValues enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
 			mMovieDb[[[dbkey stringByAppendingString:@"--language--"] stringByAppendingString:languageObj]] = @"";
 		}];
@@ -1392,22 +1396,29 @@
 				
 				NSLog(@"[DM]       [%lu] %@ / %@ / %@", ndx2, _idmovie.title, _idmovie.year, _idmovie.runtime);
 				
+				// compare the year of the metadata to the year in the file name
 				if (![_idmovie.year isEqual:year]) {
 					NSLog(@"[DM]       Skipping because of the year");
 					return;
 				}
 				
+				// compare the runtime of the metadata to the runtime of the movie file; they shouldn't be
+				// allowed to differ by too much
 				if (10 < labs(_idmovie.runtime.integerValue - (runtime.integerValue/60)) /*&& FALSE == [self title:_idmovie.title matchesTitles:titles]*/ ) {
 					NSLog(@"[DM]       Skipping because of the runtime");
 					return;
 				}
 				
+				// don't duplicate entries, even if there are duplicate movies on disk
+				if (mMovieDb[[[_idmovie.title stringByAppendingString:@"--"] stringByAppendingString:_idmovie.year.stringValue]]) {
+					NSLog(@"[DM]       Skipping because this exact title/year is already in use");
+					return;
+				}
+				
 				idmovie = _idmovie;
+				*stop2 = TRUE;
 				
 				NSLog(@"[DM]       Matched!");
-				
-				if (idmovie)
-					*stop2 = TRUE;
 			}];
 			
 			if (idmovie)
@@ -1474,14 +1485,13 @@
 		mMovieDb[[dbkey stringByAppendingString:@"--height"  ]] = height.stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--bitrate" ]] = bitrate.stringValue;
 		mMovieDb[[dbkey stringByAppendingString:@"--mtime"   ]] = @(mtime.timeIntervalSinceReferenceDate).stringValue;
+		mMovieDb[[dbkey stringByAppendingString:@"--imdbid"  ]] = idmovie.imdbId;
+		mMovieDb[[dbkey stringByAppendingString:@"--rtid"    ]] = idmovie.rtId;
+		mMovieDb[[dbkey stringByAppendingString:@"--tmdbid"  ]] = idmovie.tmdbId;
 		
 		[languages enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
 			mMovieDb[[[dbkey stringByAppendingString:@"--language--"] stringByAppendingString:languageObj]] = @"";
 		}];
-		
-		if (idmovie.imdbId ) mMovieDb[[dbkey stringByAppendingString:@"--imdbid" ]] = idmovie.imdbId;
-		if (idmovie.rtId   ) mMovieDb[[dbkey stringByAppendingString:@"--rtid"   ]] = idmovie.rtId;
-		if (idmovie.tmdbId ) mMovieDb[[dbkey stringByAppendingString:@"--tmdbid" ]] = idmovie.tmdbId;
 		
 		NSString *imageId = mMovieDb[[dbkey stringByAppendingString:@"--poster"]];
 		NSURL *imageUrl = idmovie.imageUrl;
@@ -1490,7 +1500,7 @@
 		if (!imageId.length && imageUrl) {
 			NSLog(@"[DM]         Found image at %@", idmovie.imageUrl);
 			
-			imageUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.description]];
+//		imageUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:imageUrl.description]];
 			NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 			
 			NSLog(@"[DM]           Got %lu bytes", imageData.length);
@@ -1583,7 +1593,8 @@
 			if ((!imageId.length || !imageUrl.length) && nil != (value = idperson.imageUrl)) {
 				NSLog(@"[DM]         Found image at %@", value);
 				
-				NSURL *imageUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:((NSURL *)value).absoluteString]];
+//			NSURL *imageUrl = [NSURL URLWithString:[@"http://anonymouse.org/cgi-bin/anon-www.cgi/" stringByAppendingString:((NSURL *)value).absoluteString]];
+				NSURL *imageUrl = (NSURL *)value;
 				NSData *imageData = [NSData dataWithContentsOfURL:imageUrl];
 				
 				NSLog(@"[DM]           %@", imageUrl);

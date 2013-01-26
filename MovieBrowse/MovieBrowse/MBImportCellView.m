@@ -8,6 +8,8 @@
 
 #import "MBImportCellView.h"
 #import <MovieID/IDMovie.h>
+#import <MovieID/IDIMDbMovie.h>
+#import <MovieID/IDTmdbMovie.h>
 
 @interface MBImportCellView ()
 {
@@ -47,7 +49,14 @@
 		//
 		// title
 		//
-		[info appendString:mIdMovie.title];
+		{
+			if (!mIdMovie.title) {
+				NSLog(@"%s.. no title for movie!", __PRETTY_FUNCTION__);
+				return @"";
+			}
+			else
+				[info appendString:mIdMovie.title];
+		}
 		
 		//
 		// year
