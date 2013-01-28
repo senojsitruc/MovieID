@@ -53,6 +53,7 @@
 		F998F2C4162F8E40008AF52D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F998F2C3162F8E40008AF52D /* QuartzCore.framework */; };
 		F998F2CE162FBDD4008AF52D /* MBImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F2CD162FBDD3008AF52D /* MBImageCache.m */; };
 		F998F2D116305B2A008AF52D /* MBStuff.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F2D016305B28008AF52D /* MBStuff.m */; };
+		F9AD8AE816B6869700404B19 /* MovieBrowseConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9AD8AE716B6869700404B19 /* MovieBrowseConfig.plist */; };
 		F9B9028015F791320089BB17 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9027F15F791320089BB17 /* Cocoa.framework */; };
 		F9B9028A15F791320089BB17 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9B9028815F791320089BB17 /* InfoPlist.strings */; };
 		F9B9028C15F791320089BB17 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9028B15F791320089BB17 /* main.m */; };
@@ -66,6 +67,9 @@
 		F9B902AB15F79BF30089BB17 /* MBPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902AA15F79BF30089BB17 /* MBPerson.m */; };
 		F9B902BB15F7A8F10089BB17 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B715F7A8F10089BB17 /* NSString+Additions.m */; };
 		F9B902BC15F7A8F10089BB17 /* NSThread+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */; };
+		F9DA1F5116B47F480055DFF1 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
+		F9DA1F5216B47F7A0055DFF1 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
+		F9DA1F5416B4808E0055DFF1 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */; };
 		F9F30CF916306E25006C4F17 /* MBImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F30CF816306E25006C4F17 /* MBImageView.m */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +91,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				F98A50D2166BE76A00749333 /* MovieID.framework in Copy Frameworks */,
+				F9DA1F5216B47F7A0055DFF1 /* Sparkle.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,6 +176,7 @@
 		F998F2CD162FBDD3008AF52D /* MBImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImageCache.m; sourceTree = "<group>"; };
 		F998F2CF16305B27008AF52D /* MBStuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBStuff.h; sourceTree = "<group>"; };
 		F998F2D016305B28008AF52D /* MBStuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBStuff.m; sourceTree = "<group>"; };
+		F9AD8AE716B6869700404B19 /* MovieBrowseConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MovieBrowseConfig.plist; path = ../../../Support/MovieID/MovieBrowseConfig.plist; sourceTree = "<group>"; };
 		F9B9027B15F791320089BB17 /* MovieBrowse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieBrowse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9B9027F15F791320089BB17 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F9B9028215F791320089BB17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -197,6 +203,8 @@
 		F9B902B715F7A8F10089BB17 /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
 		F9B902B815F7A8F10089BB17 /* NSThread+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSThread+Additions.h"; sourceTree = "<group>"; };
 		F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSThread+Additions.m"; sourceTree = "<group>"; };
+		F9DA1F5016B47F480055DFF1 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../Support/Sparkle.framework; sourceTree = "<group>"; };
+		F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = ../../../Support/MovieID/dsa_pub.pem; sourceTree = "<group>"; };
 		F9F30CF716306E25006C4F17 /* MBImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBImageView.h; sourceTree = "<group>"; };
 		F9F30CF816306E25006C4F17 /* MBImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -211,6 +219,7 @@
 				F9B902A115F7915E0089BB17 /* libicucore.dylib in Frameworks */,
 				F9B9029F15F7914B0089BB17 /* QTKit.framework in Frameworks */,
 				F9B9028015F791320089BB17 /* Cocoa.framework in Frameworks */,
+				F9DA1F5116B47F480055DFF1 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +399,7 @@
 		F9B9027E15F791320089BB17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9DA1F5016B47F480055DFF1 /* Sparkle.framework */,
 				F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */,
 				F91FD3121653E85E0060E4FC /* MovieID.framework */,
 				F998F2C3162F8E40008AF52D /* QuartzCore.framework */,
@@ -429,6 +439,7 @@
 		F9B9028615F791320089BB17 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */,
 				F998F279162F6FEF008AF52D /* Images */,
 				F9B9029415F791320089BB17 /* MainMenu.xib */,
 				F9B9028715F791320089BB17 /* MovieBrowse-Info.plist */,
@@ -437,6 +448,7 @@
 				F9B9028D15F791320089BB17 /* MovieBrowse-Prefix.pch */,
 				F9B9028E15F791320089BB17 /* Credits.rtf */,
 				F9B902A215F792FE0089BB17 /* Abstract.txt */,
+				F9AD8AE716B6869700404B19 /* MovieBrowseConfig.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -499,6 +511,7 @@
 				F9B9027815F791320089BB17 /* Frameworks */,
 				F9B9027915F791320089BB17 /* Resources */,
 				F998F2D216306613008AF52D /* Copy Frameworks */,
+				F9DA1F5516B482170055DFF1 /* Sparkle */,
 			);
 			buildRules = (
 			);
@@ -572,10 +585,30 @@
 				F92A7ED1168635ED00F04EDF /* MBRenameWindowController.xib in Resources */,
 				F90E4634168DAA5E005DAF44 /* MBMovieEditWindowController.xib in Resources */,
 				F9133EF8168EE7CD0097A985 /* MBActorEditWindowController.xib in Resources */,
+				F9DA1F5416B4808E0055DFF1 /* dsa_pub.pem in Resources */,
+				F9AD8AE816B6869700404B19 /* MovieBrowseConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F9DA1F5516B482170055DFF1 /* Sparkle */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Sparkle;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "echo \"Configuration: $CONFIGURATION\"\n\nif [ $CONFIGURATION = \"Debug\" ]; then\n  echo \"This is not a release build. Skipping Sparkle stuff.\"\n  exit\nfi\n\nPLIST_FILE=\"\"\n\nif [ -f \"$INFOPLIST_FILE\" ]; then\n  PLIST_FILE=\"$INFOPLIST_FILE\"\nelse\n  if [ -f \"$SRCROOT/$INFOPLIST_FILE\" ]; then\n    PLIST_FILE=\"$SRCROOT/$INFOPLIST_FILE\"\n  else\n    exit 0\n  fi\nfi\n\n#DOMAIN=\"curtisjones.us\"\nDOMAIN=\"veriton.local:20080\"\n\n# get the bundle version from the plist\nVERSION=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" $PLIST_FILE)\n\n# file names and file paths\nZIP_NAME=\"MovieBrowse-$VERSION.zip\"\nZIP_PATH=\"$HOME/Desktop/$ZIP_NAME\"\nAPP_PATH=\"$CODESIGNING_FOLDER_PATH\"\n#XML_PATH=\"$HOME/Desktop/MovieBrowse-$VERSION.xml\"\nXML_PATH=\"$HOME/Desktop/sparkle.xml\"\n\n# release notes. read from version-number specific file in the project dir?\nif [ -f \"$PROJECT_DIR/Documentation/Release Notes/$VERSION.txt\" ]; then\n  DESCRIPTION=$(< \"$PROJECT_DIR/Documentation/Release Notes/$VERSION.txt\")\nelse\n  DESCRIPTION=\"No release notes available.\"\nfi\n\n# we need the fancy-formatted gmt date for the sparkle xml\nDATE=$(TZ=GMT date)\n\n# copy the database into the app resources directory\ncp -R \"/Users/cjones/Desktop/MovieBrowse-Actors.db\" \"$APP_PATH/Contents/Resources/\"\ncp -R \"/Users/cjones/Desktop/MovieBrowse-Movies.db\" \"$APP_PATH/Contents/Resources/\"\n\n# compress the .app; the resulting zip file will live in the same location\ncd \"$APP_PATH/..\"\n#rm -f \"$ZIP_PATH\"\n#zip -q -r \"$ZIP_PATH\" \"$FULL_PRODUCT_NAME\"\n\n#echo \"APP_PATH: $APP_PATH\"\n#echo \"FULL_PRODUCT_NAME: $FULL_PRODUCT_NAME\"\n\n# the size of the zip file\nFILESIZE=$(stat -f \"%z\" \"$ZIP_PATH\")\n\n# generate a signature for the zip file\n#DSA_SIG=$(/usr/bin/openssl dgst -sha1 -binary < \"$ZIP_PATH\" | /usr/bin/openssl dgst -dss1 -sign \"$HOME/Projects/Support/MovieID/dsa_priv.pem\" | /usr/bin/openssl enc -base64)\n\ncat > \"$XML_PATH\" <<EOF\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<rss version=\"2.0\" xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n  <channel>\n    <title>MovieBrowse Changelog</title>\n    <link>http://$DOMAIN/MovieBrowse/sparkle.xml</link>\n    <description>MovieBrowse Changelog</description>\n    <language>en</language>\n<item>\n  <title>Version $VERSION</title>\n  <description><![CDATA[$DESCRIPTION]]></description>\n  <!-- <sparkle:releaseNotesLink>http://$DOMAIN/MovieBrowse/notes/$VERSION.html</sparkle:releaseNotesLink> -->\n  <pubDate>$DATE +0000</pubDate>\n  <enclosure url=\"http://$DOMAIN/MovieBrowse/releases/$ZIP_NAME\"\n    sparkle:version=\"$VERSION\"\n    sparkle:dsaSignature=\"$DSA_SIG\"\n    length=\"$FILESIZE\"\n    type=\"application/octet-stream\" />\n</item>\n</channel>\n</rss>\nEOF\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F9B9027715F791320089BB17 /* Sources */ = {
@@ -708,18 +741,20 @@
 		F9B9029A15F791320089BB17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Curtis Jones";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../DasRamDisk/Xcode/MovieID-dejbaihqqhbdppeqozalpjlcemrs/Build/Products/Debug\"",
 					"\"/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../Support\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MovieBrowse/MovieBrowse-Prefix.pch";
 				INFOPLIST_FILE = "MovieBrowse/MovieBrowse-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "F586B5B6-DD3F-4F40-A81C-D429CDED0C19";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -727,18 +762,20 @@
 		F9B9029B15F791320089BB17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application: Curtis Jones";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../DasRamDisk/Xcode/MovieID-dejbaihqqhbdppeqozalpjlcemrs/Build/Products/Debug\"",
 					"\"/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../Support\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MovieBrowse/MovieBrowse-Prefix.pch";
 				INFOPLIST_FILE = "MovieBrowse/MovieBrowse-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "F586B5B6-DD3F-4F40-A81C-D429CDED0C19";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -42,6 +42,12 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSTextField *movieInfoTxt;
 
 /**
+ * Splash Screen
+ */
+@property (assign) IBOutlet NSWindow *splashWin;
+@property (assign) IBOutlet NSTextField *splashTxt;
+
+/**
  * Tables
  */
 @property (assign) IBOutlet NSTableView *actorTable;

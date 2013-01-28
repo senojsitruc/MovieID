@@ -50,14 +50,8 @@ static NSImage *gMissingImg;
 			NSString *imageId = mPerson.imageId;
 			CGFloat width = self.actorImg.frame.size.width;
 			CGFloat height = self.actorImg.frame.size.height;
-//		NSImage *image = nil;
 			
-			/*
-			if (!imageId.length)
-				image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
-			*/
-			
-			if (/* !image &&*/ !imageId.length) {
+			if (!imageId.length) {
 				NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:@"missing-actor" andHeight:height];
 				
 				if (!image) {
@@ -68,9 +62,7 @@ static NSImage *gMissingImg;
 				
 				self.actorImg.image = image;
 			}
-			
 			else {
-//		if (!image) {
 				self.actorImg.image = nil;
 				
 				[[MBDownloadQueue sharedInstance] dispatchBeg:^{
@@ -79,8 +71,14 @@ static NSImage *gMissingImg;
 					if (!_image)
 						return;
 					
-					_image.size = NSMakeSize((NSUInteger)(_image.size.width * (height / _image.size.height)), height);
-//				[[MBImageCache sharedInstance] cacheImage:_image withId:imageId andHeight:height];
+					CGSize imageSize = _image.size;
+					
+					if (INFINITY == imageSize.width || INFINITY == imageSize.height) {
+						NSLog(@"%s.. skipping person image name=%@, id=%@ because size = %@", __PRETTY_FUNCTION__, mPerson.name, mPerson.imageId, NSStringFromSize(imageSize));
+						return;
+					}
+					
+					_image.size = NSMakeSize((NSUInteger)(imageSize.width * (height / imageSize.height)), height);
 					
 					if (transId != mTransId)
 						return;
@@ -91,8 +89,6 @@ static NSImage *gMissingImg;
 					}];
 				}];
 			}
-//		else
-//			self.actorImg.image = image;
 		}
 	}
 	

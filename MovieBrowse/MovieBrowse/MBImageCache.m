@@ -68,8 +68,9 @@ static MBImageCache *gSharedInstance;
 - (void)clearAll
 {
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
-	NSString *actors = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Actors"];
-	NSString *movies = [[[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath] stringByAppendingPathComponent:@"Movies"];
+	NSString *baseDir = [[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByExpandingTildeInPath];
+	NSString *actors = [baseDir stringByAppendingPathComponent:@"Actors"];
+	NSString *movies = [baseDir stringByAppendingPathComponent:@"Movies"];
 	void (^deleteItems)(NSString*);
 	
 	deleteItems = ^ (NSString *baseDir) {
@@ -229,70 +230,56 @@ static MBImageCache *gSharedInstance;
 	localPath = [localPath stringByExpandingTildeInPath];
 	
 	// get the image from the local on-disk cache
-	{
-		/*
-		NSData *data = [NSData dataWithContentsOfFile:localPath];
-		
-		if (data)
-			image = [[NSImage alloc] initWithData:data];
-		*/
-		
-		image = [[NSImage alloc] initWithContentsOfFile:localPath];
-	}
+	image = [[NSImage alloc] initWithContentsOfFile:localPath];
 	
 	// look for the original-size image in the on-disk cache; if we find it, resize it and save the
 	// resized version back to the on-disk cache.
 	if (!image) {
 		NSString *_localPath = [[localPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:_imageId];
-//	NSData *data = [NSData dataWithContentsOfFile:_localPath];
 		
-//	if (data) {
-//		image = [[NSImage alloc] initWithData:data];
 		image = [[NSImage alloc] initWithContentsOfFile:_localPath];
+		
+		if (image) {
+			CGSize imageSize = image.size;
 			
-			if (image) {
-				CGSize imageSize = image.size;
+			if (imageSize.width != INFINITY && imageSize.width != NAN && imageSize.height != INFINITY && imageSize.height != NAN) {
+				if (!width)
+					width = imageSize.width * (height / imageSize.height);
+				else if (!height)
+					height = imageSize.height * (width / imageSize.width);
 				
-				if (imageSize.width != INFINITY && imageSize.width != NAN && imageSize.height != INFINITY && imageSize.height != NAN) {
-					if (!width)
-						width = imageSize.width * (height / imageSize.height);
-					else if (!height)
-						height = imageSize.height * (width / imageSize.width);
-					
-					if (imageSize.width > imageSize.height)
-						width = imageSize.width * (height / imageSize.height);
-					else if (imageSize.height > imageSize.width)
-						height = imageSize.height * (width / imageSize.width);
-				}
-				
-				CGImageRef originalImage = image.CGImage;
-				CGImageRef resizedImage = [[self class] resizeCGImage:originalImage width:width height:height];
-				NSData *imageData = [[self class] pngDataFromCGImage:resizedImage];
-				
-				CGImageRelease(originalImage);
-				CGImageRelease(resizedImage);
-				
-				if (imageData.length) {
-					NSFileManager *fileManager = [[NSFileManager alloc] init];
-					NSString *parentDir = [localPath stringByDeletingLastPathComponent];
-					NSError *nserror = nil;
-					
-					if (FALSE == [fileManager fileExistsAtPath:parentDir])
-						if (FALSE == [fileManager createDirectoryAtPath:parentDir withIntermediateDirectories:TRUE attributes:nil error:&nserror])
-							NSLog(@"%s.. failed to create directory because %@ [%@]", __PRETTY_FUNCTION__, nserror.localizedDescription, parentDir);
-					
-					[imageData writeToFile:localPath atomically:TRUE];
-				}
+				if (imageSize.width > imageSize.height)
+					width = imageSize.width * (height / imageSize.height);
+				else if (imageSize.height > imageSize.width)
+					height = imageSize.height * (width / imageSize.width);
 			}
-//	}
+			
+			CGImageRef originalImage = image.CGImage;
+			CGImageRef resizedImage = [[self class] resizeCGImage:originalImage width:width height:height];
+			NSData *imageData = [[self class] pngDataFromCGImage:resizedImage];
+			
+			CGImageRelease(originalImage);
+			CGImageRelease(resizedImage);
+			
+			if (imageData.length) {
+				NSFileManager *fileManager = [[NSFileManager alloc] init];
+				NSString *parentDir = [localPath stringByDeletingLastPathComponent];
+				NSError *nserror = nil;
+				
+				if (FALSE == [fileManager fileExistsAtPath:parentDir])
+					if (FALSE == [fileManager createDirectoryAtPath:parentDir withIntermediateDirectories:TRUE attributes:nil error:&nserror])
+						NSLog(@"%s.. failed to create directory because %@ [%@]", __PRETTY_FUNCTION__, nserror.localizedDescription, parentDir);
+				
+				[imageData writeToFile:localPath atomically:TRUE];
+			}
+		}
 	}
 	
 	// get the image from the remote server
 	if (!image && imageHost.length) {
 		NSData *data = [NSData dataWithContentsOfURL:remoteUrl];
-//	image = [[NSImage alloc] initWithContentsOfURL:remoteUrl];
 		
-		if ( /*image*/ data && nil != (image = [[NSImage alloc] initWithData:data])) {
+		if (data && nil != (image = [[NSImage alloc] initWithData:data])) {
 			NSFileManager *fileManager = [[NSFileManager alloc] init];
 			NSString *parentDir = [localPath stringByDeletingLastPathComponent];
 			NSError *nserror = nil;

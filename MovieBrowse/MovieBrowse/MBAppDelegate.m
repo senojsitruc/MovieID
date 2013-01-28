@@ -167,6 +167,9 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)awakeFromNib
 {
+	_splashTxt.stringValue = @"Loading...";
+	[_splashWin makeKeyAndOrderFront:nil];
+	
 	gAppDelegate = self;
 	mShowHiddenMovies = FALSE;
 	mIsDoneLoading = FALSE;
@@ -196,29 +199,35 @@ static MBAppDelegate *gAppDelegate;
 	
 	// user defaults
 	{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		NSData *settingsData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"MovieBrowseConfig" ofType:@"plist"]];
+		NSDictionary *settings = [NSPropertyListSerialization propertyListWithData:settingsData options:NSPropertyListImmutable format:nil error:nil];
+		NSMutableDictionary *defaults = [[NSMutableDictionary alloc] init];
 		
-		[defaults registerDefaults:@{
-								MBDefaultsKeyImageHost: @"",
-							 MBDefaultsKeyImageCache: @"~/Library/Application Support/MovieBrowse/Cache",
-									MBDefaultsKeySources: @[],
-									MBDefaultsKeyApiTmdb: @"",
-									MBDefaultsKeyApiImdb: @"2wex6aeu6a8q9e49k7sfvufd6rhh0n",
-										MBDefaultsKeyApiRt: @"",
-							 MBDefaultsKeyMoviesSort: @"Title",
-				 MBDefaultsKeyMoviesShowHidden: @(0),
-							 MBDefaultsKeyGenreMulti: @"Or",
-								MBDefaultsKeyActorShow: @"Popular",
-								MBDefaultsKeyActorSort: @"Name",
-					 MBDefaultsKeyActorSelection: @[],
-					 MBDefaultsKeyGenreSelection: @[],
-					 MBDefaultsKeyMovieSelection: @[],
-								MBDefaultsKeyFindQuery: @"",
-								 MBDefaultsKeyFindType: @"Movies",
-         MBDefaultsKeyFindTitleEnabled: @(TRUE),
-      MBDefaultsKeyFindFileNameEnabled: @(FALSE),
-   MBDefaultsKeyFindDescriptionEnabled: @(FALSE)
+		defaults[MBDefaultsKeyImageHost]              = @"";
+		defaults[MBDefaultsKeyImageCache]             = @"~/Library/Application Support/MovieBrowse/Cache";
+		defaults[MBDefaultsKeySources]                = @[];
+		defaults[MBDefaultsKeyApiTmdb]                = @"";
+		defaults[MBDefaultsKeyApiImdb]                = @"2wex6aeu6a8q9e49k7sfvufd6rhh0n";
+		defaults[MBDefaultsKeyApiRt]                  = @"";
+		defaults[MBDefaultsKeyMoviesSort]             = @"Title";
+		defaults[MBDefaultsKeyMoviesShowHidden]       = @(0);
+		defaults[MBDefaultsKeyGenreMulti]             = @"Or";
+		defaults[MBDefaultsKeyActorShow]              = @"Popular";
+		defaults[MBDefaultsKeyActorSort]              = @"Name";
+		defaults[MBDefaultsKeyActorSelection]         = @[];
+		defaults[MBDefaultsKeyGenreSelection]         = @[];
+		defaults[MBDefaultsKeyMovieSelection]         = @[];
+		defaults[MBDefaultsKeyFindQuery]              = @"";
+		defaults[MBDefaultsKeyFindType]               = @"Movies";
+		defaults[MBDefaultsKeyFindTitleEnabled]       = @(TRUE);
+		defaults[MBDefaultsKeyFindFileNameEnabled]    = @(FALSE);
+		defaults[MBDefaultsKeyFindDescriptionEnabled] = @(FALSE);
+		
+		[settings enumerateKeysAndObjectsUsingBlock:^ (id key, id obj, BOOL *stop) {
+			defaults[key] = obj;
 		}];
+		
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	}
 	
 	//
@@ -472,91 +481,120 @@ static MBAppDelegate *gAppDelegate;
 		}
 	}
 	
-	//
-	// load data
-	//
-	{
+	[NSThread performBlockInBackground:^{
 		NSMutableArray *actorsArray = [[NSMutableArray alloc] init];
 		NSMutableArray *genresArray = [[NSMutableArray alloc] init];
 		NSMutableArray *moviesArray = [[NSMutableArray alloc] init];
 		
-		[mDataManager enumerateGenres:^ (MBGenre *mbgenre, BOOL *stop) { [genresArray addObject:mbgenre]; }];
-		[mDataManager enumerateActors:^ (MBPerson *mbactor, NSUInteger count, BOOL *stop) { [actorsArray addObject:mbactor]; }];
-		[mDataManager enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) { [moviesArray addObject:mbmovie]; }];
+		void (^updateStatus) (NSString*) = ^ (NSString *status) {
+			[[NSThread mainThread] performBlock:^{
+				_splashTxt.stringValue = status;
+			} waitUntilDone:TRUE];
+		};
 		
-		[self.actorsArrayController addObjects:actorsArray];
-		[self.genresArrayController addObjects:genresArray];
-		[self.moviesArrayController addObjects:moviesArray];
-		
-		mIsDoneLoading = TRUE;
-		mLanguagesDirty = TRUE;
-		mRatingsDirty = TRUE;
-		
-		[self updateMovieFilter];
-		[self updateMovieFilter_actorCache];
-		[self updateActorFilter];
-		[self updateMovieFilter_genreCache];
-		[self updateWindowTitle];
-	}
-	
-	//
-	// reinstate actor selection
-	//
-	{
-		NSArray *selection = [[NSUserDefaults standardUserDefaults] arrayForKey:MBDefaultsKeyActorSelection];
-		
-		if (selection.count) {
-			MBPerson *mbperson = [mDataManager personWithKey:selection[0]];
-			
-			if (mbperson) {
-				[self.actorsArrayController setSelectedObjects:@[mbperson]];
-				[self doNotificationActorSelectionChanged:nil];
-				[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
-			}
-		}
-	}
-	
-	//
-	// reinstate genre selection
-	//
-	{
-		NSArray *selection = [[NSUserDefaults standardUserDefaults] arrayForKey:MBDefaultsKeyGenreSelection];
-		
-		if (selection.count) {
-			[selection enumerateObjectsUsingBlock:^ (id genreKey, NSUInteger genreNdx, BOOL *genreStop) {
-				MBGenre *mbgenre = [mDataManager genreWithKey:genreKey];
-				
-				if (mbgenre)
-					[mGenreSelections addObject:mbgenre];
+		//
+		// read data
+		//
+		{
+			[mDataManager loadActors:^ (NSUInteger count, NSString *name) {
+				updateStatus([NSString stringWithFormat:@"Reading actors... %lu (%@)", count, name]);
 			}];
 			
-			if (mGenreSelections.count == 1)
-				mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections[0]).name];
-			else
-				mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%lu selected)", mGenreSelections.count];
-			
-			[self.genresArrayController setSelectedObjects:mGenreSelections];
+			[mDataManager loadMovies:^ (NSUInteger count, NSString *name) {
+				updateStatus([NSString stringWithFormat:@"Reading movies... %lu (%@)", count, name]);
+			}];
 		}
-		else
-			mGenreHeaderCell.label = @"Genre";
-	}
-	
-	//
-	// reinstate movie selection
-	//
-	{
-		NSArray *selection = [[NSUserDefaults standardUserDefaults] arrayForKey:MBDefaultsKeyMovieSelection];
 		
-		if (selection.count) {
-			MBMovie *mbmovie = [mDataManager movieWithKey:selection[0]];
-			
-			if (mbmovie) {
-				[self.moviesArrayController setSelectedObjects:@[mbmovie]];
-				[self doNotificationMovieSelectionChanged:nil];
-				[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
-			}
+		//
+		// load data
+		//
+		{
+			updateStatus(@"Almost done...");
+			[mDataManager enumerateGenres:^ (MBGenre *mbgenre, BOOL *stop) { [genresArray addObject:mbgenre]; }];
+			[mDataManager enumerateActors:^ (MBPerson *mbactor, NSUInteger count, BOOL *stop) { [actorsArray addObject:mbactor]; }];
+			[mDataManager enumerateMovies:^ (MBMovie *mbmovie, NSUInteger count, BOOL *stop) { [moviesArray addObject:mbmovie]; }];
 		}
-	}
+		
+		[[NSThread mainThread] performBlock:^{
+			{
+				[self.actorsArrayController addObjects:actorsArray];
+				[self.genresArrayController addObjects:genresArray];
+				[self.moviesArrayController addObjects:moviesArray];
+				
+				mIsDoneLoading = TRUE;
+				mLanguagesDirty = TRUE;
+				mRatingsDirty = TRUE;
+				
+				[self updateMovieFilter];
+				[self updateMovieFilter_actorCache];
+				[self updateActorFilter];
+				[self updateMovieFilter_genreCache];
+				[self updateWindowTitle];
+			}
+			
+			//
+			// reinstate actor selection
+			//
+			{
+				NSArray *selection = [[NSUserDefaults standardUserDefaults] arrayForKey:MBDefaultsKeyActorSelection];
+				
+				if (selection.count) {
+					MBPerson *mbperson = [mDataManager personWithKey:selection[0]];
+					
+					if (mbperson) {
+						[self.actorsArrayController setSelectedObjects:@[mbperson]];
+						[self doNotificationActorSelectionChanged:nil];
+						[self.actorTable scrollRowToVisible:self.actorTable.selectedRow];
+					}
+				}
+			}
+			
+			//
+			// reinstate genre selection
+			//
+			{
+				NSArray *selection = [[NSUserDefaults standardUserDefaults] arrayForKey:MBDefaultsKeyGenreSelection];
+				
+				if (selection.count) {
+					[selection enumerateObjectsUsingBlock:^ (id genreKey, NSUInteger genreNdx, BOOL *genreStop) {
+						MBGenre *mbgenre = [mDataManager genreWithKey:genreKey];
+						
+						if (mbgenre)
+							[mGenreSelections addObject:mbgenre];
+					}];
+					
+					if (mGenreSelections.count == 1)
+						mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections[0]).name];
+					else
+						mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%lu selected)", mGenreSelections.count];
+					
+					[self.genresArrayController setSelectedObjects:mGenreSelections];
+				}
+				else
+					mGenreHeaderCell.label = @"Genre";
+			}
+			
+			//
+			// reinstate movie selection
+			//
+			{
+				NSArray *selection = [[NSUserDefaults standardUserDefaults] arrayForKey:MBDefaultsKeyMovieSelection];
+				
+				if (selection.count) {
+					MBMovie *mbmovie = [mDataManager movieWithKey:selection[0]];
+					
+					if (mbmovie) {
+						[self.moviesArrayController setSelectedObjects:@[mbmovie]];
+						[self doNotificationMovieSelectionChanged:nil];
+						[self.movieTable scrollRowToVisible:self.movieTable.selectedRow];
+					}
+				}
+			}
+			
+			[_splashWin orderOut:nil];
+			[_window makeKeyAndOrderFront:nil];
+		}];
+	}];
 	
 	[NSThread performBlockInBackground:^{
 		

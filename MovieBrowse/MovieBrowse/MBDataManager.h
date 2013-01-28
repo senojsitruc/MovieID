@@ -29,10 +29,10 @@
 - (void)upgradeTmdbToImdb;
 - (void)getMissingImages;
 
-- (void)enumerateMovies:(void (^)(MBMovie*, BOOL*))handler;
-- (void)enumerateMoviesForPerson:(MBPerson *)mbperson handler:(void (^)(MBMovie*, BOOL*))handler;
+- (void)enumerateMovies:(void (^)(MBMovie*, NSUInteger, BOOL*))handler;
 - (void)enumerateGenres:(void (^)(MBGenre*, BOOL*))handler;
 - (void)enumerateActors:(void (^)(MBPerson*, NSUInteger, BOOL*))handler;
+- (void)enumerateMoviesForPerson:(MBPerson *)mbperson handler:(void (^)(MBMovie*, BOOL*))handler;
 - (void)enumerateActorsForMovie:(MBMovie *)mbmovie handler:(void (^)(MBPerson*, BOOL*))handler;
 
 - (void)deleteMovie:(MBMovie *)movie;
@@ -54,5 +54,7 @@
 - (void)addMovie:(IDMovie *)idmovie withDirPath:(NSString *)dirPath duration:(NSNumber *)duration filesize:(NSNumber *)filesize width:(NSNumber *)width height:(NSNumber *)height bitrate:(NSNumber *)bitrate mtime:(NSDate *)mtime languages:(NSArray *)languages;
 
 - (void)closeDb;
+- (void)loadActors:(void (^)(NSUInteger, NSString*))handler;
+- (void)loadMovies:(void (^)(NSUInteger, NSString*))handler;
 
 @end

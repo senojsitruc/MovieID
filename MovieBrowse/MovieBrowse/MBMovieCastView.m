@@ -17,8 +17,6 @@
 #import "MBDownloadQueue.h"
 #import <objc/runtime.h>
 
-static NSMutableDictionary *gActorViews;
-
 @interface MBMovieCastView ()
 {
 	MBMovie *mMovie;
@@ -27,11 +25,6 @@ static NSMutableDictionary *gActorViews;
 @end
 
 @implementation MBMovieCastView
-
-+ (void)load
-{
-	gActorViews = [[NSMutableDictionary alloc] init];
-}
 
 - (void)setMovie:(MBMovie *)mbmovie
 {
@@ -49,17 +42,6 @@ static NSMutableDictionary *gActorViews;
 	}];
 	
 	CGRect myFrame = self.frame;
-	
-	/*
-	NSView *actorsView = gActorViews[mbmovie.dbkey];
-	
-	if (actorsView) {
-		[self addSubview:actorsView];
-		return;
-	}
-	else
-		gActorViews[mbmovie.dbkey] = (actorsView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)]);
-	*/
 	
 	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
 		__block CGFloat hoffset = 0;
@@ -91,7 +73,20 @@ static NSMutableDictionary *gActorViews;
 			if (!image)
 				return;
 			
-			CGFloat width = (NSUInteger)(image.size.width * (myFrame.size.height / image.size.height));
+			CGSize imageSize = image.size;
+			
+			if (INFINITY == imageSize.width || INFINITY == imageSize.height) {
+				NSLog(@"%s.. skipping person image name=%@, id=%@ because size = %@", __PRETTY_FUNCTION__, mbperson.name, mbperson.imageId, NSStringFromSize(imageSize));
+				return;
+			}
+			
+			CGFloat width = (NSUInteger)(imageSize.width * (myFrame.size.height / imageSize.height));
+			
+			if (width > 2000.) {
+				NSLog(@"%s.. skipping because width = %f", __PRETTY_FUNCTION__, width);
+				return;
+			}
+			
 			image.size = NSMakeSize(width, myFrame.size.height);
 			
 			NSButton *imageBtn = [[NSButton alloc] initWithFrame:NSMakeRect(hoffset, 0, image.size.width, image.size.height)];

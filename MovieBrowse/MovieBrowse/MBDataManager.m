@@ -61,6 +61,7 @@
 		
 		[self openDb];
 		
+		/*
 		__block NSUInteger count = 0;
 		
 		[NSThread performBlockInBackground:^{
@@ -78,6 +79,8 @@
 		
 		NSLog(@"movies.count = %lu", mMovies.count);
 		NSLog(@"actors.count = %lu", mActors.count);
+		*/
+		
 	}
 	
 	return self;
@@ -125,10 +128,11 @@
  *
  *
  */
-- (void)loadActors
+- (void)loadActors:(void (^)(NSUInteger, NSString*))handler
 {
 	__block MBPerson *mbperson = nil;
 	__block NSMutableDictionary *movies = nil;
+	__block NSUInteger actorCount = 0;
 	
 	[mActorDb enumerateKeys:^ (NSString *key, BOOL *stop) {
 		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
@@ -142,6 +146,9 @@
 		
 		if (mbperson && ![actor isEqualToString:mbperson.name]) {
 			mActors[mbperson.name] = mbperson;
+			actorCount += 1;
+			if (handler && !(actorCount % 1000))
+				handler(actorCount, mbperson.name);
 			mbperson = nil;
 			movies = nil;
 		}
@@ -184,13 +191,14 @@
  *
  *
  */
-- (void)loadMovies
+- (void)loadMovies:(void (^)(NSUInteger, NSString*))handler
 {
 	__block MBMovie *mbmovie = nil;
 	__block NSString *curTitle = nil;
 	__block NSMutableDictionary *actors = nil;
 	__block NSMutableDictionary *genres = nil;
 	__block NSMutableArray *languages = nil;
+	__block NSUInteger movieCount = 0;
 	
 	[mMovieDb enumerateKeysAndValuesAsStrings:^ (NSString *key, NSString *value, BOOL *stop) {
 		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
@@ -214,6 +222,9 @@
 			*/
 			
 			mMovies[mbmovie.dbkey] = mbmovie;
+			movieCount += 1;
+			if (handler && !(movieCount % 100))
+				handler(movieCount, mbmovie.title);
 			mbmovie = nil;
 			actors = nil;
 			genres = nil;
@@ -574,6 +585,16 @@
 		mMovieDb[[dbkey stringByAppendingString:@"--poster"]] = imageId;
 		
 		[(NSData *)value writeToFile:dataPath atomically:FALSE];
+		
+		// purge any cached resized versions of the image
+		{
+			NSString *prefix = [imageId stringByAppendingString:@"--"];
+			
+			[[fileManager contentsOfDirectoryAtPath:dataDir error:nil] enumerateObjectsUsingBlock:^ (id fileObj, NSUInteger fileNdx, BOOL *fileStop) {
+				if ([fileObj hasPrefix:prefix])
+					[fileManager removeItemAtPath:[dataDir stringByAppendingPathComponent:fileObj] error:nil];
+			}];
+		}
 	}
 }
 
@@ -743,10 +764,10 @@
  *
  *
  */
-- (void)enumerateMovies:(void (^)(MBMovie*, BOOL*))handler
+- (void)enumerateMovies:(void (^)(MBMovie*, NSUInteger, BOOL*))handler
 {
 	[[mMovies allValues] enumerateObjectsUsingBlock:^ (id obj, NSUInteger ndx, BOOL *stop) {
-		handler((MBMovie *)obj, stop);
+		handler((MBMovie *)obj, ndx, stop);
 	}];
 }
 
@@ -779,7 +800,7 @@
 - (void)enumerateActors:(void (^)(MBPerson*, NSUInteger, BOOL*))handler
 {
 	[[mActors allValues] enumerateObjectsUsingBlock:^ (id obj, NSUInteger ndx, BOOL *stop) {
-		handler((MBPerson *)obj, ((MBPerson *)obj).movies.count, stop);
+		handler((MBPerson *)obj, ndx, stop);
 	}];
 }
 
@@ -899,7 +920,7 @@
 	NSString *actorsDir = [[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageCache] stringByAppendingPathComponent:@"Actors"];
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
 	
-	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+	[self enumerateMovies:^ (MBMovie *mbmovie, NSUInteger count, BOOL *stop) {
 		NSString *imdbId = mbmovie.imdbId;
 		NSString *imageId = mbmovie.posterId;
 		
@@ -980,7 +1001,7 @@
 	__block BOOL _stop = FALSE;
 	__block NSUInteger current=0, total=0;
 	
-	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+	[self enumerateMovies:^ (MBMovie *mbmovie, NSUInteger count, BOOL *stop) {
 		NSString *tmdbId = mbmovie.tmdbId;
 		NSString *imdbId = mbmovie.imdbId;
 		
@@ -991,7 +1012,7 @@
 			total += 1;
 	}];
 	
-	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+	[self enumerateMovies:^ (MBMovie *mbmovie, NSUInteger count, BOOL *stop) {
 		if (_stop) {
 			*stop = TRUE;
 			return;
@@ -1040,7 +1061,7 @@
 {
 	NSMutableDictionary *ratings = [[NSMutableDictionary alloc] init];
 	
-	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+	[self enumerateMovies:^ (MBMovie *mbmovie, NSUInteger count, BOOL *stop) {
 		NSString *rating = mbmovie.rating;
 		
 		if (rating.length)
@@ -1049,7 +1070,7 @@
 	
 	NSLog(@"%@", ratings);
 	
-	[self enumerateMovies:^ (MBMovie *mbmovie, BOOL *stop) {
+	[self enumerateMovies:^ (MBMovie *mbmovie, NSUInteger count, BOOL *stop) {
 		NSString *rating = [IDRating normalizedRating:mbmovie.rating];
 		
 		if (rating.length && ![mbmovie.rating isEqualToString:rating]) {
