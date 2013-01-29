@@ -26,13 +26,15 @@ static NSImage *gMissingImg;
 
 + (void)load
 {
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"MissingMovie" ofType:@"png"];
-	
-	if (path) {
-		NSData *data = [NSData dataWithContentsOfFile:path];
+	@autoreleasepool {
+		NSString *path = [[NSBundle mainBundle] pathForResource:@"MissingMovie" ofType:@"png"];
 		
-		if (data)
-			gMissingImg = [[NSImage alloc] initWithData:data];
+		if (path) {
+			NSData *data = [NSData dataWithContentsOfFile:path];
+			
+			if (data)
+				gMissingImg = [[NSImage alloc] initWithData:data];
+		}
 	}
 }
 

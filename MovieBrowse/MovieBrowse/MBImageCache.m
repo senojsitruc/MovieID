@@ -27,7 +27,9 @@ static MBImageCache *gSharedInstance;
  */
 + (void)load
 {
-	gSharedInstance = [[MBImageCache alloc] init];
+	@autoreleasepool {
+		gSharedInstance = [[MBImageCache alloc] init];
+	}
 }
 
 /**

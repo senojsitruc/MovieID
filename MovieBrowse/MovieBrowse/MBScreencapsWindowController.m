@@ -224,7 +224,17 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		
 		NSURL *url = [NSURL URLWithString:urlString];
 		NSData *data = [NSData dataWithContentsOfURL:url];
-		NSDictionary *info = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+		NSDictionary *info = nil;
+		
+		@try {
+			info = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+		}
+		@catch (NSException *e) {
+			NSLog(@"%s.. failed to JSONObjectWithData(), %@", __PRETTY_FUNCTION__, e.reason);
+			NSLog(@"%@", e.callStackSymbols);
+			NSLog(@"%@", url);
+			return;
+		}
 		
 		mInfoDuration = ((NSNumber *)info[MBScreencapsKeyDuration]).integerValue;
 		mInfoWidth = ((NSNumber *)info[MBScreencapsKeyWidth]).integerValue;

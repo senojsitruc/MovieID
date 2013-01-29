@@ -27,7 +27,9 @@ static MBDownloadQueue *gQueue;
  */
 + (void)load
 {
-	gQueue = [[MBDownloadQueue alloc] init];
+	@autoreleasepool {
+		gQueue = [[MBDownloadQueue alloc] init];
+	}
 }
 
 /**

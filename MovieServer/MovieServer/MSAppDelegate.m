@@ -19,7 +19,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <QTKit/QTKit.h>
 
-NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
+//NSString * const gBaseDir = @"/Volumes/bigger/Media/Movies";
+NSString * const gBaseDir = @"/Users/Shared/Bigger/Media/Movies";
 
 @interface MSAppDelegate ()
 {
