@@ -202,7 +202,11 @@ static MBAppDelegate *gAppDelegate;
 	// user defaults
 	{
 		NSData *settingsData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"MovieBrowseConfig" ofType:@"plist"]];
-		NSDictionary *settings = [NSPropertyListSerialization propertyListWithData:settingsData options:NSPropertyListImmutable format:nil error:nil];
+		NSDictionary *settings = nil;
+		
+		if (settingsData)
+			settings = [NSPropertyListSerialization propertyListWithData:settingsData options:NSPropertyListImmutable format:nil error:nil];
+		
 		NSMutableDictionary *defaults = [[NSMutableDictionary alloc] init];
 		
 		defaults[MBDefaultsKeyImageHost]              = @"";
@@ -1835,7 +1839,7 @@ static MBAppDelegate *gAppDelegate;
 	}
 	else {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id personObj, NSDictionary *bindings) {
-			return nil != mActorsByName[((MBPerson *)personObj).name] && (showAll || 5 <= ((MBPerson *)personObj).movies.count);
+			return nil != mActorsByName[((MBPerson *)personObj).name] && (showAll || (5 <= ((MBPerson *)personObj).movies.count && ((MBPerson *)personObj).imageId));
 		}];
 	}
 	
