@@ -1670,42 +1670,42 @@ static MBAppDelegate *gAppDelegate;
 		
 		if (findTitle && findDesc && findName) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location ||
-							 NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location ||
-							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+				return (_mbmovie.title && NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location) ||
+							 (_mbmovie.description && NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location) ||
+							 (_mbmovie.dirpath && NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location);
 			};
 		}
 		else if (findTitle && findDesc) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location ||
-							 NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location;
+				return (_mbmovie.title && NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location) ||
+							 (_mbmovie.description && NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location);
 			};
 		}
 		else if (findTitle && findName) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location ||
-							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+				return (_mbmovie.title && NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location) ||
+							 (_mbmovie.dirpath && NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location);
 			};
 		}
 		else if (findDesc && findName) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location ||
-							 NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+				return (_mbmovie.description && NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location) ||
+							 (_mbmovie.dirpath && NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location);
 			};
 		}
 		else if (findTitle) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location;
+				return _mbmovie.title && NSNotFound != [_mbmovie.title.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else if (findDesc) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location;
+				return _mbmovie.description && NSNotFound != [_mbmovie.description.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else if (findName) {
 			compare = ^ BOOL (MBMovie *_mbmovie) {
-				return NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
+				return _mbmovie.dirpath && NSNotFound != [_mbmovie.dirpath.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else {
