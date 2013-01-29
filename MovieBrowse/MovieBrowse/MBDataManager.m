@@ -113,6 +113,7 @@
 - (void)closeDb
 {
 #ifdef DEBUG
+	NSLog(@"%s", __PRETTY_FUNCTION__);
 	[mMovieDb compact];
 	[mActorDb compact];
 #endif

@@ -260,8 +260,8 @@ static MBImageCache *gSharedInstance;
 			CGImageRef resizedImage = [[self class] resizeCGImage:originalImage width:width height:height];
 			NSData *imageData = [[self class] pngDataFromCGImage:resizedImage];
 			
-			CGImageRelease(originalImage);
-			CGImageRelease(resizedImage);
+			if (originalImage) CGImageRelease(originalImage);
+			if (resizedImage) CGImageRelease(resizedImage);
 			
 			if (imageData.length) {
 				NSFileManager *fileManager = [[NSFileManager alloc] init];

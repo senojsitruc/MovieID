@@ -13,9 +13,20 @@
 - (CGImageRef)CGImage
 {
 	NSData *data = self.TIFFRepresentation;
-	CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
-	CGImageRef maskRef = CGImageSourceCreateImageAtIndex(source, 0, NULL);
 	
+	if (!data) {
+		NSLog(@"%s.. failed to TIFFRepresentation()", __PRETTY_FUNCTION__);
+		return nil;
+	}
+	
+	CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+	
+	if (!source) {
+		NSLog(@"%s.. failed to CGImageSourceCreateWithData()", __PRETTY_FUNCTION__);
+		return nil;
+	}
+	
+	CGImageRef maskRef = CGImageSourceCreateImageAtIndex(source, 0, NULL);
 	CFRelease(source);
 	
 	return maskRef;

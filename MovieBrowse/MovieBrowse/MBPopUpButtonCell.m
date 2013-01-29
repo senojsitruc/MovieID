@@ -11,8 +11,8 @@
 @implementation MBPopUpButtonCell
 
 /**
- *
- *
+ * The controlView should be an MBTableHeaderView. It's superview is an NSClipView and its superview
+ * is the NSScrollView.
  */
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {

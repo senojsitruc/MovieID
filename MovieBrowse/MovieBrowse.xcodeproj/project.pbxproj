@@ -70,6 +70,11 @@
 		F9DA1F5116B47F480055DFF1 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
 		F9DA1F5216B47F7A0055DFF1 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
 		F9DA1F5416B4808E0055DFF1 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */; };
+		F9EA0CF516B75E960037875F /* MMDrawingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF016B75E960037875F /* MMDrawingUtils.m */; };
+		F9EA0CF616B75E960037875F /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF216B75E960037875F /* MMScroller.m */; };
+		F9EA0CF716B75E960037875F /* MMScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF416B75E960037875F /* MMScrollView.m */; };
+		F9EA0CFA16B769130037875F /* MBScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF916B769130037875F /* MBScroller.m */; };
+		F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CFC16B769F50037875F /* MBScrollView.m */; };
 		F9F30CF916306E25006C4F17 /* MBImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F30CF816306E25006C4F17 /* MBImageView.m */; };
 /* End PBXBuildFile section */
 
@@ -205,6 +210,16 @@
 		F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSThread+Additions.m"; sourceTree = "<group>"; };
 		F9DA1F5016B47F480055DFF1 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../Support/Sparkle.framework; sourceTree = "<group>"; };
 		F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = ../../../Support/MovieID/dsa_pub.pem; sourceTree = "<group>"; };
+		F9EA0CEF16B75E960037875F /* MMDrawingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawingUtils.h; sourceTree = "<group>"; };
+		F9EA0CF016B75E960037875F /* MMDrawingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawingUtils.m; sourceTree = "<group>"; };
+		F9EA0CF116B75E960037875F /* MMScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScroller.h; sourceTree = "<group>"; };
+		F9EA0CF216B75E960037875F /* MMScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScroller.m; sourceTree = "<group>"; };
+		F9EA0CF316B75E960037875F /* MMScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScrollView.h; sourceTree = "<group>"; };
+		F9EA0CF416B75E960037875F /* MMScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScrollView.m; sourceTree = "<group>"; };
+		F9EA0CF816B769130037875F /* MBScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScroller.h; sourceTree = "<group>"; };
+		F9EA0CF916B769130037875F /* MBScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScroller.m; sourceTree = "<group>"; };
+		F9EA0CFB16B769F50037875F /* MBScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScrollView.h; sourceTree = "<group>"; };
+		F9EA0CFC16B769F50037875F /* MBScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScrollView.m; sourceTree = "<group>"; };
 		F9F30CF716306E25006C4F17 /* MBImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBImageView.h; sourceTree = "<group>"; };
 		F9F30CF816306E25006C4F17 /* MBImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -429,6 +444,7 @@
 				F90E4635168E2B4F005DAF44 /* MBGoogleImageSearch.h */,
 				F90E4636168E2B50005DAF44 /* MBGoogleImageSearch.m */,
 				F9B902B315F7A8C60089BB17 /* Categories */,
+				F9EA0CEC16B75E890037875F /* Extern */,
 				F9B902AF15F7A7E80089BB17 /* Model */,
 				F97BF37415F91F8200444926 /* Interface */,
 				F9B9028615F791320089BB17 /* Supporting Files */,
@@ -483,6 +499,28 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		F9EA0CEC16B75E890037875F /* Extern */ = {
+			isa = PBXGroup;
+			children = (
+				F9EA0CEE16B75E960037875F /* MMScroller */,
+			);
+			name = Extern;
+			sourceTree = "<group>";
+		};
+		F9EA0CEE16B75E960037875F /* MMScroller */ = {
+			isa = PBXGroup;
+			children = (
+				F9EA0CEF16B75E960037875F /* MMDrawingUtils.h */,
+				F9EA0CF016B75E960037875F /* MMDrawingUtils.m */,
+				F9EA0CF116B75E960037875F /* MMScroller.h */,
+				F9EA0CF216B75E960037875F /* MMScroller.m */,
+				F9EA0CF316B75E960037875F /* MMScrollView.h */,
+				F9EA0CF416B75E960037875F /* MMScrollView.m */,
+			);
+			name = MMScroller;
+			path = Extern/MMScroller;
+			sourceTree = "<group>";
+		};
 		F9F30CF516306E11006C4F17 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +534,10 @@
 				F932121F1635DE090093E619 /* MBTableHeaderCell.m */,
 				F93212141635A2B30093E619 /* MBTableHeaderView.h */,
 				F93212151635A2B30093E619 /* MBTableHeaderView.m */,
+				F9EA0CF816B769130037875F /* MBScroller.h */,
+				F9EA0CF916B769130037875F /* MBScroller.m */,
+				F9EA0CFB16B769F50037875F /* MBScrollView.h */,
+				F9EA0CFC16B769F50037875F /* MBScrollView.m */,
 			);
 			name = Miscellaneous;
 			sourceTree = "<group>";
@@ -654,6 +696,11 @@
 				F922D192168E47560018B5D1 /* NSImage+Additions.m in Sources */,
 				F9133EF7168EE7CD0097A985 /* MBActorEditWindowController.m in Sources */,
 				F9133EFB168EFB770097A985 /* NSPopUpButton+Additions.m in Sources */,
+				F9EA0CF516B75E960037875F /* MMDrawingUtils.m in Sources */,
+				F9EA0CF616B75E960037875F /* MMScroller.m in Sources */,
+				F9EA0CF716B75E960037875F /* MMScrollView.m in Sources */,
+				F9EA0CFA16B769130037875F /* MBScroller.m in Sources */,
+				F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

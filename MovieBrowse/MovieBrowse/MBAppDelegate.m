@@ -26,6 +26,7 @@
 #import "MBPreferencesWindowController.h"
 #import "MBRenameWindowController.h"
 #import "MBScreencapsWindowController.h"
+#import "MMScroller.h"
 #import "NSArray+Additions.h"
 #import "NSString+Additions.h"
 #import "NSThread+Additions.h"
@@ -231,11 +232,26 @@ static MBAppDelegate *gAppDelegate;
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	}
 	
+	/*
 	{
 		_actorTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
 		_genreTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
 		_movieTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
 	}
+	*/
+	
+	/*
+	{
+		CGRect frame = _actorTableScrollView.verticalScroller.frame;
+		frame.origin.y += 20;
+		frame.size.height -= 10;
+		_actorTableScrollView.verticalScroller.frame = frame;
+//	[_actorTableScrollView.verticalScroller setHidden:TRUE];
+		NSLog(@"scroller = %@", NSStringFromRect(_actorTableScrollView.verticalScroller.frame));
+		NSLog(@"%@", _actorTableScrollView.verticalScroller);
+		NSLog(@"%@", _actorTableScrollView.verticalScroller.superview);
+	}
+	*/
 	
 	//
 	// movie table customizations
@@ -291,6 +307,8 @@ static MBAppDelegate *gAppDelegate;
 		mMovieHeaderMenuRatingSeparatorItem = [NSMenuItem separatorItem];
 		mMovieHeaderMenuRatingHeadingItem = [[NSMenuItem alloc] initWithTitle:@"Ratings" action:nil keyEquivalent:@""];
 		mMovieHeaderMenuRatingItems = [[NSMutableArray alloc] init];
+		
+		((MMScroller *)_movieTableScrollView.verticalScroller).drawsRightRule = FALSE;
 	}
 	
 	//
@@ -328,6 +346,8 @@ static MBAppDelegate *gAppDelegate;
 		mGenreHeaderMenuMultiAndItem = multiAnd;
 		mGenreHeaderMenuMultiNotOrItem = multiNotOr;
 		mGenreHeaderMenuMultiNotAndItem = multiNotAnd;
+		
+		((MMScroller *)_genreTableScrollView.verticalScroller).drawsRightRule = TRUE;
 	}
 	
 	//
@@ -373,6 +393,8 @@ static MBAppDelegate *gAppDelegate;
 		mActorHeaderMenuSortByName = sortByName;
 		mActorHeaderMenuSortByAge = sortByAge;
 		mActorHeaderMenuSortByMovies = sortByMovies;
+		
+		((MMScroller *)_actorTableScrollView.verticalScroller).drawsRightRule = TRUE;
 	}
 }
 
