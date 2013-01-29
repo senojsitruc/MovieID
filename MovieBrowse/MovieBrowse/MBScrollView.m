@@ -43,9 +43,20 @@
 			}];
 			
 			if (someView) {
-				[someView removeAllSubviews];
-				[someView addSubview:headerView];
-				someView.frame = headerView.bounds;
+				__block NSTableHeaderView *oldHeaderView = nil;
+				
+				[someView.subviews enumerateObjectsUsingBlock:^ (id _view, NSUInteger ndx, BOOL *stop) {
+					if ([_view isKindOfClass:NSTableHeaderView.class] && _view != headerView) {
+						oldHeaderView = _view;
+						*stop = TRUE;
+					}
+				}];
+				
+				if (oldHeaderView) {
+					[oldHeaderView removeFromSuperview];
+					[someView addSubview:headerView];
+					someView.frame = headerView.bounds;
+				}
 			}
 		}
 		

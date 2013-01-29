@@ -68,6 +68,12 @@
 		F9B902BB15F7A8F10089BB17 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B715F7A8F10089BB17 /* NSString+Additions.m */; };
 		F9B902BC15F7A8F10089BB17 /* NSThread+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */; };
 		F9D90D4416B830110063C0F6 /* NSView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4316B830110063C0F6 /* NSView+Additions.m */; };
+		F9D90D4816B8734D0063C0F6 /* MBTableRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4716B8734D0063C0F6 /* MBTableRowView.m */; };
+		F9D90D4B16B875900063C0F6 /* MBMovieRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4A16B875900063C0F6 /* MBMovieRowView.m */; };
+		F9D90D4E16B87F660063C0F6 /* MBMovieTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4D16B87F660063C0F6 /* MBMovieTableView.m */; };
+		F9D90D5116B888260063C0F6 /* MBGenreTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D5016B888260063C0F6 /* MBGenreTableView.m */; };
+		F9D90D5416B889080063C0F6 /* MBGenreRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D5316B889080063C0F6 /* MBGenreRowView.m */; };
+		F9D90D5716B8953C0063C0F6 /* MBActorRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D5616B8953C0063C0F6 /* MBActorRowView.m */; };
 		F9DA1F5116B47F480055DFF1 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
 		F9DA1F5216B47F7A0055DFF1 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
 		F9DA1F5416B4808E0055DFF1 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */; };
@@ -211,6 +217,18 @@
 		F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSThread+Additions.m"; sourceTree = "<group>"; };
 		F9D90D4216B830110063C0F6 /* NSView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Additions.h"; sourceTree = "<group>"; };
 		F9D90D4316B830110063C0F6 /* NSView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Additions.m"; sourceTree = "<group>"; };
+		F9D90D4616B8734D0063C0F6 /* MBTableRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBTableRowView.h; sourceTree = "<group>"; };
+		F9D90D4716B8734D0063C0F6 /* MBTableRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBTableRowView.m; sourceTree = "<group>"; };
+		F9D90D4916B875900063C0F6 /* MBMovieRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieRowView.h; sourceTree = "<group>"; };
+		F9D90D4A16B875900063C0F6 /* MBMovieRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieRowView.m; sourceTree = "<group>"; };
+		F9D90D4C16B87F660063C0F6 /* MBMovieTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieTableView.h; sourceTree = "<group>"; };
+		F9D90D4D16B87F660063C0F6 /* MBMovieTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieTableView.m; sourceTree = "<group>"; };
+		F9D90D4F16B888260063C0F6 /* MBGenreTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreTableView.h; sourceTree = "<group>"; };
+		F9D90D5016B888260063C0F6 /* MBGenreTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreTableView.m; sourceTree = "<group>"; };
+		F9D90D5216B889080063C0F6 /* MBGenreRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreRowView.h; sourceTree = "<group>"; };
+		F9D90D5316B889080063C0F6 /* MBGenreRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreRowView.m; sourceTree = "<group>"; };
+		F9D90D5516B8953C0063C0F6 /* MBActorRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorRowView.h; sourceTree = "<group>"; };
+		F9D90D5616B8953C0063C0F6 /* MBActorRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorRowView.m; sourceTree = "<group>"; };
 		F9DA1F5016B47F480055DFF1 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../Support/Sparkle.framework; sourceTree = "<group>"; };
 		F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = ../../../Support/MovieID/dsa_pub.pem; sourceTree = "<group>"; };
 		F9EA0CEF16B75E960037875F /* MMDrawingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawingUtils.h; sourceTree = "<group>"; };
@@ -273,6 +291,10 @@
 				F998F27D162F7335008AF52D /* MBMovieCastView.m */,
 				F998F2C0162F85EF008AF52D /* MBMovieCellView.h */,
 				F998F2C1162F85EF008AF52D /* MBMovieCellView.m */,
+				F9D90D4916B875900063C0F6 /* MBMovieRowView.h */,
+				F9D90D4A16B875900063C0F6 /* MBMovieRowView.m */,
+				F9D90D4C16B87F660063C0F6 /* MBMovieTableView.h */,
+				F9D90D4D16B87F660063C0F6 /* MBMovieTableView.m */,
 			);
 			name = Movie;
 			sourceTree = "<group>";
@@ -362,6 +384,8 @@
 				F93211FA163310AB0093E619 /* MBActorCellView.m */,
 				F93212211635E2440093E619 /* MBActorImageView.h */,
 				F93212221635E2440093E619 /* MBActorImageView.m */,
+				F9D90D5516B8953C0063C0F6 /* MBActorRowView.h */,
+				F9D90D5616B8953C0063C0F6 /* MBActorRowView.m */,
 			);
 			name = Actor;
 			sourceTree = "<group>";
@@ -373,6 +397,10 @@
 				F9232069167D147400D14519 /* MBGenreCellView.m */,
 				F923206B167D155E00D14519 /* MBGenreBadgeView.h */,
 				F923206C167D155E00D14519 /* MBGenreBadgeView.m */,
+				F9D90D4F16B888260063C0F6 /* MBGenreTableView.h */,
+				F9D90D5016B888260063C0F6 /* MBGenreTableView.m */,
+				F9D90D5216B889080063C0F6 /* MBGenreRowView.h */,
+				F9D90D5316B889080063C0F6 /* MBGenreRowView.m */,
 			);
 			name = Genre;
 			sourceTree = "<group>";
@@ -543,6 +571,8 @@
 				F9EA0CF916B769130037875F /* MBScroller.m */,
 				F9EA0CFB16B769F50037875F /* MBScrollView.h */,
 				F9EA0CFC16B769F50037875F /* MBScrollView.m */,
+				F9D90D4616B8734D0063C0F6 /* MBTableRowView.h */,
+				F9D90D4716B8734D0063C0F6 /* MBTableRowView.m */,
 			);
 			name = Miscellaneous;
 			sourceTree = "<group>";
@@ -707,6 +737,12 @@
 				F9EA0CFA16B769130037875F /* MBScroller.m in Sources */,
 				F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */,
 				F9D90D4416B830110063C0F6 /* NSView+Additions.m in Sources */,
+				F9D90D4816B8734D0063C0F6 /* MBTableRowView.m in Sources */,
+				F9D90D4B16B875900063C0F6 /* MBMovieRowView.m in Sources */,
+				F9D90D4E16B87F660063C0F6 /* MBMovieTableView.m in Sources */,
+				F9D90D5116B888260063C0F6 /* MBGenreTableView.m in Sources */,
+				F9D90D5416B889080063C0F6 /* MBGenreRowView.m in Sources */,
+				F9D90D5716B8953C0063C0F6 /* MBActorRowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

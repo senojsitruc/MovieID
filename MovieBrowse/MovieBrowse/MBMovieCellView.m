@@ -29,13 +29,7 @@ static NSImage *gMissingImg;
 {
 	@autoreleasepool {
 		NSString *path = [[NSBundle mainBundle] pathForResource:@"MissingMovie" ofType:@"png"];
-		
-		if (path) {
-			NSData *data = [NSData dataWithContentsOfFile:path];
-			
-			if (data)
-				gMissingImg = [[NSImage alloc] initWithData:data];
-		}
+		if (path) gMissingImg = [[NSImage alloc] initWithContentsOfFile:path];
 	}
 }
 
@@ -56,14 +50,8 @@ static NSImage *gMissingImg;
 		{
 			NSString *imageId = mMovie.posterId;
 			CGFloat height = self.movieImg.frame.size.height;
-//		NSImage *image = nil;
 			
-			/*
-			if (imageId.length)
-				image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
-			*/
-			
-			if (/* !image && */ !imageId.length) {
+			if (!imageId.length) {
 				NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:@"missing-movie" andHeight:height];
 				
 				if (!image) {
@@ -74,7 +62,6 @@ static NSImage *gMissingImg;
 				self.movieImg.image = image;
 			}
 			else {
-//		if (!image) {
 				self.movieImg.image = nil;
 				
 				[[MBDownloadQueue sharedInstance] dispatchBeg:^{
@@ -84,7 +71,6 @@ static NSImage *gMissingImg;
 						return;
 					
 					_image.size = NSMakeSize((NSUInteger)(_image.size.width * (height / _image.size.height)), height);
-//				[[MBImageCache sharedInstance] cacheImage:_image withId:imageId andHeight:height];
 					
 					if (transId != mTransId)
 						return;
@@ -95,8 +81,6 @@ static NSImage *gMissingImg;
 					}];
 				}];
 			}
-//		else
-//			self.movieImg.image = image;
 		}
 	}
 	
