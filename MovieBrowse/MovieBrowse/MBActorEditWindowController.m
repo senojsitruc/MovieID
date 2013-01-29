@@ -167,6 +167,7 @@
 {
 	NSString *imageId = mbperson.imageId;
 	CGFloat height = _posterImg.frame.size.height;
+	CGFloat width = _posterImg.frame.size.width;
 	NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:imageId andHeight:height];
 	
 	_posterImg.image = nil;
@@ -184,7 +185,7 @@
 			[_posterPrg startAnimation:self];
 			
 			[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-				NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:imageId width:0 height:height];
+				NSImage *image = [[MBImageCache sharedInstance] actorImageWithId:imageId width:width height:height];
 				
 				if (!image) {
 					[[NSThread mainThread] performBlock:^{
