@@ -55,9 +55,9 @@
 	if (self) {
 		mSources = [[NSMutableDictionary alloc] init];
 		
-		mActors = [[NSMutableDictionary alloc] init];
-		mGenres = [[NSMutableDictionary alloc] init];
-		mMovies = [[NSMutableDictionary alloc] init];
+		mActors = [[NSMutableDictionary alloc] initWithCapacity:250000];
+		mGenres = [[NSMutableDictionary alloc] initWithCapacity:100];
+		mMovies = [[NSMutableDictionary alloc] initWithCapacity:25000];
 		
 		[self openDb];
 		
@@ -134,52 +134,50 @@
 	__block NSMutableDictionary *movies = nil;
 	__block NSUInteger actorCount = 0;
 	
-	[mActorDb enumerateKeys:^ (NSString *key, BOOL *stop) {
+	[mActorDb enumerateKeysAndValuesAsStrings:^ (NSString *key, NSString *value, BOOL *stop) {
 		NSArray *keyParts = [key componentsSeparatedByString:@"--"];
 		
-		if (keyParts.count < 2)
-			return;
-		
-		NSString *actor = keyParts[0];
-		NSString *label = keyParts[1];
-		NSString *value = mActorDb[key];
-		
-		if (mbperson && ![actor isEqualToString:mbperson.name]) {
-			mActors[mbperson.name] = mbperson;
-			actorCount += 1;
-			if (handler && !(actorCount % 1000))
-				handler(actorCount, mbperson.name);
-			mbperson = nil;
-			movies = nil;
-		}
-		
-		if (mbperson == nil) {
-			mbperson = [[MBPerson alloc] init];
-			mbperson.movies = (movies = [[NSMutableDictionary alloc] init]);
-			mbperson.name = actor;
-		}
-		
-		if ([label isEqualToString:@"image"]) {
-			if (keyParts.count == 3) {
-				if ([keyParts[2] isEqual:@"id"])
-					mbperson.imageId = value;
-				else if ([keyParts[2] isEqual:@"url"])
-					mbperson.imageUrl = [NSURL URLWithString:value];
+		if (keyParts.count >= 2) {
+			NSString *actor = keyParts[0];
+			NSString *label = keyParts[1];
+			
+			if (mbperson && ![actor isEqualToString:mbperson.name]) {
+				mActors[mbperson.name] = mbperson;
+				actorCount += 1;
+				if (handler && !(actorCount % 1000))
+					handler(actorCount, mbperson.name);
+				mbperson = nil;
+				movies = nil;
 			}
-		}
-		else if ([label isEqualToString:@"tmdbid" ]) mbperson.tmdbId = value;
-		else if ([label isEqualToString:@"rtid"   ]) mbperson.rtId   = value;
-		else if ([label isEqualToString:@"imdbid" ]) mbperson.imdbId = value;
-		else if ([label isEqualToString:@"bio"    ]) mbperson.bio    = value;
-		else if ([label isEqualToString:@"dob"    ]) mbperson.dob    = value;
-		else if ([label isEqualToString:@"dod"    ]) mbperson.dod    = value;
-		else if ([label isEqualToString:@"web"    ]) mbperson.web    = value;
-		else if ([label isEqualToString:@"movie"  ] && keyParts.count == 4) {
-			NSMutableString *key = [[NSMutableString alloc] init];
-			[key appendString:keyParts[2]];
-			[key appendString:@"--"];
-			[key appendString:keyParts[3]];
-			movies[key] = @"";
+			
+			if (mbperson == nil) {
+				mbperson = [[MBPerson alloc] init];
+				mbperson.movies = (movies = [[NSMutableDictionary alloc] init]);
+				mbperson.name = actor;
+			}
+			
+			if ([label isEqualToString:@"image"]) {
+				if (keyParts.count == 3) {
+					if ([keyParts[2] isEqual:@"id"])
+						mbperson.imageId = value;
+					else if ([keyParts[2] isEqual:@"url"])
+						mbperson.imageUrl = [NSURL URLWithString:value];
+				}
+			}
+			else if ([label isEqualToString:@"tmdbid" ]) mbperson.tmdbId = value;
+			else if ([label isEqualToString:@"rtid"   ]) mbperson.rtId   = value;
+			else if ([label isEqualToString:@"imdbid" ]) mbperson.imdbId = value;
+			else if ([label isEqualToString:@"bio"    ]) mbperson.bio    = value;
+			else if ([label isEqualToString:@"dob"    ]) mbperson.dob    = value;
+			else if ([label isEqualToString:@"dod"    ]) mbperson.dod    = value;
+			else if ([label isEqualToString:@"web"    ]) mbperson.web    = value;
+			else if ([label isEqualToString:@"movie"  ] && keyParts.count == 4) {
+				NSMutableString *key = [[NSMutableString alloc] init];
+				[key appendString:keyParts[2]];
+				[key appendString:@"--"];
+				[key appendString:keyParts[3]];
+				movies[key] = @"";
+			}
 		}
 	}];
 	

@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Curtis Jones. All rights reserved.
 //
 
+#import <MovieID/Subscript.h>
 #import "MBAppDelegate.h"
 #import "MBGenre.h"
 #import "MBMovie.h"
@@ -228,6 +229,12 @@ static MBAppDelegate *gAppDelegate;
 		}];
 		
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+	}
+	
+	{
+		_actorTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
+		_genreTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
+		_movieTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
 	}
 	
 	//

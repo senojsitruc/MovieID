@@ -32,6 +32,15 @@
 		F97BF38F15F9E5ED00444926 /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = F97BF38D15F9E5ED00444926 /* NSData+Base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F97BF39015F9E5ED00444926 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF38E15F9E5ED00444926 /* NSData+Base64.m */; };
 		F97BF39315F9E61000444926 /* libcommonCrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F97BF39215F9E61000444926 /* libcommonCrypto.dylib */; };
+		F9AD8B0616B749D300404B19 /* NSArray+Subscript.h in Headers */ = {isa = PBXBuildFile; fileRef = F9AD8AFD16B749D300404B19 /* NSArray+Subscript.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9AD8B0716B749D300404B19 /* NSArray+Subscript.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD8AFE16B749D300404B19 /* NSArray+Subscript.m */; };
+		F9AD8B0816B749D300404B19 /* NSDictionary+Subscript.h in Headers */ = {isa = PBXBuildFile; fileRef = F9AD8AFF16B749D300404B19 /* NSDictionary+Subscript.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9AD8B0916B749D300404B19 /* NSDictionary+Subscript.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD8B0016B749D300404B19 /* NSDictionary+Subscript.m */; };
+		F9AD8B0A16B749D300404B19 /* NSMutableArray+Subscript.h in Headers */ = {isa = PBXBuildFile; fileRef = F9AD8B0116B749D300404B19 /* NSMutableArray+Subscript.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9AD8B0B16B749D300404B19 /* NSMutableArray+Subscript.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD8B0216B749D300404B19 /* NSMutableArray+Subscript.m */; };
+		F9AD8B0C16B749D300404B19 /* NSMutableDictionary+Subscript.h in Headers */ = {isa = PBXBuildFile; fileRef = F9AD8B0316B749D300404B19 /* NSMutableDictionary+Subscript.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9AD8B0D16B749D300404B19 /* NSMutableDictionary+Subscript.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD8B0416B749D300404B19 /* NSMutableDictionary+Subscript.m */; };
+		F9AD8B0E16B749D300404B19 /* Subscript.h in Headers */ = {isa = PBXBuildFile; fileRef = F9AD8B0516B749D300404B19 /* Subscript.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9B9018D15F75E990089BB17 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9018C15F75E990089BB17 /* Cocoa.framework */; };
 		F9B9019715F75E990089BB17 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9B9019515F75E990089BB17 /* InfoPlist.strings */; };
 		F9B901FE15F761140089BB17 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B901FD15F761140089BB17 /* QTKit.framework */; };
@@ -59,7 +68,7 @@
 		F9B9023A15F7831C0089BB17 /* table_builder.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022A15F7831C0089BB17 /* table_builder.h */; };
 		F9B9023B15F7831C0089BB17 /* write_batch.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9022B15F7831C0089BB17 /* write_batch.h */; };
 		F9B9023C15F7831C0089BB17 /* libleveldb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B9022C15F7831C0089BB17 /* libleveldb.a */; };
-		F9B9025715F789000089BB17 /* NSObject+SBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9023E15F789000089BB17 /* NSObject+SBJson.h */; };
+		F9B9025715F789000089BB17 /* NSObject+SBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9023E15F789000089BB17 /* NSObject+SBJson.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9B9025815F789000089BB17 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B9023F15F789000089BB17 /* NSObject+SBJson.m */; };
 		F9B9025915F789000089BB17 /* SBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024015F789000089BB17 /* SBJson.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9B9025A15F789000089BB17 /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B9024115F789000089BB17 /* SBJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -112,6 +121,15 @@
 		F97BF38D15F9E5ED00444926 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		F97BF38E15F9E5ED00444926 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		F97BF39215F9E61000444926 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
+		F9AD8AFD16B749D300404B19 /* NSArray+Subscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Subscript.h"; sourceTree = "<group>"; };
+		F9AD8AFE16B749D300404B19 /* NSArray+Subscript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Subscript.m"; sourceTree = "<group>"; };
+		F9AD8AFF16B749D300404B19 /* NSDictionary+Subscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Subscript.h"; sourceTree = "<group>"; };
+		F9AD8B0016B749D300404B19 /* NSDictionary+Subscript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Subscript.m"; sourceTree = "<group>"; };
+		F9AD8B0116B749D300404B19 /* NSMutableArray+Subscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Subscript.h"; sourceTree = "<group>"; };
+		F9AD8B0216B749D300404B19 /* NSMutableArray+Subscript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Subscript.m"; sourceTree = "<group>"; };
+		F9AD8B0316B749D300404B19 /* NSMutableDictionary+Subscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Subscript.h"; sourceTree = "<group>"; };
+		F9AD8B0416B749D300404B19 /* NSMutableDictionary+Subscript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Subscript.m"; sourceTree = "<group>"; };
+		F9AD8B0516B749D300404B19 /* Subscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscript.h; sourceTree = "<group>"; };
 		F9B9018915F75E990089BB17 /* MovieID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MovieID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9B9018C15F75E990089BB17 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F9B9018F15F75E990089BB17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -249,6 +267,22 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		F9AD8AFC16B749D300404B19 /* Subscript */ = {
+			isa = PBXGroup;
+			children = (
+				F9AD8AFD16B749D300404B19 /* NSArray+Subscript.h */,
+				F9AD8AFE16B749D300404B19 /* NSArray+Subscript.m */,
+				F9AD8AFF16B749D300404B19 /* NSDictionary+Subscript.h */,
+				F9AD8B0016B749D300404B19 /* NSDictionary+Subscript.m */,
+				F9AD8B0116B749D300404B19 /* NSMutableArray+Subscript.h */,
+				F9AD8B0216B749D300404B19 /* NSMutableArray+Subscript.m */,
+				F9AD8B0316B749D300404B19 /* NSMutableDictionary+Subscript.h */,
+				F9AD8B0416B749D300404B19 /* NSMutableDictionary+Subscript.m */,
+				F9AD8B0516B749D300404B19 /* Subscript.h */,
+			);
+			path = Subscript;
+			sourceTree = "<group>";
+		};
 		F9B9017D15F75E990089BB17 = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +348,7 @@
 		F9B9020F15F770CB0089BB17 /* Extern */ = {
 			isa = PBXGroup;
 			children = (
+				F9AD8AFC16B749D300404B19 /* Subscript */,
 				F9B9023D15F789000089BB17 /* SBJson */,
 				F9B9021B15F7831C0089BB17 /* LevelDB */,
 				F9B9021015F770CB0089BB17 /* RegexKitLite */,
@@ -428,6 +463,12 @@
 				F9B9026A15F789000089BB17 /* SBJsonTokeniser.h in Headers */,
 				F9B9026C15F789000089BB17 /* SBJsonUTF8Stream.h in Headers */,
 				F9B9026E15F789000089BB17 /* SBJsonWriter.h in Headers */,
+				F9B9025715F789000089BB17 /* NSObject+SBJson.h in Headers */,
+				F9AD8B0616B749D300404B19 /* NSArray+Subscript.h in Headers */,
+				F9AD8B0816B749D300404B19 /* NSDictionary+Subscript.h in Headers */,
+				F9AD8B0A16B749D300404B19 /* NSMutableArray+Subscript.h in Headers */,
+				F9AD8B0C16B749D300404B19 /* NSMutableDictionary+Subscript.h in Headers */,
+				F9AD8B0E16B749D300404B19 /* Subscript.h in Headers */,
 				F9B9022F15F7831C0089BB17 /* c.h in Headers */,
 				F9B9023015F7831C0089BB17 /* cache.h in Headers */,
 				F9B9023115F7831C0089BB17 /* comparator.h in Headers */,
@@ -441,7 +482,6 @@
 				F9B9023915F7831C0089BB17 /* table.h in Headers */,
 				F9B9023A15F7831C0089BB17 /* table_builder.h in Headers */,
 				F9B9023B15F7831C0089BB17 /* write_batch.h in Headers */,
-				F9B9025715F789000089BB17 /* NSObject+SBJson.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +575,10 @@
 				F932120C1634B52D0093E619 /* IDIMDbMovie.m in Sources */,
 				F93212101634B5420093E619 /* IDIMDbPerson.m in Sources */,
 				F96BBEB916813D35000CA160 /* IDRating.m in Sources */,
+				F9AD8B0716B749D300404B19 /* NSArray+Subscript.m in Sources */,
+				F9AD8B0916B749D300404B19 /* NSDictionary+Subscript.m in Sources */,
+				F9AD8B0B16B749D300404B19 /* NSMutableArray+Subscript.m in Sources */,
+				F9AD8B0D16B749D300404B19 /* NSMutableDictionary+Subscript.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +669,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -651,6 +696,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;

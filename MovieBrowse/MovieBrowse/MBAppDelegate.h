@@ -53,6 +53,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSTableView *actorTable;
 @property (assign) IBOutlet NSTableView *genreTable;
 @property (assign) IBOutlet NSTableView *movieTable;
+@property (assign) IBOutlet NSScrollView *actorTableScrollView;
+@property (assign) IBOutlet NSScrollView *genreTableScrollView;
+@property (assign) IBOutlet NSScrollView *movieTableScrollView;
 
 /**
  * Arrays
