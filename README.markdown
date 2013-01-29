@@ -1,7 +1,8 @@
 ##MovieID
 
-An application for OS X 10.7 that identifies movies and stores the associated metadata. It features
-an interface for browsing movies by actor, genre, language and rating.
+An application for Mac OS X 10.7 (and later) that identifies movies and stores the associated metadata. It features an interface for browsing movies by actor, genre, language, year and rating.
+
+The import system scans the user-specified directories and identifies movies based on the movie's parent directory's name (each movie should exist in a separate directory, with the year as part of the name) and the duration of the movie.
 
 ##Screenshots
 ![alt text][1]
