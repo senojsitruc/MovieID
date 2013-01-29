@@ -67,6 +67,7 @@
 		F9B902AB15F79BF30089BB17 /* MBPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902AA15F79BF30089BB17 /* MBPerson.m */; };
 		F9B902BB15F7A8F10089BB17 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B715F7A8F10089BB17 /* NSString+Additions.m */; };
 		F9B902BC15F7A8F10089BB17 /* NSThread+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */; };
+		F9D90D4416B830110063C0F6 /* NSView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4316B830110063C0F6 /* NSView+Additions.m */; };
 		F9DA1F5116B47F480055DFF1 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
 		F9DA1F5216B47F7A0055DFF1 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F9DA1F5016B47F480055DFF1 /* Sparkle.framework */; };
 		F9DA1F5416B4808E0055DFF1 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */; };
@@ -208,6 +209,8 @@
 		F9B902B715F7A8F10089BB17 /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
 		F9B902B815F7A8F10089BB17 /* NSThread+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSThread+Additions.h"; sourceTree = "<group>"; };
 		F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSThread+Additions.m"; sourceTree = "<group>"; };
+		F9D90D4216B830110063C0F6 /* NSView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Additions.h"; sourceTree = "<group>"; };
+		F9D90D4316B830110063C0F6 /* NSView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Additions.m"; sourceTree = "<group>"; };
 		F9DA1F5016B47F480055DFF1 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../Support/Sparkle.framework; sourceTree = "<group>"; };
 		F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = ../../../Support/MovieID/dsa_pub.pem; sourceTree = "<group>"; };
 		F9EA0CEF16B75E960037875F /* MMDrawingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawingUtils.h; sourceTree = "<group>"; };
@@ -485,6 +488,8 @@
 		F9B902B315F7A8C60089BB17 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				F9D90D4216B830110063C0F6 /* NSView+Additions.h */,
+				F9D90D4316B830110063C0F6 /* NSView+Additions.m */,
 				F9B902B615F7A8F10089BB17 /* NSString+Additions.h */,
 				F9B902B715F7A8F10089BB17 /* NSString+Additions.m */,
 				F9B902B815F7A8F10089BB17 /* NSThread+Additions.h */,
@@ -701,6 +706,7 @@
 				F9EA0CF716B75E960037875F /* MMScrollView.m in Sources */,
 				F9EA0CFA16B769130037875F /* MBScroller.m in Sources */,
 				F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */,
+				F9D90D4416B830110063C0F6 /* NSView+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

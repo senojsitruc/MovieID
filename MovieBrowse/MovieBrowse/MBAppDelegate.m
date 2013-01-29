@@ -1738,18 +1738,18 @@ static MBAppDelegate *gAppDelegate;
 		
 		if (findTitle && findDesc) {
 			compare = ^ BOOL (MBPerson *_mbperson) {
-				return NSNotFound != [_mbperson.name.lowercaseString rangeOfString:mFindQuery].location ||
-							 NSNotFound != [_mbperson.bio.lowercaseString rangeOfString:mFindQuery].location;
+				return (_mbperson.name && NSNotFound != [_mbperson.name.lowercaseString rangeOfString:mFindQuery].location) ||
+							 (_mbperson.bio && NSNotFound != [_mbperson.bio.lowercaseString rangeOfString:mFindQuery].location);
 			};
 		}
 		else if (findTitle) {
 			compare = ^ BOOL (MBPerson *_mbperson) {
-				return NSNotFound != [_mbperson.name.lowercaseString rangeOfString:mFindQuery].location;
+				return _mbperson.name && NSNotFound != [_mbperson.name.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else if (findDesc) {
 			compare = ^ BOOL (MBPerson *_mbperson) {
-				return NSNotFound != [_mbperson.bio.lowercaseString rangeOfString:mFindQuery].location;
+				return _mbperson.bio && NSNotFound != [_mbperson.bio.lowercaseString rangeOfString:mFindQuery].location;
 			};
 		}
 		else {
@@ -1782,13 +1782,11 @@ static MBAppDelegate *gAppDelegate;
 	mFindType = _findTypeBtn.titleOfSelectedItem;
 	mFindIndex = NSNotFound;
 	
-	// close the find window if the search query is zero-length
-	if (!mFindQuery.length) {
+	// run a search for the given query (if any), otherwise close the find sheet
+	if (mFindQuery.length)
+		[self doActionFindNext:sender];
+	else
 		[self doActionFindHide:sender];
-		return;
-	}
-	
-	[self doActionFindNext:sender];
 }
 
 

@@ -17,6 +17,11 @@
 
 @implementation MBPerson
 
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<%@: %p> %@", NSStringFromClass(self.class), self, self.name];
+}
+
 - (id)copyWithZone:(NSZone *)zone
 {
 	MBPerson *copy = [[MBPerson allocWithZone:zone] init];

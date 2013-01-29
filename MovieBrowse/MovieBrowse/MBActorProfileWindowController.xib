@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1080</int>
-		<string key="IBDocument.SystemVersion">12C60</string>
+		<string key="IBDocument.SystemVersion">12C2034</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3083</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
 		<string key="IBDocument.HIToolboxVersion">625.00</string>
@@ -44,7 +44,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSWindowTemplate" id="259429969">
-				<int key="NSWindowStyleMask">9</int>
+				<int key="NSWindowStyleMask">1</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{-2277, 71}, {873, 623}}</string>
 				<int key="NSWTFlags">1685586944</int>
@@ -220,7 +220,7 @@
 											<int key="NSvFlags">274</int>
 											<string key="NSFrameSize">{425, 96}</string>
 											<reference key="NSSuperview" ref="815461645"/>
-											<reference key="NSNextKeyView" ref="66312805"/>
+											<reference key="NSNextKeyView" ref="102673968"/>
 											<string key="NSReuseIdentifierKey">_NS:13</string>
 										</object>
 									</array>
@@ -261,7 +261,7 @@
 							</array>
 							<string key="NSFrame">{{428, 457}, {425, 96}}</string>
 							<reference key="NSSuperview" ref="952605449"/>
-							<reference key="NSNextKeyView" ref="102673968"/>
+							<reference key="NSNextKeyView" ref="815461645"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<int key="NSsFlags">202752</int>
 							<reference key="NSVScroller" ref="102673968"/>
@@ -312,7 +312,7 @@
 					<bool key="NSViewIsLayerTreeHost">YES</bool>
 					<string key="NSReuseIdentifierKey">_NS:20</string>
 				</object>
-				<string key="NSScreenRect">{{-2560, -240}, {2560, 1440}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1920, 1058}}</string>
 				<string key="NSMinSize">{873, 645}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">NO</bool>
