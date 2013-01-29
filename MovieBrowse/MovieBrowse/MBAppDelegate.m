@@ -195,10 +195,6 @@ static MBAppDelegate *gAppDelegate;
 	mActorsByName = [[NSMutableDictionary alloc] init];
 	mActorsSorted = [[NSMutableArray alloc] init];
 	
-	self.actorsArray = [[NSMutableArray alloc] init];
-	self.genresArray = [[NSMutableArray alloc] init];
-	self.moviesArray = [[NSMutableArray alloc] init];
-	
 	// user defaults
 	{
 		NSData *settingsData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"MovieBrowseConfig" ofType:@"plist"]];
@@ -235,27 +231,6 @@ static MBAppDelegate *gAppDelegate;
 		
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	}
-	
-	/*
-	{
-		_actorTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
-		_genreTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
-		_movieTableScrollView.scrollerStyle = NSScrollerStyleOverlay;
-	}
-	*/
-	
-	/*
-	{
-		CGRect frame = _actorTableScrollView.verticalScroller.frame;
-		frame.origin.y += 20;
-		frame.size.height -= 10;
-		_actorTableScrollView.verticalScroller.frame = frame;
-//	[_actorTableScrollView.verticalScroller setHidden:TRUE];
-		NSLog(@"scroller = %@", NSStringFromRect(_actorTableScrollView.verticalScroller.frame));
-		NSLog(@"%@", _actorTableScrollView.verticalScroller);
-		NSLog(@"%@", _actorTableScrollView.verticalScroller.superview);
-	}
-	*/
 	
 	//
 	// movie table customizations
@@ -1030,7 +1005,8 @@ static MBAppDelegate *gAppDelegate;
 	
 	// tally the count for each language
 	{
-		NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
+//	NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
+		NSArray *objects = _moviesArrayController.arrangedObjects;
 		
 		[objects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
 			NSArray *languages = ((MBMovie *)movieObj).languages;
@@ -1104,7 +1080,8 @@ static MBAppDelegate *gAppDelegate;
 	
 	// tally the count for each rating
 	{
-		NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
+//	NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
+		NSArray *objects = _moviesArrayController.arrangedObjects;
 		
 		[objects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
 			NSString *rating = ((MBMovie *)movieObj).rating;
@@ -2188,7 +2165,7 @@ static MBAppDelegate *gAppDelegate;
 		}];
 	}
 	else {
-		[_moviesArray enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
+		[_moviesArrayController.arrangedObjects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
 			[((MBMovie *)movieObj).genres.allKeys enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
 				mGenresByName[genreObj] = @(1 + ((NSNumber *)mGenresByName[genreObj]).integerValue);
 			}];

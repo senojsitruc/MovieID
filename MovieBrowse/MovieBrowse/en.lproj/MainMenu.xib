@@ -1419,15 +1419,14 @@
 												<reference key="NSNextResponder" ref="968037554"/>
 												<string key="NSFrameSize">{210, 17}</string>
 												<reference key="NSSuperview" ref="968037554"/>
-												<reference key="NSNextKeyView" ref="799013137"/>
+												<reference key="NSNextKeyView" ref="1016782615"/>
 												<string key="NSReuseIdentifierKey">_NS:16</string>
 												<reference key="NSTableView" ref="185125054"/>
 											</object>
-											<object class="_NSCornerView" key="NSCornerView" id="799013137">
-												<reference key="NSNextResponder" ref="933230677"/>
+											<object class="_NSCornerView" key="NSCornerView">
+												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">-2147483392</int>
 												<string key="NSFrame">{{194, 0}, {16, 17}}</string>
-												<reference key="NSSuperview" ref="933230677"/>
 												<reference key="NSNextKeyView" ref="1016782615"/>
 												<string key="NSReuseIdentifierKey">_NS:19</string>
 											</object>
@@ -1565,7 +1564,6 @@
 									<reference key="NSBGColor" ref="903734613"/>
 									<int key="NScvFlags">4</int>
 								</object>
-								<reference ref="799013137"/>
 							</array>
 							<string key="NSFrame">{{0, -2}, {210, 664}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
@@ -1576,7 +1574,6 @@
 							<reference key="NSHScroller" ref="1027535298"/>
 							<reference key="NSContentView" ref="1016782615"/>
 							<reference key="NSHeaderClipView" ref="968037554"/>
-							<reference key="NSCornerView" ref="799013137"/>
 							<bytes key="NSScrollAmts">QSAAAEEgAABCUAAAQlAAAA</bytes>
 							<double key="NSMinMagnification">0.25</double>
 							<double key="NSMaxMagnification">4</double>
@@ -1606,15 +1603,14 @@
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{208, 17}</string>
 												<reference key="NSSuperview" ref="87894670"/>
-												<reference key="NSNextKeyView" ref="119882750"/>
+												<reference key="NSNextKeyView" ref="698422246"/>
 												<string key="NSReuseIdentifierKey">_NS:16</string>
 												<reference key="NSTableView" ref="47429185"/>
 											</object>
-											<object class="_NSCornerView" key="NSCornerView" id="119882750">
-												<reference key="NSNextResponder" ref="277959615"/>
+											<object class="_NSCornerView" key="NSCornerView">
+												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">-2147483392</int>
 												<string key="NSFrame">{{224, 0}, {16, 17}}</string>
-												<reference key="NSSuperview" ref="277959615"/>
 												<reference key="NSNextKeyView" ref="698422246"/>
 												<string key="NSReuseIdentifierKey">_NS:19</string>
 											</object>
@@ -1714,7 +1710,6 @@
 									<reference key="NSBGColor" ref="903734613"/>
 									<int key="NScvFlags">4</int>
 								</object>
-								<reference ref="119882750"/>
 							</array>
 							<string key="NSFrame">{{209, -2}, {210, 664}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
@@ -1725,7 +1720,6 @@
 							<reference key="NSHScroller" ref="511255036"/>
 							<reference key="NSContentView" ref="698422246"/>
 							<reference key="NSHeaderClipView" ref="87894670"/>
-							<reference key="NSCornerView" ref="119882750"/>
 							<bytes key="NSScrollAmts">QSAAAEEgAABB6AAAQegAAA</bytes>
 							<double key="NSMinMagnification">0.25</double>
 							<double key="NSMaxMagnification">4</double>
@@ -1755,15 +1749,14 @@
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{817, 17}</string>
 												<reference key="NSSuperview" ref="782481074"/>
-												<reference key="NSNextKeyView" ref="540144503"/>
+												<reference key="NSNextKeyView" ref="931218518"/>
 												<string key="NSReuseIdentifierKey">_NS:16</string>
 												<reference key="NSTableView" ref="728358822"/>
 											</object>
-											<object class="_NSCornerView" key="NSCornerView" id="540144503">
-												<reference key="NSNextResponder" ref="61780931"/>
+											<object class="_NSCornerView" key="NSCornerView">
+												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">-2147483392</int>
 												<string key="NSFrame">{{803, 0}, {16, 17}}</string>
-												<reference key="NSSuperview" ref="61780931"/>
 												<reference key="NSNextKeyView" ref="931218518"/>
 												<string key="NSReuseIdentifierKey">_NS:19</string>
 											</object>
@@ -1863,7 +1856,6 @@
 									<reference key="NSBGColor" ref="903734613"/>
 									<int key="NScvFlags">4</int>
 								</object>
-								<reference ref="540144503"/>
 							</array>
 							<string key="NSFrame">{{418, 29}, {819, 633}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
@@ -1874,7 +1866,6 @@
 							<reference key="NSHScroller" ref="496757709"/>
 							<reference key="NSContentView" ref="931218518"/>
 							<reference key="NSHeaderClipView" ref="782481074"/>
-							<reference key="NSCornerView" ref="540144503"/>
 							<bytes key="NSScrollAmts">QSAAAEEgAABDy4AAQ8uAAA</bytes>
 							<double key="NSMinMagnification">0.25</double>
 							<double key="NSMaxMagnification">4</double>
@@ -3112,54 +3103,6 @@
 						<reference key="destination" ref="277959615"/>
 					</object>
 					<int key="connectionID">3645</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: actorsArray</string>
-						<reference key="source" ref="599050462"/>
-						<reference key="destination" ref="976324537"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="599050462"/>
-							<reference key="NSDestination" ref="976324537"/>
-							<string key="NSLabel">contentArray: actorsArray</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">actorsArray</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">722</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: genresArray</string>
-						<reference key="source" ref="650320241"/>
-						<reference key="destination" ref="976324537"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="650320241"/>
-							<reference key="NSDestination" ref="976324537"/>
-							<string key="NSLabel">contentArray: genresArray</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">genresArray</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">723</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: moviesArray</string>
-						<reference key="source" ref="628236386"/>
-						<reference key="destination" ref="976324537"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="628236386"/>
-							<reference key="NSDestination" ref="976324537"/>
-							<string key="NSLabel">contentArray: moviesArray</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">moviesArray</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">920</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">

@@ -58,20 +58,6 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSScrollView *movieTableScrollView;
 
 /**
- * Arrays
- */
-@property (readwrite, strong) NSMutableArray *actorsArray;
-@property (readwrite, strong) NSMutableArray *genresArray;
-@property (readwrite, strong) NSMutableArray *moviesArray;
-
-/**
- * Selection
- */
-@property (readwrite, strong) NSIndexSet *actorsArraySelection;
-@property (readwrite, strong) NSIndexSet *genresArraySelection;
-@property (readwrite, strong) NSIndexSet *moviesArraySelection;
-
-/**
  * Array Controllers
  */
 @property (readwrite, strong) IBOutlet NSArrayController *actorsArrayController;
