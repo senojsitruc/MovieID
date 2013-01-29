@@ -375,6 +375,9 @@ static MBAppDelegate *gAppDelegate;
 		
 		((MMScroller *)_actorTableScrollView.verticalScroller).drawsRightRule = TRUE;
 	}
+	
+	// call this to restore the appropriate interface for the current find type (actor or movie)
+	[self doActionFindType:nil];
 }
 
 /**
