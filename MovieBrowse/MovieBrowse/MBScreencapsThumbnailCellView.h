@@ -8,10 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MBScreencapsThumbnailView : NSView
+@interface MBScreencapsThumbnailCellView : NSTableCellView
 
 @property (readwrite, assign, nonatomic) BOOL loading;
-@property (readwrite, strong, nonatomic) NSImage *image;
 @property (readwrite, strong, nonatomic) NSString *timestamp;
+@property (readwrite, copy, nonatomic) NSImage* (^loadImage)();
 
 @end

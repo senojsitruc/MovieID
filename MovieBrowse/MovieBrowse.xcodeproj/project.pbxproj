@@ -18,8 +18,7 @@
 		F923205A167962D300D14519 /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232059167962D300D14519 /* NSArray+Additions.m */; };
 		F923206A167D147400D14519 /* MBGenreCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232069167D147400D14519 /* MBGenreCellView.m */; };
 		F923206D167D155F00D14519 /* MBGenreBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F923206C167D155E00D14519 /* MBGenreBadgeView.m */; };
-		F9232071167E611F00D14519 /* MBScreencapsThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232070167E611F00D14519 /* MBScreencapsThumbnailView.m */; };
-		F9232074167E613E00D14519 /* MBScreencapsBigView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232073167E613E00D14519 /* MBScreencapsBigView.m */; };
+		F9232071167E611F00D14519 /* MBScreencapsThumbnailCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232070167E611F00D14519 /* MBScreencapsThumbnailCellView.m */; };
 		F923207B167E623A00D14519 /* MBScreencapsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232079167E623A00D14519 /* MBScreencapsWindowController.m */; };
 		F923207C167E623A00D14519 /* MBScreencapsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F923207A167E623A00D14519 /* MBScreencapsWindowController.xib */; };
 		F92A7EAC16831FFA00F04EDF /* MBPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F92A7EAA16831FFA00F04EDF /* MBPreferencesWindowController.m */; };
@@ -82,6 +81,7 @@
 		F9EA0CF716B75E960037875F /* MMScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF416B75E960037875F /* MMScrollView.m */; };
 		F9EA0CFA16B769130037875F /* MBScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF916B769130037875F /* MBScroller.m */; };
 		F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CFC16B769F50037875F /* MBScrollView.m */; };
+		F9EBF47C16BC5620008892DF /* MBScreencapsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EBF47B16BC5620008892DF /* MBScreencapsTableView.m */; };
 		F9F30CF916306E25006C4F17 /* MBImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F30CF816306E25006C4F17 /* MBImageView.m */; };
 /* End PBXBuildFile section */
 
@@ -132,10 +132,8 @@
 		F9232069167D147400D14519 /* MBGenreCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreCellView.m; sourceTree = "<group>"; };
 		F923206B167D155E00D14519 /* MBGenreBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenreBadgeView.h; sourceTree = "<group>"; };
 		F923206C167D155E00D14519 /* MBGenreBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenreBadgeView.m; sourceTree = "<group>"; };
-		F923206F167E611F00D14519 /* MBScreencapsThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScreencapsThumbnailView.h; sourceTree = "<group>"; };
-		F9232070167E611F00D14519 /* MBScreencapsThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScreencapsThumbnailView.m; sourceTree = "<group>"; };
-		F9232072167E613E00D14519 /* MBScreencapsBigView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScreencapsBigView.h; sourceTree = "<group>"; };
-		F9232073167E613E00D14519 /* MBScreencapsBigView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScreencapsBigView.m; sourceTree = "<group>"; };
+		F923206F167E611F00D14519 /* MBScreencapsThumbnailCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScreencapsThumbnailCellView.h; sourceTree = "<group>"; };
+		F9232070167E611F00D14519 /* MBScreencapsThumbnailCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScreencapsThumbnailCellView.m; sourceTree = "<group>"; };
 		F9232078167E623A00D14519 /* MBScreencapsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScreencapsWindowController.h; sourceTree = "<group>"; };
 		F9232079167E623A00D14519 /* MBScreencapsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScreencapsWindowController.m; sourceTree = "<group>"; };
 		F923207A167E623A00D14519 /* MBScreencapsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBScreencapsWindowController.xib; sourceTree = "<group>"; };
@@ -188,7 +186,7 @@
 		F998F2CD162FBDD3008AF52D /* MBImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImageCache.m; sourceTree = "<group>"; };
 		F998F2CF16305B27008AF52D /* MBStuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBStuff.h; sourceTree = "<group>"; };
 		F998F2D016305B28008AF52D /* MBStuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBStuff.m; sourceTree = "<group>"; };
-		F9AD8AE716B6869700404B19 /* MovieBrowseConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MovieBrowseConfig.plist; path = ../../../Support/MovieID/MovieBrowseConfig.plist; sourceTree = "<group>"; };
+		F9AD8AE716B6869700404B19 /* MovieBrowseConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.bplist; name = MovieBrowseConfig.plist; path = ../../../../Support/MovieID/MovieBrowseConfig.plist; sourceTree = "<group>"; };
 		F9B9027B15F791320089BB17 /* MovieBrowse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieBrowse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9B9027F15F791320089BB17 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F9B9028215F791320089BB17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -230,7 +228,7 @@
 		F9D90D5516B8953C0063C0F6 /* MBActorRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorRowView.h; sourceTree = "<group>"; };
 		F9D90D5616B8953C0063C0F6 /* MBActorRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorRowView.m; sourceTree = "<group>"; };
 		F9DA1F5016B47F480055DFF1 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../Support/Sparkle.framework; sourceTree = "<group>"; };
-		F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = ../../../Support/MovieID/dsa_pub.pem; sourceTree = "<group>"; };
+		F9DA1F5316B4808E0055DFF1 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = /Users/cjones/Projects/Support/MovieID/dsa_pub.pem; sourceTree = "<absolute>"; };
 		F9EA0CEF16B75E960037875F /* MMDrawingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawingUtils.h; sourceTree = "<group>"; };
 		F9EA0CF016B75E960037875F /* MMDrawingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawingUtils.m; sourceTree = "<group>"; };
 		F9EA0CF116B75E960037875F /* MMScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScroller.h; sourceTree = "<group>"; };
@@ -241,6 +239,8 @@
 		F9EA0CF916B769130037875F /* MBScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScroller.m; sourceTree = "<group>"; };
 		F9EA0CFB16B769F50037875F /* MBScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScrollView.h; sourceTree = "<group>"; };
 		F9EA0CFC16B769F50037875F /* MBScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScrollView.m; sourceTree = "<group>"; };
+		F9EBF47A16BC5620008892DF /* MBScreencapsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScreencapsTableView.h; sourceTree = "<group>"; };
+		F9EBF47B16BC5620008892DF /* MBScreencapsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScreencapsTableView.m; sourceTree = "<group>"; };
 		F9F30CF716306E25006C4F17 /* MBImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBImageView.h; sourceTree = "<group>"; };
 		F9F30CF816306E25006C4F17 /* MBImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -304,11 +304,11 @@
 			children = (
 				F9232078167E623A00D14519 /* MBScreencapsWindowController.h */,
 				F9232079167E623A00D14519 /* MBScreencapsWindowController.m */,
-				F923206F167E611F00D14519 /* MBScreencapsThumbnailView.h */,
-				F9232070167E611F00D14519 /* MBScreencapsThumbnailView.m */,
-				F9232072167E613E00D14519 /* MBScreencapsBigView.h */,
-				F9232073167E613E00D14519 /* MBScreencapsBigView.m */,
+				F923206F167E611F00D14519 /* MBScreencapsThumbnailCellView.h */,
+				F9232070167E611F00D14519 /* MBScreencapsThumbnailCellView.m */,
 				F923207A167E623A00D14519 /* MBScreencapsWindowController.xib */,
+				F9EBF47A16BC5620008892DF /* MBScreencapsTableView.h */,
+				F9EBF47B16BC5620008892DF /* MBScreencapsTableView.m */,
 			);
 			name = Screencaps;
 			sourceTree = "<group>";
@@ -719,8 +719,7 @@
 				F923205A167962D300D14519 /* NSArray+Additions.m in Sources */,
 				F923206A167D147400D14519 /* MBGenreCellView.m in Sources */,
 				F923206D167D155F00D14519 /* MBGenreBadgeView.m in Sources */,
-				F9232071167E611F00D14519 /* MBScreencapsThumbnailView.m in Sources */,
-				F9232074167E613E00D14519 /* MBScreencapsBigView.m in Sources */,
+				F9232071167E611F00D14519 /* MBScreencapsThumbnailCellView.m in Sources */,
 				F923207B167E623A00D14519 /* MBScreencapsWindowController.m in Sources */,
 				F92A7EAC16831FFA00F04EDF /* MBPreferencesWindowController.m in Sources */,
 				F92A7EB216832DB100F04EDF /* MBActorProfileWindowController.m in Sources */,
@@ -743,6 +742,7 @@
 				F9D90D5116B888260063C0F6 /* MBGenreTableView.m in Sources */,
 				F9D90D5416B889080063C0F6 /* MBGenreRowView.m in Sources */,
 				F9D90D5716B8953C0063C0F6 /* MBActorRowView.m in Sources */,
+				F9EBF47C16BC5620008892DF /* MBScreencapsTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

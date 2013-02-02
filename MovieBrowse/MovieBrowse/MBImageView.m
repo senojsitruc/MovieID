@@ -15,4 +15,16 @@
 	return [self.superview menuForEvent:theEvent];
 }
 
+- (void)mouseDown:(NSEvent *)theEvent
+{
+	NSLog(@"%s.. %@", __PRETTY_FUNCTION__, theEvent);
+	[super mouseDown:theEvent];
+}
+
+- (BOOL)acceptsFirstResponder
+{
+	NSLog(@"%s", __PRETTY_FUNCTION__);
+	return TRUE;
+}
+
 @end

@@ -9,42 +9,23 @@
 #import <Cocoa/Cocoa.h>
 
 @class MBMovie;
-@class MBScreencapsThumbnailView;
+@class MBScreencapsTableView;
+@class MBScreencapsThumbnailCellView;
 
-@interface MBScreencapsWindowController : NSWindowController
+@interface MBScreencapsWindowController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource>
 
-// row 0
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow0Col0;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow0Col1;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow0Col2;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow0Col3;
-
-// row 1
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow1Col0;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow1Col1;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow1Col2;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow1Col3;
-
-// row 2
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow2Col0;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow2Col1;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow2Col2;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow2Col3;
-
-// row 3
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow3Col0;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow3Col1;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow3Col2;
-@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsThumbnailView *thumbnailRow3Col3;
-
-// controls
-@property (readwrite, assign, nonatomic) IBOutlet NSButton *prevBtn;
-@property (readwrite, assign, nonatomic) IBOutlet NSButton *nextBtn;
+/**
+ * Grid
+ */
+@property (readwrite, assign, nonatomic) IBOutlet MBScreencapsTableView *tableView;
 @property (readwrite, assign, nonatomic) IBOutlet NSButton *closeBtn;
 
-// other
-@property (readwrite, assign, nonatomic) IBOutlet NSTextField *infoTxt;
-@property (readwrite, strong, nonatomic) MBMovie *movie;
+/**
+ * Big
+ */
+@property (readwrite, assign, nonatomic) IBOutlet NSPanel *bigWin;
+@property (readwrite, assign, nonatomic) IBOutlet NSImageView *bigImg;
+@property (readwrite, assign, nonatomic) IBOutlet NSProgressIndicator *bigPrg;
 
 /**
  * Show / hide

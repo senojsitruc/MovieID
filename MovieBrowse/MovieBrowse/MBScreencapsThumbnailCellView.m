@@ -6,18 +6,27 @@
 //  Copyright (c) 2012 Curtis Jones. All rights reserved.
 //
 
-#import "MBScreencapsThumbnailView.h"
+#import "MBScreencapsThumbnailCellView.h"
+#import "MBDownloadQueue.h"
+#import "MBImageView.h"
+#import "NSThread+Additions.h"
 
-@interface MBScreencapsThumbnailView ()
+@interface MBScreencapsThumbnailCellView ()
 {
-	NSImage *mImage;
+	NSUInteger mTransId;
+	
+	NSObject *mObjVal;
 	NSImageView *mImageView;
 	NSProgressIndicator *mProgressView;
 	NSString *mTimestamp;
 }
 @end
 
-@implementation MBScreencapsThumbnailView
+@implementation MBScreencapsThumbnailCellView
+
+
+
+
 
 #pragma mark - NSView
 
@@ -27,17 +36,17 @@
  */
 - (void)awakeFromNib
 {
-	mImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(0, 0, NSWidth(self.frame), NSHeight(self.frame))];
+	mImageView = [[MBImageView alloc] initWithFrame:self.bounds];
 	mImageView.imageFrameStyle = NSImageFrameNone;
 	mImageView.imageScaling = NSScaleProportionally;
 	mImageView.imageAlignment = NSImageAlignCenter;
 	[mImageView setEditable:FALSE];
-//[self addSubview:mImageView];
+	[self addSubview:mImageView];
 	
 	mProgressView = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(self.frame.size.width/2-10, self.frame.size.height/2-10, 20, 20)];
 	mProgressView.style = NSProgressIndicatorSpinningStyle;
 	mProgressView.controlSize = NSRegularControlSize;
-	[mProgressView setHidden:TRUE];
+	[mProgressView setDisplayedWhenStopped:FALSE];
 	[self addSubview:mProgressView];
 }
 
@@ -45,27 +54,28 @@
  *
  *
  */
-- (void)drawRect:(NSRect)dirtyRect
+- (void)setObjectValue:(id)objectValue
 {
-	NSRect frame = self.frame;
+	[super setObjectValue:objectValue];
 	
-	[[NSColor whiteColor] setFill];
-	[NSBezierPath fillRect:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
+	NSUInteger transId = ++mTransId;
+	mObjVal = objectValue;
+	mImageView.image = nil;
+	NSImage* (^loadImage)() = _loadImage;
 	
-	[super drawRect:dirtyRect];
+	[mProgressView startAnimation:nil];
 	
-	if (mImage)
-		[mImageView drawRect:dirtyRect];
-	
-	[[NSColor blackColor] setStroke];
-	[NSBezierPath strokeRect:NSMakeRect(0, 0, frame.size.width, frame.size.height)];
-	
-	if (mTimestamp) {
-		[mTimestamp drawInRect:NSMakeRect(5, 5, 200, 15) withAttributes:@{
-			NSFontAttributeName: [NSFont systemFontOfSize:12],
-			NSForegroundColorAttributeName: [NSColor blackColor]
-//		NSStrokeWidthAttributeName: @(1.0),
-//		NSStrokeColorAttributeName: [NSColor blackColor]
+	if (loadImage) {
+		[[MBDownloadQueue sharedInstance] dispatchBeg:^{
+			NSImage *image = loadImage();
+			if (transId == mTransId) {
+				[[NSThread mainThread] performBlock:^{
+					if (transId == mTransId) {
+						[mProgressView stopAnimation:nil];
+						mImageView.image = image;
+					}
+				}];
+			}
 		}];
 	}
 }
@@ -99,26 +109,6 @@
 - (BOOL)loading
 {
 	return ![mProgressView isHidden];
-}
-
-/**
- *
- *
- */
-- (NSImage *)image
-{
-	return mImage;
-}
-
-/**
- *
- *
- */
-- (void)setImage:(NSImage *)image
-{
-	mImageView.image = (mImage = image);
-	[mImageView setHidden:(nil == image)];
-	[self setNeedsDisplay:TRUE];
 }
 
 /**
