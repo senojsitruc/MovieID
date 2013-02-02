@@ -7,6 +7,7 @@
 //
 
 #import "MBScreencapsTableView.h"
+#import "MBScreencapsWindowController.h"
 
 @interface MBScreencapsTableView ()
 {
@@ -48,6 +49,21 @@
 	mLastMouseDownEvent = theEvent;
 	mLastMouseDownFlags = [NSEvent modifierFlags];
 	[super mouseDown:theEvent];
+}
+
+/**
+ *
+ *
+ */
+- (NSImage *)dragImageForRowsWithIndexes:(NSIndexSet *)dragRows tableColumns:(NSArray *)tableColumns event:(NSEvent *)dragEvent offset:(NSPointPointer)dragImageOffset
+{
+	NSPoint point = [self convertPoint:mLastMouseDownEvent.locationInWindow fromView:nil];
+	NSInteger row = [self rowAtPoint:point];
+	NSInteger col = [self columnAtPoint:point];
+	MBScreencapsWindowController *swc = (MBScreencapsWindowController *)self.dataSource;
+	NSImage *draggedImage = [swc thumbnailImageForRow:row column:col];
+	
+	return draggedImage;
 }
 
 @end

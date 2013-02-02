@@ -33,4 +33,9 @@
 - (void)showInWindow:(NSWindow *)parentWindow forMovie:(MBMovie *)movie;
 - (void)hide;
 
+/**
+ * For use by the table view for dragged images.
+ */
+- (NSImage *)thumbnailImageForRow:(NSUInteger)row column:(NSUInteger)col;
+
 @end

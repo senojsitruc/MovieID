@@ -30,6 +30,8 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	NSUInteger mTransactionId;
 	NSMutableDictionary *mImageCache;
 	
+	NSUInteger mDraggedImageIndex;
+	
 	MBMovie *mMovie;
 }
 @end
@@ -61,6 +63,9 @@ NSString * const MBScreencapsKeyHeight = @"height";
 - (void)windowDidLoad
 {
 	[super windowDidLoad];
+	
+	// we can drag thumbnails to the finder (or other apss)
+	[_tableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:FALSE];
 	
 	// click a table cell to show a full size screencap
 	_tableView.target = self;
@@ -104,6 +109,22 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	[self.window orderOut:nil];
 }
 
+/**
+ *
+ *
+ */
+- (NSImage *)thumbnailImageForRow:(NSUInteger)row column:(NSUInteger)col
+{
+	NSImage *image = nil;
+	NSString *key = [NSString stringWithFormat:@"%lu--png--210--150", 60*((5*row)+col)];
+	
+	@synchronized (mImageCache) {
+		image = mImageCache[key];
+	}
+	
+	return image;
+}
+
 
 
 
@@ -141,7 +162,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	
 	seconds = timeOffset;
 	
-	return [NSString stringWithFormat:@"%02lu:%02lu:%02lu", hours, minutes, seconds];
+	return [NSString stringWithFormat:@"%02lu.%02lu.%02lu", hours, minutes, seconds];
 }
 
 
@@ -230,6 +251,30 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	}
 	
 	return image;
+}
+
+/**
+ * Offset is expressed in seconds.
+ *
+ */
+- (NSData *)serverGetDataForImageAtOffset:(NSUInteger)offset withSize:(NSSize)size
+{
+	NSData *data = nil;
+	NSString *key = [NSString stringWithFormat:@"%lu--png--%d--%d", offset, (int)size.width, (int)size.height];
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	
+	if (imageHost.length) {
+		NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
+		
+		[urlString appendString:@"/Screencaps/"];
+		[urlString appendString:[mMovie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		[urlString appendString:@"/image--"];
+		[urlString appendString:key];
+		
+		data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
+	}
+	
+	return data;
 }
 
 
@@ -421,6 +466,49 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		return @(imageNdx);
 	else
 		return nil;
+}
+
+
+
+
+
+#pragma mark - NSTableViewDataSource - Drag-n-Drop
+
+/**
+ *
+ *
+ */
+- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+	NSPoint point = [_tableView convertPoint:_tableView.lastMouseDownEvent.locationInWindow fromView:nil];
+	NSInteger row = [_tableView rowAtPoint:point];
+	NSInteger col = [_tableView columnAtPoint:point];
+	
+	mDraggedImageIndex = (row * 5) + col;
+	
+	[pboard declareTypes:@[NSFilesPromisePboardType] owner:self];
+	[pboard setPropertyList:@[@"png"] forType:NSFilesPromisePboardType];
+	
+	return TRUE;
+}
+
+/**
+ *
+ *
+ */
+- (NSArray *)tableView:(NSTableView *)aTableView namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination forDraggedRowsWithIndexes:(NSIndexSet *)indexSet
+{
+	NSString *fileName = [NSString stringWithFormat:@"%@ - %@.png", mMovie.title, [self humanReadableCode:mGranularity*mDraggedImageIndex]];
+	NSString *filePath = [dropDestination.path stringByAppendingPathComponent:fileName];
+	
+	[[[NSData alloc] init] writeToFile:filePath atomically:TRUE];
+	
+	[NSThread performBlockInBackground:^{
+		NSData *data = [self serverGetDataForImageAtOffset:mGranularity*mDraggedImageIndex withSize:NSMakeSize(mInfoWidth, mInfoHeight)];
+		[data writeToFile:filePath atomically:FALSE];
+	}];
+	
+	return @[fileName];
 }
 
 @end
