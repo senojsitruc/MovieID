@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef void (^MBURLConnectionDataHandler) (NSNumber*, NSDictionary*, NSData*);
-typedef void (^MBURLConnectionProgressHandler) (long long, long long, NSString*, NSString*, NSString*, NSURL*);
+typedef void (^MBURLConnectionProgressHandler) (long long, long long, NSString*, NSString*, NSString*, NSURL*, NSData*);
 
 @interface MBURLConnection : NSURLConnection <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 

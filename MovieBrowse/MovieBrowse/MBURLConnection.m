@@ -155,7 +155,7 @@
 	mDone = TRUE;
 	
 	if (mProgressHandler && _contentLength)
-		mProgressHandler(mData.length, _contentLength, _fileName, _mimeType, _textEncoding, _url);
+		mProgressHandler(mData.length, _contentLength, _fileName, _mimeType, _textEncoding, _url, nil);
 	
 	if (mResponse) {
 		if (mDataHandler)
@@ -216,7 +216,7 @@
 	_url = response.URL;
 	
 	if (mProgressHandler)
-		mProgressHandler(0, _contentLength, _fileName, _mimeType, _textEncoding, _url);
+		mProgressHandler(0, _contentLength, _fileName, _mimeType, _textEncoding, _url, nil);
 	
 	if ([response isKindOfClass:NSHTTPURLResponse.class]) {
 		if (mResponse) {
@@ -244,7 +244,7 @@
 	//NSLog(@"%s.. %llu", __PRETTY_FUNCTION__, mResponse.expectedContentLength);
 	
 	if (mProgressHandler && _contentLength)
-		mProgressHandler(mData.length, _contentLength, _fileName, _mimeType, _textEncoding, _url);
+		mProgressHandler(mData.length, _contentLength, _fileName, _mimeType, _textEncoding, _url, data);
 }
 
 /**

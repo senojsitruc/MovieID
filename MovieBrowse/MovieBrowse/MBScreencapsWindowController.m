@@ -13,7 +13,9 @@
 #import "MBAppDelegate.h"
 #import "MBMovie.h"
 #import "MBDownloadQueue.h"
+#import "MBFileMetadata.h"
 #import "NSThread+Additions.h"
+#import "NSProgress.h"
 #import <QuartzCore/QuartzCore.h>
 
 NSString * const MBScreencapsKeyDuration = @"duration";
@@ -34,6 +36,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	
 	NSUInteger mDraggedImageIndex;
 	
+	NSUInteger mTransId;
 	MBMovie *mMovie;
 }
 @end
@@ -390,7 +393,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		[urlRequest setHTTPShouldHandleCookies:TRUE];
 		[urlRequest setHTTPShouldUsePipelining:TRUE];
 		
-		MBURLConnectionProgressHandler progressHandler = ^ (long long _bytesSoFar, long long _bytesTotal, NSString *_fileName, NSString *_mimeType, NSString *_textEncoding, NSURL *_url) {
+		MBURLConnectionProgressHandler progressHandler = ^ (long long _bytesSoFar, long long _bytesTotal, NSString *_fileName, NSString *_mimeType, NSString *_textEncoding, NSURL *_url, NSData *_data) {
 			[[NSThread mainThread] performBlock:^{
 				_bigPrg.doubleValue = 100. * (double)_bytesSoFar / (double)_bytesTotal;
 				_bigTxt.stringValue = [NSString stringWithFormat:@"%llu of %llu", _bytesSoFar, _bytesTotal];
@@ -579,14 +582,72 @@ NSString * const MBScreencapsKeyHeight = @"height";
 - (NSArray *)tableView:(NSTableView *)aTableView namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination forDraggedRowsWithIndexes:(NSIndexSet *)indexSet
 {
 	NSString *fileName = [NSString stringWithFormat:@"%@ - %@.png", mMovie.title, [self humanReadableCode:mGranularity*mDraggedImageIndex]];
-	NSString *filePath = [dropDestination.path stringByAppendingPathComponent:fileName];
+	NSString *filePath = [[dropDestination.path stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"download"];
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	NSOutputStream *outputStream = [NSOutputStream outputStreamToFileAtPath:filePath append:TRUE];
+	NSMutableURLRequest *urlRequest = nil;
+	MBMovie *mbmovie = mMovie;
+	NSProgress *progress = nil;
 	
-	[[[NSData alloc] init] writeToFile:filePath atomically:TRUE];
+	// if there's no image host, then we don't know where to get the image from
+	if (!imageHost.length)
+		return @[fileName];
 	
-	[NSThread performBlockInBackground:^{
-		NSData *data = [self serverGetDataForImageAtOffset:mGranularity*mDraggedImageIndex withSize:NSMakeSize(mInfoWidth, mInfoHeight)];
-		[data writeToFile:filePath atomically:FALSE];
-	}];
+	[outputStream open];
+	
+	// construct the request url and the progress. the progress object will reflect our download
+	// progress in the dock and in the finder.
+	{
+		NSUInteger timeOffset = mGranularity * mDraggedImageIndex;
+		NSString *key = [NSString stringWithFormat:@"%lu--png--%d--%d", timeOffset, (int)mInfoWidth, (int)mInfoHeight];
+		NSMutableString *urlString = [[NSMutableString alloc] init];
+		
+		[urlString appendString:imageHost];
+		[urlString appendString:@"/Screencaps/"];
+		[urlString appendString:[mbmovie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		[urlString appendString:@"/image--"];
+		[urlString appendString:key];
+		
+		NSURL *url = [[NSURL alloc] initWithString:urlString];
+		
+		urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+		[urlRequest setHTTPMethod:@"GET"];
+		[urlRequest setHTTPShouldHandleCookies:TRUE];
+		[urlRequest setHTTPShouldUsePipelining:TRUE];
+		
+		NSDictionary *userInfo = @{ @"NSProgressFileDownloadingSourceURL": url,
+																@"NSProgressFileLocationCanChange": @(TRUE),
+																@"NSProgressFileOperationKind": @"NSProgressFileOperationKindDownloading",
+																@"NSProgressFileURL": [NSURL fileURLWithPath:filePath] };
+		
+		progress = [[NSProgress alloc] initWithParent:nil userInfo:userInfo];
+		progress.kind = @"NSProgressKindFile";
+		progress.pausable = TRUE;
+		progress.cancellable = TRUE;
+		progress.totalUnitCount = 1;
+		progress.completedUnitCount = 0;
+		[progress publish];
+	}
+	
+	// the progress handler receives data as the sender sends it to us. we append it to the file
+	MBURLConnectionProgressHandler progressHandler = ^ (long long _bytesSoFar, long long _bytesTotal, NSString *_fileName, NSString *_mimeType, NSString *_textEncoding, NSURL *_url, NSData *_data) {
+		if (_data) {
+			[outputStream write:_data.bytes maxLength:_data.length];
+			progress.totalUnitCount = _bytesTotal;
+			progress.completedUnitCount = _bytesSoFar;
+		}
+	};
+	
+	// the data handler is called when the response is complete. close the file.
+	MBURLConnectionDataHandler dataHandler = ^ (NSNumber *_status, NSDictionary *_headers, NSData *_data) {
+		[fileManager moveItemAtPath:filePath toPath:[filePath stringByDeletingPathExtension] error:nil];
+		[outputStream close];
+		[progress unpublish];
+	};
+	
+	MBURLConnection *urlConnection = [[MBURLConnection alloc] initWithRequest:urlRequest progressHandler:progressHandler dataHandler:dataHandler];
+	[urlConnection runInBackground:TRUE];
 	
 	return @[fileName];
 }

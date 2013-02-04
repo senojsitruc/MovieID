@@ -14,6 +14,7 @@
 		F9133EF8168EE7CD0097A985 /* MBActorEditWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9133EF6168EE7CD0097A985 /* MBActorEditWindowController.xib */; };
 		F9133EFB168EFB770097A985 /* NSPopUpButton+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9133EFA168EFB770097A985 /* NSPopUpButton+Additions.m */; };
 		F914FC6215FCF11400B960D0 /* MBMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914FC6115FCF11400B960D0 /* MBMovieView.m */; };
+		F91AAF6516C0175A001278EC /* MBFileMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = F91AAF6416C0175A001278EC /* MBFileMetadata.m */; };
 		F922D192168E47560018B5D1 /* NSImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F922D191168E47560018B5D1 /* NSImage+Additions.m */; };
 		F923205A167962D300D14519 /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232059167962D300D14519 /* NSArray+Additions.m */; };
 		F923206A167D147400D14519 /* MBGenreCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9232069167D147400D14519 /* MBGenreCellView.m */; };
@@ -124,6 +125,9 @@
 		F9133EFA168EFB770097A985 /* NSPopUpButton+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPopUpButton+Additions.m"; sourceTree = "<group>"; };
 		F914FC6015FCF11400B960D0 /* MBMovieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieView.h; sourceTree = "<group>"; };
 		F914FC6115FCF11400B960D0 /* MBMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieView.m; sourceTree = "<group>"; };
+		F91AAF6316C0175A001278EC /* MBFileMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBFileMetadata.h; sourceTree = "<group>"; };
+		F91AAF6416C0175A001278EC /* MBFileMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBFileMetadata.m; sourceTree = "<group>"; };
+		F91AAF6716C03E89001278EC /* NSProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSProgress.h; sourceTree = "<group>"; };
 		F91FD3121653E85E0060E4FC /* MovieID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MovieID.framework; path = "/Volumes/DasRamDisk/Xcode/MovieID-aadurtnvwlsyfzcufjyphkfsyzrk/Build/Products/Debug/MovieID.framework"; sourceTree = "<absolute>"; };
 		F922D190168E47560018B5D1 /* NSImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Additions.h"; sourceTree = "<group>"; };
 		F922D191168E47560018B5D1 /* NSImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Additions.m"; sourceTree = "<group>"; };
@@ -365,6 +369,9 @@
 			children = (
 				F94D323316BF1ABC0004EE39 /* MBURLConnection.h */,
 				F94D323416BF1ABC0004EE39 /* MBURLConnection.m */,
+				F91AAF6316C0175A001278EC /* MBFileMetadata.h */,
+				F91AAF6416C0175A001278EC /* MBFileMetadata.m */,
+				F91AAF6716C03E89001278EC /* NSProgress.h */,
 			);
 			name = Miscellaneous;
 			sourceTree = "<group>";
@@ -757,6 +764,7 @@
 				F9D90D5716B8953C0063C0F6 /* MBActorRowView.m in Sources */,
 				F9EBF47C16BC5620008892DF /* MBScreencapsTableView.m in Sources */,
 				F94D323516BF1ABC0004EE39 /* MBURLConnection.m in Sources */,
+				F91AAF6516C0175A001278EC /* MBFileMetadata.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
