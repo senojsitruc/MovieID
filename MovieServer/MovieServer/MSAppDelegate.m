@@ -67,7 +67,7 @@ NSString * const gBaseDir = @"/Users/Shared/Bigger/Media/Movies";
 		NSString *action = pathParts[1];
 		
 		//
-		// screencaps
+		// Screencaps
 		//
 		if ([action isEqualToString:@"Screencaps"]) {
 			NSString *movieDir = [pathParts[2] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

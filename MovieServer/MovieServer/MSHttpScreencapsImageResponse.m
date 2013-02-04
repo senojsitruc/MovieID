@@ -7,6 +7,7 @@
 //
 
 #import "MSHttpScreencapsImageResponse.h"
+#import "HTTPDataResponse.h"
 #import "HTTPConnection.h"
 #import "MSHttpResponse.h"
 #import "MSAppDelegate.h"
@@ -17,11 +18,26 @@
 
 @implementation MSHttpScreencapsImageResponse
 
-+ (MSHttpResponse *)responseWithPath:(NSString *)filePath andFiles:(NSArray *)files andParams:(NSString *)params forConnection:(HTTPConnection *)connection;
++ (id<HTTPResponse>)responseWithPath:(NSString *)filePath andFiles:(NSArray *)files andParams:(NSString *)params forConnection:(HTTPConnection *)connection
 {
 	if (!files.count)
 		return nil;
 	
+	NSArray *paramParts = [params componentsSeparatedByString:@"--"];
+	
+	if (paramParts.count < 5) {
+		NSLog(@"%s.. invalid params, '%@'", __PRETTY_FUNCTION__, params);
+//	[connection responseDidAbort:response];
+		return nil;
+	}
+	
+	NSUInteger offset = ((NSString *)paramParts[1]).integerValue;
+	CGSize size = CGSizeMake(((NSString *)paramParts[3]).integerValue, ((NSString *)paramParts[4]).integerValue);
+	NSData *imageData = [MSAppDelegate pngDataForTime:offset inMovie:files[0] maxSize:size];
+	
+	return [[HTTPDataResponse alloc] initWithData:imageData];
+	
+	/*
 	MSHttpScreencapsImageResponse *response = [[MSHttpScreencapsImageResponse alloc] init];
 //NSDictionary *args = [response parseCgiParams:filePath];
 	
@@ -56,8 +72,9 @@
 		response->mIsDone = TRUE;
 		[connection responseHasAvailableData:response];
 	}];
+	*/
 	
-	return response;
+	//return response;
 }
 
 @end

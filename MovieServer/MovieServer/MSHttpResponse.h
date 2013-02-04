@@ -15,6 +15,7 @@
 {
 	BOOL mIsDone;
 	NSUInteger mResultCount;
+	NSUInteger mContentLength;
 }
 
 @property (nonatomic, strong) NSString *filePath;

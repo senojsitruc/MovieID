@@ -52,7 +52,7 @@
  */
 - (UInt64)contentLength
 {
-	return 0;
+	return mContentLength;
 }
 
 /**

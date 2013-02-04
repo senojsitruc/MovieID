@@ -11,6 +11,6 @@
 
 @interface MSHttpScreencapsImageResponse : MSHttpResponse
 
-+ (MSHttpResponse *)responseWithPath:(NSString *)filePath andFiles:(NSArray *)files andParams:(NSString *)params forConnection:(HTTPConnection *)connection;
++ (id<HTTPResponse>)responseWithPath:(NSString *)filePath andFiles:(NSArray *)files andParams:(NSString *)params forConnection:(HTTPConnection *)connection;
 
 @end
