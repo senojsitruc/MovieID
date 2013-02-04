@@ -14,6 +14,7 @@
 #import "MBMovie.h"
 #import "MBDownloadQueue.h"
 #import "NSThread+Additions.h"
+#import <QuartzCore/QuartzCore.h>
 
 NSString * const MBScreencapsKeyDuration = @"duration";
 NSString * const MBScreencapsKeyWidth = @"width";
@@ -357,8 +358,11 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	
 	// clear out the previous image (if any) and start the progress indicator
 	_bigImg.image = nil;
-	_bigPrg.doubleValue = 0.;
-	[_bigPrg setHidden:FALSE];
+	_bigPrg.doubleValue = 0.1;
+	_bigPrg.layer.opacity = 0.6;
+	_bigTxt.layer.opacity = 0.8;
+	_bigImg.layer.opacity = 0.0;
+	_bigTxt.stringValue = @"Loading...";
 	
 	// the window title includes the movie title and the time offset for the screencap
 	_bigWin.title = [NSString stringWithFormat:@"%@ | %@", mMovie.title, [self humanReadableCode:timeOffset]];
@@ -368,18 +372,6 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	[_bigWin setFrame:cellFrame display:TRUE animate:FALSE];
 	[_bigWin makeKeyAndOrderFront:sender];
 	[_bigWin setFrame:winFrame display:TRUE animate:TRUE];
-	
-	/*
-	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
-		NSImage *image = [self serverGetImageAtOffset:timeOffset withSize:NSMakeSize(mInfoWidth, mInfoHeight)];
-		image.size = NSMakeSize(picWidth, picHeight);
-		
-		[[NSThread mainThread] performBlock:^{
-			[_bigPrg stopAnimation:sender];
-			_bigImg.image = image;
-		}];
-	}];
-	*/
 	
 	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
 		NSString *key = [NSString stringWithFormat:@"%lu--png--%d--%d", timeOffset, (int)mInfoWidth, (int)mInfoHeight];
@@ -401,6 +393,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		MBURLConnectionProgressHandler progressHandler = ^ (long long _bytesSoFar, long long _bytesTotal, NSString *_fileName, NSString *_mimeType, NSString *_textEncoding, NSURL *_url) {
 			[[NSThread mainThread] performBlock:^{
 				_bigPrg.doubleValue = 100. * (double)_bytesSoFar / (double)_bytesTotal;
+				_bigTxt.stringValue = [NSString stringWithFormat:@"%llu of %llu", _bytesSoFar, _bytesTotal];
 			}];
 		};
 		
@@ -409,15 +402,52 @@ NSString * const MBScreencapsKeyHeight = @"height";
 			image.size = NSMakeSize(picWidth, picHeight);
 			
 			[[NSThread mainThread] performBlock:^{
-				_bigPrg.doubleValue = 0.;
+				CABasicAnimation *fadeOut = [CABasicAnimation animationWithKeyPath:@"opacity"];
+				fadeOut.fromValue = @(0.8);
+				fadeOut.toValue = @(0.0);
+				fadeOut.duration = 0.75;
+				fadeOut.delegate = self;
+				fadeOut.removedOnCompletion = FALSE;
+				[fadeOut setValue:@"fadeOut" forKey:@"type"];
+				[_bigPrg.layer addAnimation:fadeOut forKey:@"opacity"];
+				[_bigTxt.layer addAnimation:fadeOut forKey:@"opacity"];
+				
 				_bigImg.image = image;
-				[_bigPrg setHidden:TRUE];
+				CABasicAnimation *fadeIn = [CABasicAnimation animationWithKeyPath:@"opacity"];
+				fadeIn.fromValue = @(0.0);
+				fadeIn.toValue = @(1.0);
+				fadeIn.duration = 0.75;
+				fadeIn.delegate = self;
+				fadeIn.removedOnCompletion = FALSE;
+				[fadeOut setValue:@"fadeIn" forKey:@"type"];
+				[_bigImg.layer addAnimation:fadeOut forKey:@"fadeIn"];
 			}];
 		};
 		
 		MBURLConnection *urlConnection = [[MBURLConnection alloc] initWithRequest:urlRequest progressHandler:progressHandler dataHandler:dataHandler];
 		[urlConnection runInBackground:FALSE];
 	}];
+}
+
+/**
+ *
+ *
+ */
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+	NSString *type = [theAnimation valueForKey:@"type"];
+	
+	if ([type isEqualToString:@"fadeOut"]) {
+		_bigPrg.layer.opacity = 0.;
+		[_bigPrg.layer removeAnimationForKey:@"opacity"];
+		
+		_bigTxt.layer.opacity = 0.;
+		[_bigTxt.layer removeAnimationForKey:@"opacity"];
+	}
+	else if ([type isEqualToString:@"fadeIn"]) {
+		_bigImg.layer.opacity = 1.;
+		[_bigTxt.layer removeAnimationForKey:@"opacity"];
+	}
 }
 
 

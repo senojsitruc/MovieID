@@ -26,6 +26,7 @@
 @property (readwrite, assign, nonatomic) IBOutlet NSPanel *bigWin;
 @property (readwrite, assign, nonatomic) IBOutlet NSImageView *bigImg;
 @property (readwrite, assign, nonatomic) IBOutlet NSProgressIndicator *bigPrg;
+@property (readwrite, assign, nonatomic) IBOutlet NSTextField *bigTxt;
 
 /**
  * Show / hide
