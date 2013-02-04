@@ -18,7 +18,7 @@
 
 @implementation MSHttpScreencapsImageResponse
 
-+ (id<HTTPResponse>)responseWithPath:(NSString *)filePath andFiles:(NSArray *)files andParams:(NSString *)params forConnection:(HTTPConnection *)connection
++ (NSObject<HTTPResponse> *)responseWithPath:(NSString *)filePath andFiles:(NSArray *)files andParams:(NSString *)params forConnection:(HTTPConnection *)connection
 {
 	if (!files.count)
 		return nil;
