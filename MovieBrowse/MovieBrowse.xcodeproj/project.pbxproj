@@ -42,6 +42,7 @@
 		F932122C16361F140093E619 /* MBDownloadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F932122B16361F130093E619 /* MBDownloadQueue.m */; };
 		F93212611638C5460093E619 /* MBImportWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212601638C5460093E619 /* MBImportWindowController.m */; };
 		F93212641638EA170093E619 /* MBImportCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212631638EA170093E619 /* MBImportCellView.m */; };
+		F94D323516BF1ABC0004EE39 /* MBURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F94D323416BF1ABC0004EE39 /* MBURLConnection.m */; };
 		F97BF37A15F91FF400444926 /* MBActorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37915F91FF400444926 /* MBActorView.m */; };
 		F97BF37D15F9C20200444926 /* MBGenre.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37C15F9C20200444926 /* MBGenre.m */; };
 		F98A50D1166BE76400749333 /* MovieID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
@@ -171,6 +172,8 @@
 		F93212601638C5460093E619 /* MBImportWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImportWindowController.m; sourceTree = "<group>"; };
 		F93212621638EA170093E619 /* MBImportCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBImportCellView.h; sourceTree = "<group>"; };
 		F93212631638EA170093E619 /* MBImportCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImportCellView.m; sourceTree = "<group>"; };
+		F94D323316BF1ABC0004EE39 /* MBURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBURLConnection.h; sourceTree = "<group>"; };
+		F94D323416BF1ABC0004EE39 /* MBURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBURLConnection.m; sourceTree = "<group>"; };
 		F97BF37815F91FF400444926 /* MBActorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorView.h; sourceTree = "<group>"; };
 		F97BF37915F91FF400444926 /* MBActorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorView.m; sourceTree = "<group>"; };
 		F97BF37B15F9C20100444926 /* MBGenre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenre.h; sourceTree = "<group>"; };
@@ -357,6 +360,15 @@
 			name = Import;
 			sourceTree = "<group>";
 		};
+		F94D323116BF1A3D0004EE39 /* Miscellaneous */ = {
+			isa = PBXGroup;
+			children = (
+				F94D323316BF1ABC0004EE39 /* MBURLConnection.h */,
+				F94D323416BF1ABC0004EE39 /* MBURLConnection.m */,
+			);
+			name = Miscellaneous;
+			sourceTree = "<group>";
+		};
 		F97BF37415F91F8200444926 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
@@ -475,6 +487,7 @@
 				F90E4635168E2B4F005DAF44 /* MBGoogleImageSearch.h */,
 				F90E4636168E2B50005DAF44 /* MBGoogleImageSearch.m */,
 				F9B902B315F7A8C60089BB17 /* Categories */,
+				F94D323116BF1A3D0004EE39 /* Miscellaneous */,
 				F9EA0CEC16B75E890037875F /* Extern */,
 				F9B902AF15F7A7E80089BB17 /* Model */,
 				F97BF37415F91F8200444926 /* Interface */,
@@ -743,6 +756,7 @@
 				F9D90D5416B889080063C0F6 /* MBGenreRowView.m in Sources */,
 				F9D90D5716B8953C0063C0F6 /* MBActorRowView.m in Sources */,
 				F9EBF47C16BC5620008892DF /* MBScreencapsTableView.m in Sources */,
+				F94D323516BF1ABC0004EE39 /* MBURLConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

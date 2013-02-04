@@ -9,6 +9,7 @@
 #import "MBScreencapsWindowController.h"
 #import "MBScreencapsTableView.h"
 #import "MBScreencapsThumbnailCellView.h"
+#import "MBURLConnection.h"
 #import "MBAppDelegate.h"
 #import "MBMovie.h"
 #import "MBDownloadQueue.h"
@@ -299,6 +300,14 @@ NSString * const MBScreencapsKeyHeight = @"height";
  */
 - (void)doActionThumbnailTableClicked:(id)sender
 {
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	MBMovie *mbmovie = mMovie;
+	
+	if (!imageHost.length) {
+		NSLog(@"%s.. no image host!", __PRETTY_FUNCTION__);
+		return;
+	}
+	
 	NSInteger row = _tableView.clickedRow;
 	NSInteger col = _tableView.clickedColumn;
 	
@@ -348,7 +357,8 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	
 	// clear out the previous image (if any) and start the progress indicator
 	_bigImg.image = nil;
-	[_bigPrg startAnimation:sender];
+	_bigPrg.doubleValue = 0.;
+	[_bigPrg setHidden:FALSE];
 	
 	// the window title includes the movie title and the time offset for the screencap
 	_bigWin.title = [NSString stringWithFormat:@"%@ | %@", mMovie.title, [self humanReadableCode:timeOffset]];
@@ -359,6 +369,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	[_bigWin makeKeyAndOrderFront:sender];
 	[_bigWin setFrame:winFrame display:TRUE animate:TRUE];
 	
+	/*
 	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
 		NSImage *image = [self serverGetImageAtOffset:timeOffset withSize:NSMakeSize(mInfoWidth, mInfoHeight)];
 		image.size = NSMakeSize(picWidth, picHeight);
@@ -367,6 +378,45 @@ NSString * const MBScreencapsKeyHeight = @"height";
 			[_bigPrg stopAnimation:sender];
 			_bigImg.image = image;
 		}];
+	}];
+	*/
+	
+	[[MBDownloadQueue sharedInstance] dispatchBeg:^{
+		NSString *key = [NSString stringWithFormat:@"%lu--png--%d--%d", timeOffset, (int)mInfoWidth, (int)mInfoHeight];
+		NSMutableString *urlString = [[NSMutableString alloc] init];
+		
+		[urlString appendString:imageHost];
+		[urlString appendString:@"/Screencaps/"];
+		[urlString appendString:[mbmovie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		[urlString appendString:@"/image--"];
+		[urlString appendString:key];
+		
+		NSURL *url = [[NSURL alloc] initWithString:urlString];
+		NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+		
+		[urlRequest setHTTPMethod:@"GET"];
+		[urlRequest setHTTPShouldHandleCookies:TRUE];
+		[urlRequest setHTTPShouldUsePipelining:TRUE];
+		
+		MBURLConnectionProgressHandler progressHandler = ^ (long long _bytesSoFar, long long _bytesTotal, NSString *_fileName, NSString *_mimeType, NSString *_textEncoding, NSURL *_url) {
+			[[NSThread mainThread] performBlock:^{
+				_bigPrg.doubleValue = 100. * (double)_bytesSoFar / (double)_bytesTotal;
+			}];
+		};
+		
+		MBURLConnectionDataHandler dataHandler = ^ (NSNumber *_status, NSDictionary *_headers, NSData *_data) {
+			NSImage *image = [[NSImage alloc] initWithData:_data];
+			image.size = NSMakeSize(picWidth, picHeight);
+			
+			[[NSThread mainThread] performBlock:^{
+				_bigPrg.doubleValue = 0.;
+				_bigImg.image = image;
+				[_bigPrg setHidden:TRUE];
+			}];
+		};
+		
+		MBURLConnection *urlConnection = [[MBURLConnection alloc] initWithRequest:urlRequest progressHandler:progressHandler dataHandler:dataHandler];
+		[urlConnection runInBackground:FALSE];
 	}];
 }
 

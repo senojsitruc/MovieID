@@ -88,11 +88,11 @@
 						<object class="NSProgressIndicator" id="603430368">
 							<reference key="NSNextResponder" ref="636624037"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{345, 171}, {16, 16}}</string>
+							<string key="NSFrame">{{253, 169}, {200, 20}}</string>
 							<reference key="NSSuperview" ref="636624037"/>
 							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:945</string>
-							<int key="NSpiFlags">28938</int>
+							<int key="NSpiFlags">24584</int>
 							<double key="NSMaxValue">100</double>
 						</object>
 					</array>
@@ -401,7 +401,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{976, 13}, {75, 32}}</string>
 							<reference key="NSSuperview" ref="51675631"/>
-							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="177724539">
@@ -674,8 +673,8 @@
 								<float key="scoringTypeFloat">29</float>
 								<int key="contentType">3</int>
 							</object>
-							<reference ref="603430368"/>
 							<reference ref="767969258"/>
+							<reference ref="603430368"/>
 						</array>
 						<reference key="parent" ref="568505736"/>
 					</object>
@@ -695,6 +694,24 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">164</int>
 						<reference key="object" ref="603430368"/>
+						<array class="NSMutableArray" key="children">
+							<object class="IBNSLayoutConstraint" id="114116355">
+								<reference key="firstItem" ref="603430368"/>
+								<int key="firstAttribute">7</int>
+								<int key="relation">0</int>
+								<nil key="secondItem"/>
+								<int key="secondAttribute">0</int>
+								<float key="multiplier">1</float>
+								<object class="IBLayoutConstant" key="constant">
+									<double key="value">200</double>
+								</object>
+								<float key="priority">1000</float>
+								<reference key="containingView" ref="603430368"/>
+								<int key="scoringType">3</int>
+								<float key="scoringTypeFloat">9</float>
+								<int key="contentType">1</int>
+							</object>
+						</array>
 						<reference key="parent" ref="636624037"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -1021,18 +1038,8 @@
 						<reference key="parent" ref="636624037"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">351</int>
-						<reference key="object" ref="283937706"/>
-						<reference key="parent" ref="636624037"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">352</int>
 						<reference key="object" ref="821841544"/>
-						<reference key="parent" ref="636624037"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">353</int>
-						<reference key="object" ref="312621410"/>
 						<reference key="parent" ref="636624037"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -1045,6 +1052,21 @@
 						<reference key="object" ref="464276983"/>
 						<reference key="parent" ref="51675631"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">363</int>
+						<reference key="object" ref="114116355"/>
+						<reference key="parent" ref="603430368"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">364</int>
+						<reference key="object" ref="283937706"/>
+						<reference key="parent" ref="636624037"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">365</int>
+						<reference key="object" ref="312621410"/>
+						<reference key="parent" ref="636624037"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -1055,7 +1077,6 @@
 				<boolean value="YES" key="143.IBNSWindowAutoPositionCentersVertical"/>
 				<string key="143.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="143.NSWindowTemplate.visibleAtLaunch"/>
-				<string key="144.CustomClassName">MBScreencapsBigView</string>
 				<array class="NSMutableArray" key="144.IBNSViewMetadataConstraints">
 					<reference ref="309848438"/>
 					<reference ref="9963143"/>
@@ -1068,6 +1089,9 @@
 				<boolean value="NO" key="145.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="145.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="146.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<array class="NSMutableArray" key="164.IBNSViewMetadataConstraints">
+					<reference ref="114116355"/>
+				</array>
 				<boolean value="NO" key="164.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="164.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="168.IBNSWindowAutoPositionCentersHorizontal"/>
@@ -1140,17 +1164,18 @@
 				<string key="347.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="349.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="350.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="351.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="352.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="353.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="354.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="355.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="363.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="364.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="365.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">355</int>
+			<int key="maxID">365</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
