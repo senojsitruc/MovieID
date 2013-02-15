@@ -94,9 +94,12 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		mNumOfImages = 0;
 		[mImageCache removeAllObjects];
 		[self clearThumbnails];
-		[self serverGetScreencapsInfo];
 		((NSScrollView *)_tableView.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)_tableView.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
+		
+		[NSThread performBlockInBackground:^{
+			[self serverGetScreencapsInfo];
+		}];
 	}
 	
 	[NSApp beginSheet:self.window modalForWindow:parentWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
@@ -177,7 +180,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 #pragma mark - Server
 
 /**
- *
+ * Run this in a background thread because it calls the server and can block for a long time.
  *
  */
 - (void)serverGetScreencapsInfo
@@ -219,7 +222,9 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		mNumOfImages = 0;
 	}
 	
-	[_tableView reloadData];
+	[[NSThread mainThread] performBlock:^{
+		[_tableView reloadData];
+	}];
 }
 
 /**

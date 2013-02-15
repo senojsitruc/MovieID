@@ -193,7 +193,7 @@
 		F998F2CD162FBDD3008AF52D /* MBImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBImageCache.m; sourceTree = "<group>"; };
 		F998F2CF16305B27008AF52D /* MBStuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBStuff.h; sourceTree = "<group>"; };
 		F998F2D016305B28008AF52D /* MBStuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBStuff.m; sourceTree = "<group>"; };
-		F9AD8AE716B6869700404B19 /* MovieBrowseConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.bplist; name = MovieBrowseConfig.plist; path = ../../../../Support/MovieID/MovieBrowseConfig.plist; sourceTree = "<group>"; };
+		F9AD8AE716B6869700404B19 /* MovieBrowseConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.bplist; name = MovieBrowseConfig.plist; path = "/Volumes/Stuart Little/Projects/Support/MovieID/MovieBrowseConfig.plist"; sourceTree = "<absolute>"; };
 		F9B9027B15F791320089BB17 /* MovieBrowse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieBrowse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9B9027F15F791320089BB17 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F9B9028215F791320089BB17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
