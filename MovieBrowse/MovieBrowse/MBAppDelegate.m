@@ -118,27 +118,12 @@ static MBAppDelegate *gAppDelegate;
 	NSUInteger mFindIndex;
 	
 	/**
-	 * Movie Table
+	 * Table Menu Handlers
 	 */
 	MBPopUpMenuItemHandler mMovieMenuSortHandler;
-	
-	/**
-	 * Genre Table
-	 */
 	MBPopUpMenuItemHandler mGenreMenuMultiHandler;
-	
-	/**
-	 * Actor Table
-	 */
+	MBPopUpMenuItemHandler mActorMenuShowHandler;
 	MBPopUpMenuItemHandler mActorMenuSortHandler;
-	
-	MBPopUpButtonCell *mActorHeaderCell;
-	NSMenu *mActorHeaderMenu;
-	NSMenuItem *mActorHeaderMenuShowAllItem;
-	NSMenuItem *mActorHeaderMenuShowPopularItem;
-	NSMenuItem *mActorHeaderMenuSortByName;
-	NSMenuItem *mActorHeaderMenuSortByAge;
-	NSMenuItem *mActorHeaderMenuSortByMovies;
 }
 @end
 
@@ -280,20 +265,20 @@ static MBAppDelegate *gAppDelegate;
 	{
 		mGenreMenuMultiHandler = ^ (NSString *itemTitle, NSInteger itemTag, NSInteger state) {
 			if ([itemTitle isEqualToString:@"  Movies in Any"] || [itemTitle isEqualToString:@"Or"]) {
-				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies in Any" inSection:@"Multi Select"];
 				[[NSUserDefaults standardUserDefaults] setObject:@"Or" forKey:MBDefaultsKeyGenreMulti];
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies in Any" inSection:@"Multi Select"];
 			}
 			else if ([itemTitle isEqualToString:@"  Movies in All"] || [itemTitle isEqualToString:@"And"]) {
-				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies in All" inSection:@"Multi Select"];
 				[[NSUserDefaults standardUserDefaults] setObject:@"And" forKey:MBDefaultsKeyGenreMulti];
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies in All" inSection:@"Multi Select"];
 			}
 			else if ([itemTitle isEqualToString:@"  Movies not in Any"] || [itemTitle isEqualToString:@"NotOr"]) {
-				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies not in Any" inSection:@"Multi Select"];
 				[[NSUserDefaults standardUserDefaults] setObject:@"NotOr" forKey:MBDefaultsKeyGenreMulti];
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies not in Any" inSection:@"Multi Select"];
 			}
 			else if ([itemTitle isEqualToString:@"  Movies not in All"] || [itemTitle isEqualToString:@"NotAnd"]) {
-				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies not in All" inSection:@"Multi Select"];
 				[[NSUserDefaults standardUserDefaults] setObject:@"NotAnd" forKey:MBDefaultsKeyGenreMulti];
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies not in All" inSection:@"Multi Select"];
 			}
 			
 			[gAppDelegate doNotificationGenreSelectionChanged:nil];
@@ -309,48 +294,60 @@ static MBAppDelegate *gAppDelegate;
 	}
 	
 	//
-	// actor table customizations
+	// actor table menu
 	//
 	{
-		NSTableColumn *column = [self.actorTable tableColumnWithIdentifier:@"Actor"];
-		MBTableHeaderView *headerView = [[MBTableHeaderView alloc] init];
-		MBPopUpButtonCell *headerCell = [[MBPopUpButtonCell alloc] initTextCell:@"ActorsCell"];
-		headerCell.label = @"Actor";
+		mActorMenuShowHandler = ^ (NSString *itemTitle, NSInteger itemTag, NSInteger itemState) {
+			if ([itemTitle isEqualToString:@"  All"] || [itemTitle isEqualToString:@"All"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"All" forKey:MBDefaultsKeyActorShow];
+				[gAppDelegate->_actorTableMenu setState:NSOnState forItem:@"  All" inSection:@"Show"];
+				[gAppDelegate updateActorsHeaderLabel];
+				[gAppDelegate.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
+				[gAppDelegate updateActorPostSort];
+				[gAppDelegate updateActorFilter];
+			}
+			else if ([itemTitle isEqualToString:@"  Popular"] || [itemTitle isEqualToString:@"Popular"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Popular" forKey:MBDefaultsKeyActorShow];
+				[gAppDelegate->_actorTableMenu setState:NSOnState forItem:@"  Popular" inSection:@"Show"];
+				[gAppDelegate updateActorsHeaderLabel];
+				[gAppDelegate.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
+				[gAppDelegate updateActorPostSort];
+				[gAppDelegate updateActorFilter];
+			}
+		};
 		
-		NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Actor Menu"];
+		mActorMenuSortHandler = ^ (NSString *itemTitle, NSInteger itemTag, NSInteger itemState) {
+			if ([itemTitle isEqualToString:@"  Actor by Name"] || [itemTitle isEqualToString:@"Name"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Name" forKey:MBDefaultsKeyActorSort];
+				[gAppDelegate->_actorTableMenu setState:NSOnState forItem:@"  Actor by Name" inSection:@"Sort"];
+				[gAppDelegate updateActorsHeaderLabel];
+				[gAppDelegate.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
+				[gAppDelegate updateActorPostSort];
+			}
+			else if ([itemTitle isEqualToString:@"  Actor by Age"] || [itemTitle isEqualToString:@"Age"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Age" forKey:MBDefaultsKeyActorSort];
+				[gAppDelegate->_actorTableMenu setState:NSOnState forItem:@"  Actor by Age" inSection:@"Sort"];
+				[gAppDelegate updateActorsHeaderLabel];
+				[gAppDelegate.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dob" ascending:FALSE]]];
+				[gAppDelegate updateActorPostSort];
+			}
+			else if ([itemTitle isEqualToString:@"  Actor by Movies"] || [itemTitle isEqualToString:@"Movies"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Movies" forKey:MBDefaultsKeyActorSort];
+				[gAppDelegate->_actorTableMenu setState:NSOnState forItem:@"  Actor by Movies" inSection:@"Sort"];
+				[gAppDelegate updateActorsHeaderLabel];
+				[gAppDelegate.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"movieCount" ascending:FALSE]]];
+				[gAppDelegate updateActorPostSort];
+			}
+		};
 		
-		NSRect headerFrame = self.actorTable.headerView.frame;
-		headerFrame.size.height += 10;
-		headerView.frame = headerFrame;
+		[_actorTableMenu addSectionWithTitle:@"Show" mode:MBPopUpMenuSectionModeOne];
+		[_actorTableMenu addItemWithTitle:@"  All" toSection:@"Show" withHandler:mActorMenuShowHandler];
+		[_actorTableMenu addItemWithTitle:@"  Popular" toSection:@"Show" withHandler:mActorMenuShowHandler];
 		
-		[menu addItemWithTitle:@"Show" action:nil keyEquivalent:@""];
-		NSMenuItem *showAll = [menu addItemWithTitle:@"  All" action:@selector(doActionActorsShowAll:) keyEquivalent:@""];
-		NSMenuItem *showPopular = [menu addItemWithTitle:@"  Popular" action:@selector(doActionActorsShowPopular:) keyEquivalent:@""];
-		[menu addItem:[NSMenuItem separatorItem]];
-		
-		[menu addItemWithTitle:@"Sort" action:nil keyEquivalent:@""];
-		NSMenuItem *sortByName = [menu addItemWithTitle:@"  Actor by Name" action:@selector(doActionActorsSortByName:) keyEquivalent:@""];
-		NSMenuItem *sortByAge = [menu addItemWithTitle:@"  Actor by Age" action:@selector(doActionActorsSortByAge:) keyEquivalent:@""];
-		NSMenuItem *sortByMovies = [menu addItemWithTitle:@"  Actor by Movies" action:@selector(doActionActorsSortByMovies:) keyEquivalent:@""];
-		
-		showAll.target = self;
-		showPopular.target = self;
-		sortByName.target = self;
-		sortByAge.target = self;
-		sortByMovies.target = self;
-		
-		headerCell.menu = menu;
-		column.headerCell = headerCell;
-		
-		self.actorTable.headerView = headerView;
-		
-		mActorHeaderCell = headerCell;
-		mActorHeaderMenu = menu;
-		mActorHeaderMenuShowAllItem = showAll;
-		mActorHeaderMenuShowPopularItem = showPopular;
-		mActorHeaderMenuSortByName = sortByName;
-		mActorHeaderMenuSortByAge = sortByAge;
-		mActorHeaderMenuSortByMovies = sortByMovies;
+		[_actorTableMenu addSectionWithTitle:@"Sort" mode:MBPopUpMenuSectionModeOne];
+		[_actorTableMenu addItemWithTitle:@"  Actor by Name" toSection:@"Sort" withHandler:mActorMenuSortHandler];
+		[_actorTableMenu addItemWithTitle:@"  Actor by Age" toSection:@"Sort" withHandler:mActorMenuSortHandler];
+		[_actorTableMenu addItemWithTitle:@"  Actor by Movies" toSection:@"Sort" withHandler:mActorMenuSortHandler];
 		
 		((MMScroller *)_actorTableScrollView.verticalScroller).drawsRightRule = TRUE;
 	}
@@ -391,15 +388,7 @@ static MBAppDelegate *gAppDelegate;
 	// reinstate actor "show" behavior
 	{
 		NSString *show = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyActorShow];
-		
-		if ([show isEqualToString:@"All"]) {
-			mActorHeaderMenuShowAllItem.state = NSOnState;
-			mActorHeaderMenuShowPopularItem.state = NSOffState;
-		}
-		else if ([show isEqualToString:@"Popular"]) {
-			mActorHeaderMenuShowAllItem.state = NSOffState;
-			mActorHeaderMenuShowPopularItem.state = NSOnState;
-		}
+		mActorMenuShowHandler(show, 0, NSOnState);
 	}
 	
 	//
@@ -409,13 +398,7 @@ static MBAppDelegate *gAppDelegate;
 		// actors
 		{
 			NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyActorSort];
-			
-			if ([sort isEqualToString:@"Name"])
-				[self doActionActorsSortByName:mActorHeaderMenuSortByName];
-			else if ([sort isEqualToString:@"Age"])
-				[self doActionActorsSortByAge:mActorHeaderMenuSortByAge];
-			else if ([sort isEqualToString:@"Movies"])
-				[self doActionActorsSortByMovies:mActorHeaderMenuSortByMovies];
+			mActorMenuSortHandler(sort, 0, NSOnState);
 		}
 		
 		// genres
@@ -802,8 +785,6 @@ static MBAppDelegate *gAppDelegate;
 		[defaults setObject:genres forKey:MBDefaultsKeyGenreSelection];
 	}
 	
-	[self.genreTable.headerView setNeedsDisplay:TRUE];
-	
 	mLanguagesDirty = TRUE;
 	mRatingsDirty = TRUE;
 	
@@ -1073,25 +1054,23 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateActorsHeaderLabel
 {
-	NSString *prefix = nil;
+	NSString *prefix=nil, *label=nil;
+	NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyActorSort];
+	NSString *show = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyActorShow];
 	
-	if (mActorHeaderMenuSortByName.state == NSOnState)
-		prefix = @"Actor by Name";
-	else if (mActorHeaderMenuSortByAge.state == NSOnState)
-		prefix = @"Actor by Age";
-	else if (mActorHeaderMenuSortByMovies.state == NSOnState)
-		prefix = @"Actor by Movies";
+	if (sort)
+		prefix = [@"Actor by " stringByAppendingString:sort];
 	else
 		prefix = @"Actor";
 	
 	if (mActorSelection)
-		mActorHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mActorSelection.name];
-	else if (mActorHeaderMenuShowPopularItem.state)
-		mActorHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, @"Popular"];
+		label = [NSString stringWithFormat:@"%@ (%@)", prefix, mActorSelection.name];
+	else if ([show isEqualToString:@"Popular"])
+		label = [NSString stringWithFormat:@"%@ (%@)", prefix, @"Popular"];
 	else
-		mActorHeaderCell.label = prefix;
+		label = prefix;
 	
-	[self.actorTable.headerView setNeedsDisplay:TRUE];
+	_actorTableMenu.label = label;
 }
 
 /**
@@ -1106,84 +1085,6 @@ static MBAppDelegate *gAppDelegate;
 		((NSScrollView *)self.actorTable.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)self.actorTable.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 	}
-}
-
-/**
- *
- *
- */
-- (void)doActionActorsShowAll:(id)sender
-{
-	mActorHeaderMenuShowAllItem.state = NSOnState;
-	mActorHeaderMenuShowPopularItem.state = NSOffState;
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"All" forKey:MBDefaultsKeyActorShow];
-	
-	[self updateActorFilter];
-	[self updateActorsHeaderLabel];
-}
-
-/**
- *
- *
- */
-- (void)doActionActorsShowPopular:(id)sender
-{
-	mActorHeaderMenuShowAllItem.state = NSOffState;
-	mActorHeaderMenuShowPopularItem.state = NSOnState;
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"Popular" forKey:MBDefaultsKeyActorShow];
-	
-	[self updateActorFilter];
-	[self updateActorsHeaderLabel];
-}
-
-/**
- *
- *
- */
-- (void)doActionActorsSortByName:(id)sender
-{
-	mActorHeaderMenuSortByName.state = NSOnState;
-	mActorHeaderMenuSortByAge.state = NSOffState;
-	mActorHeaderMenuSortByMovies.state = NSOffState;
-	
-	[self updateActorsHeaderLabel];
-	[[NSUserDefaults standardUserDefaults] setObject:@"Name" forKey:MBDefaultsKeyActorSort];
-	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:TRUE]]];
-	[self updateActorPostSort];
-}
-
-/**
- *
- *
- */
-- (void)doActionActorsSortByAge:(id)sender
-{
-	mActorHeaderMenuSortByName.state = NSOffState;
-	mActorHeaderMenuSortByAge.state = NSOnState;
-	mActorHeaderMenuSortByMovies.state = NSOffState;
-	
-	[self updateActorsHeaderLabel];
-	[[NSUserDefaults standardUserDefaults] setObject:@"Age" forKey:MBDefaultsKeyActorSort];
-	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dob" ascending:FALSE]]];
-	[self updateActorPostSort];
-}
-
-/**
- *
- *
- */
-- (void)doActionActorsSortByMovies:(id)sender
-{
-	mActorHeaderMenuSortByName.state = NSOffState;
-	mActorHeaderMenuSortByAge.state = NSOffState;
-	mActorHeaderMenuSortByMovies.state = NSOnState;
-	
-	[self updateActorsHeaderLabel];
-	[[NSUserDefaults standardUserDefaults] setObject:@"Movies" forKey:MBDefaultsKeyActorSort];
-	[self.actorsArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"movieCount" ascending:FALSE]]];
-	[self updateActorPostSort];
 }
 
 
@@ -1476,7 +1377,8 @@ static MBAppDelegate *gAppDelegate;
 		return;
 	
 	NSPredicate *predicate = nil;
-	BOOL showAll = mActorHeaderMenuShowAllItem.state == NSOnState;
+	NSString *show = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyActorShow];
+	BOOL showAll = [show isEqualToString:@"All"];
 	
 	if (mMovieSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
