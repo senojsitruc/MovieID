@@ -32,11 +32,8 @@
 		F92A7ED1168635ED00F04EDF /* MBRenameWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92A7ECF168635ED00F04EDF /* MBRenameWindowController.xib */; };
 		F93211EC16327D2C0093E619 /* MBActorMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211EB16327D2C0093E619 /* MBActorMovieView.m */; };
 		F93211FB163310AB0093E619 /* MBActorCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93211FA163310AB0093E619 /* MBActorCellView.m */; };
-		F93212161635A2B30093E619 /* MBTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212151635A2B30093E619 /* MBTableHeaderView.m */; };
-		F93212191635B4070093E619 /* MBPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212181635B4060093E619 /* MBPopUpButtonCell.m */; };
 		F932121B1635C5E20093E619 /* DownArrow.gif in Resources */ = {isa = PBXBuildFile; fileRef = F932121A1635C5E20093E619 /* DownArrow.gif */; };
 		F932121D1635C8640093E619 /* UpDownArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = F932121C1635C8640093E619 /* UpDownArrow.png */; };
-		F93212201635DE0A0093E619 /* MBTableHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F932121F1635DE090093E619 /* MBTableHeaderCell.m */; };
 		F93212231635E2440093E619 /* MBActorImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F93212221635E2440093E619 /* MBActorImageView.m */; };
 		F93212251635E34E0093E619 /* MissingActor.png in Resources */ = {isa = PBXBuildFile; fileRef = F93212241635E34E0093E619 /* MissingActor.png */; };
 		F9321229163610AD0093E619 /* TimeMachineIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = F9321228163610AD0093E619 /* TimeMachineIcon.icns */; };
@@ -72,7 +69,6 @@
 		F9B902BB15F7A8F10089BB17 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B715F7A8F10089BB17 /* NSString+Additions.m */; };
 		F9B902BC15F7A8F10089BB17 /* NSThread+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */; };
 		F9D90D4416B830110063C0F6 /* NSView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4316B830110063C0F6 /* NSView+Additions.m */; };
-		F9D90D4816B8734D0063C0F6 /* MBTableRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4716B8734D0063C0F6 /* MBTableRowView.m */; };
 		F9D90D4B16B875900063C0F6 /* MBMovieRowView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4A16B875900063C0F6 /* MBMovieRowView.m */; };
 		F9D90D4E16B87F660063C0F6 /* MBMovieTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D4D16B87F660063C0F6 /* MBMovieTableView.m */; };
 		F9D90D5116B888260063C0F6 /* MBGenreTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D90D5016B888260063C0F6 /* MBGenreTableView.m */; };
@@ -160,14 +156,8 @@
 		F93211EB16327D2C0093E619 /* MBActorMovieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorMovieView.m; sourceTree = "<group>"; };
 		F93211F9163310AB0093E619 /* MBActorCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorCellView.h; sourceTree = "<group>"; };
 		F93211FA163310AB0093E619 /* MBActorCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorCellView.m; sourceTree = "<group>"; };
-		F93212141635A2B30093E619 /* MBTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBTableHeaderView.h; sourceTree = "<group>"; };
-		F93212151635A2B30093E619 /* MBTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBTableHeaderView.m; sourceTree = "<group>"; };
-		F93212171635B4060093E619 /* MBPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBPopUpButtonCell.h; sourceTree = "<group>"; };
-		F93212181635B4060093E619 /* MBPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPopUpButtonCell.m; sourceTree = "<group>"; };
 		F932121A1635C5E20093E619 /* DownArrow.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DownArrow.gif; sourceTree = "<group>"; };
 		F932121C1635C8640093E619 /* UpDownArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UpDownArrow.png; sourceTree = "<group>"; };
-		F932121E1635DE090093E619 /* MBTableHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBTableHeaderCell.h; sourceTree = "<group>"; };
-		F932121F1635DE090093E619 /* MBTableHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBTableHeaderCell.m; sourceTree = "<group>"; };
 		F93212211635E2440093E619 /* MBActorImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBActorImageView.h; sourceTree = "<group>"; };
 		F93212221635E2440093E619 /* MBActorImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBActorImageView.m; sourceTree = "<group>"; };
 		F93212241635E34E0093E619 /* MissingActor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingActor.png; sourceTree = "<group>"; };
@@ -228,8 +218,6 @@
 		F9B902B915F7A8F10089BB17 /* NSThread+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSThread+Additions.m"; sourceTree = "<group>"; };
 		F9D90D4216B830110063C0F6 /* NSView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Additions.h"; sourceTree = "<group>"; };
 		F9D90D4316B830110063C0F6 /* NSView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Additions.m"; sourceTree = "<group>"; };
-		F9D90D4616B8734D0063C0F6 /* MBTableRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBTableRowView.h; sourceTree = "<group>"; };
-		F9D90D4716B8734D0063C0F6 /* MBTableRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBTableRowView.m; sourceTree = "<group>"; };
 		F9D90D4916B875900063C0F6 /* MBMovieRowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieRowView.h; sourceTree = "<group>"; };
 		F9D90D4A16B875900063C0F6 /* MBMovieRowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieRowView.m; sourceTree = "<group>"; };
 		F9D90D4C16B87F660063C0F6 /* MBMovieTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieTableView.h; sourceTree = "<group>"; };
@@ -587,18 +575,10 @@
 			children = (
 				F9F30CF716306E25006C4F17 /* MBImageView.h */,
 				F9F30CF816306E25006C4F17 /* MBImageView.m */,
-				F93212171635B4060093E619 /* MBPopUpButtonCell.h */,
-				F93212181635B4060093E619 /* MBPopUpButtonCell.m */,
 				F92A7EC91686319700F04EDF /* MBTableView.h */,
 				F92A7ECA1686319700F04EDF /* MBTableView.m */,
-				F932121E1635DE090093E619 /* MBTableHeaderCell.h */,
-				F932121F1635DE090093E619 /* MBTableHeaderCell.m */,
-				F93212141635A2B30093E619 /* MBTableHeaderView.h */,
-				F93212151635A2B30093E619 /* MBTableHeaderView.m */,
 				F9EA0CFB16B769F50037875F /* MBScrollView.h */,
 				F9EA0CFC16B769F50037875F /* MBScrollView.m */,
-				F9D90D4616B8734D0063C0F6 /* MBTableRowView.h */,
-				F9D90D4716B8734D0063C0F6 /* MBTableRowView.m */,
 				F990107F16D90FE0007A3F65 /* MBPopUpMenu.h */,
 				F990108016D90FE0007A3F65 /* MBPopUpMenu.m */,
 			);
@@ -737,9 +717,6 @@
 				F9F30CF916306E25006C4F17 /* MBImageView.m in Sources */,
 				F93211EC16327D2C0093E619 /* MBActorMovieView.m in Sources */,
 				F93211FB163310AB0093E619 /* MBActorCellView.m in Sources */,
-				F93212161635A2B30093E619 /* MBTableHeaderView.m in Sources */,
-				F93212191635B4070093E619 /* MBPopUpButtonCell.m in Sources */,
-				F93212201635DE0A0093E619 /* MBTableHeaderCell.m in Sources */,
 				F93212231635E2440093E619 /* MBActorImageView.m in Sources */,
 				F932122C16361F140093E619 /* MBDownloadQueue.m in Sources */,
 				F93212611638C5460093E619 /* MBImportWindowController.m in Sources */,
@@ -763,7 +740,6 @@
 				F9EA0CF716B75E960037875F /* MMScrollView.m in Sources */,
 				F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */,
 				F9D90D4416B830110063C0F6 /* NSView+Additions.m in Sources */,
-				F9D90D4816B8734D0063C0F6 /* MBTableRowView.m in Sources */,
 				F9D90D4B16B875900063C0F6 /* MBMovieRowView.m in Sources */,
 				F9D90D4E16B87F660063C0F6 /* MBMovieTableView.m in Sources */,
 				F9D90D5116B888260063C0F6 /* MBGenreTableView.m in Sources */,
