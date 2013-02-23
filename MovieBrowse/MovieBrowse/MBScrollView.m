@@ -66,7 +66,7 @@
 		// the scrollers provide a vertical rule, so we want them to always be visible. the scroller
 		// subclass will take care of hiding the scroller knob based on mouse tracking.
 		{
-			self.verticalScroller.frame = NSMakeRect(contentFrame.size.width-15, 27, 15, contentFrame.size.height);
+			self.verticalScroller.frame = NSMakeRect(contentFrame.size.width-15, 0, 15, contentFrame.size.height);
 			(void)self.verticalScroller;
 			[self.verticalScroller removeFromSuperview];
 			[self addSubview:self.verticalScroller];

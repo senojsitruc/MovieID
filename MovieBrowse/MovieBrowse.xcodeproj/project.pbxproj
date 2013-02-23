@@ -84,7 +84,6 @@
 		F9EA0CF516B75E960037875F /* MMDrawingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF016B75E960037875F /* MMDrawingUtils.m */; };
 		F9EA0CF616B75E960037875F /* MMScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF216B75E960037875F /* MMScroller.m */; };
 		F9EA0CF716B75E960037875F /* MMScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF416B75E960037875F /* MMScrollView.m */; };
-		F9EA0CFA16B769130037875F /* MBScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CF916B769130037875F /* MBScroller.m */; };
 		F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EA0CFC16B769F50037875F /* MBScrollView.m */; };
 		F9EBF47C16BC5620008892DF /* MBScreencapsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9EBF47B16BC5620008892DF /* MBScreencapsTableView.m */; };
 		F9F30CF916306E25006C4F17 /* MBImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F30CF816306E25006C4F17 /* MBImageView.m */; };
@@ -249,8 +248,6 @@
 		F9EA0CF216B75E960037875F /* MMScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScroller.m; sourceTree = "<group>"; };
 		F9EA0CF316B75E960037875F /* MMScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMScrollView.h; sourceTree = "<group>"; };
 		F9EA0CF416B75E960037875F /* MMScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMScrollView.m; sourceTree = "<group>"; };
-		F9EA0CF816B769130037875F /* MBScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScroller.h; sourceTree = "<group>"; };
-		F9EA0CF916B769130037875F /* MBScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScroller.m; sourceTree = "<group>"; };
 		F9EA0CFB16B769F50037875F /* MBScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScrollView.h; sourceTree = "<group>"; };
 		F9EA0CFC16B769F50037875F /* MBScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBScrollView.m; sourceTree = "<group>"; };
 		F9EBF47A16BC5620008892DF /* MBScreencapsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBScreencapsTableView.h; sourceTree = "<group>"; };
@@ -598,8 +595,6 @@
 				F932121F1635DE090093E619 /* MBTableHeaderCell.m */,
 				F93212141635A2B30093E619 /* MBTableHeaderView.h */,
 				F93212151635A2B30093E619 /* MBTableHeaderView.m */,
-				F9EA0CF816B769130037875F /* MBScroller.h */,
-				F9EA0CF916B769130037875F /* MBScroller.m */,
 				F9EA0CFB16B769F50037875F /* MBScrollView.h */,
 				F9EA0CFC16B769F50037875F /* MBScrollView.m */,
 				F9D90D4616B8734D0063C0F6 /* MBTableRowView.h */,
@@ -766,7 +761,6 @@
 				F9EA0CF516B75E960037875F /* MMDrawingUtils.m in Sources */,
 				F9EA0CF616B75E960037875F /* MMScroller.m in Sources */,
 				F9EA0CF716B75E960037875F /* MMScrollView.m in Sources */,
-				F9EA0CFA16B769130037875F /* MBScroller.m in Sources */,
 				F9EA0CFD16B769F50037875F /* MBScrollView.m in Sources */,
 				F9D90D4416B830110063C0F6 /* NSView+Additions.m in Sources */,
 				F9D90D4816B8734D0063C0F6 /* MBTableRowView.m in Sources */,

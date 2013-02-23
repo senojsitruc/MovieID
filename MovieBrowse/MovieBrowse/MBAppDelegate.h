@@ -21,6 +21,7 @@ extern NSString * const MBDefaultsKeyApiRt;
 @class MBPerson;
 @class MBDataManager;
 @class MBActorMovieView;
+@class MBPopUpMenu;
 @class MBImportWindowController;
 @class MBActorProfileWindowController;
 @class MBPreferencesWindowController;
@@ -56,6 +57,9 @@ extern NSString * const MBDefaultsKeyApiRt;
 @property (assign) IBOutlet NSScrollView *actorTableScrollView;
 @property (assign) IBOutlet NSScrollView *genreTableScrollView;
 @property (assign) IBOutlet NSScrollView *movieTableScrollView;
+@property (assign) IBOutlet MBPopUpMenu *actorTableMenu;
+@property (assign) IBOutlet MBPopUpMenu *genreTableMenu;
+@property (assign) IBOutlet MBPopUpMenu *movieTableMenu;
 
 /**
  * Array Controllers

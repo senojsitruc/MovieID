@@ -120,22 +120,18 @@ static MBAppDelegate *gAppDelegate;
 	/**
 	 * Movie Table
 	 */
-	MBPopUpMenu *mMovieMenu;
 	MBPopUpMenuItemHandler mMovieMenuSortHandler;
 	
 	/**
 	 * Genre Table
 	 */
-	MBPopUpButtonCell *mGenreHeaderCell;
-	NSMenu *mGenreHeaderMenu;
-	NSMenuItem *mGenreHeaderMenuMultiOrItem;
-	NSMenuItem *mGenreHeaderMenuMultiAndItem;
-	NSMenuItem *mGenreHeaderMenuMultiNotOrItem;
-	NSMenuItem *mGenreHeaderMenuMultiNotAndItem;
+	MBPopUpMenuItemHandler mGenreMenuMultiHandler;
 	
 	/**
 	 * Actor Table
 	 */
+	MBPopUpMenuItemHandler mActorMenuSortHandler;
+	
 	MBPopUpButtonCell *mActorHeaderCell;
 	NSMenu *mActorHeaderMenu;
 	NSMenuItem *mActorHeaderMenuShowAllItem;
@@ -222,14 +218,10 @@ static MBAppDelegate *gAppDelegate;
 	}
 	
 	//
-	// movie table customizations
+	// movie table menu
 	//
 	{
-		[self.window.contentView addSubview:(mMovieMenu = [[MBPopUpMenu alloc] initWithFrame:NSZeroRect])];
-		
-		mMovieMenu.label = @"My Label (Something)";
-		
-		mMovieMenu.willDisplayHandler = ^{
+		_movieTableMenu.willDisplayHandler = ^{
 			[gAppDelegate updateMoviesHeaderLanguages:TRUE];
 			[gAppDelegate updateMoviesHeaderRating:TRUE];
 		};
@@ -240,83 +232,78 @@ static MBAppDelegate *gAppDelegate;
 				[gAppDelegate updateMoviesHeaderLabel];
 				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
 				[gAppDelegate updateMoviesPostSort];
-				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Title" inSection:@"Sort"];
+				[gAppDelegate->_movieTableMenu setState:NSOnState forItem:@"  Movie by Title" inSection:@"Sort"];
 			}
 			else if ([itemTitle isEqualToString:@"  Movie by Year"] || [itemTitle isEqualToString:@"Year"]) {
 				[[NSUserDefaults standardUserDefaults] setObject:@"Year" forKey:MBDefaultsKeyMoviesSort];
 				[gAppDelegate updateMoviesHeaderLabel];
 				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"year" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
 				[gAppDelegate updateMoviesPostSort];
-				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Year" inSection:@"Sort"];
+				[gAppDelegate->_movieTableMenu setState:NSOnState forItem:@"  Movie by Year" inSection:@"Sort"];
 			}
 			else if ([itemTitle isEqualToString:@"  Movie by Score"] || [itemTitle isEqualToString:@"Score"]) {
 				[[NSUserDefaults standardUserDefaults] setObject:@"Score" forKey:MBDefaultsKeyMoviesSort];
 				[gAppDelegate updateMoviesHeaderLabel];
 				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"score" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
 				[gAppDelegate updateMoviesPostSort];
-				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Score" inSection:@"Sort"];
+				[gAppDelegate->_movieTableMenu setState:NSOnState forItem:@"  Movie by Score" inSection:@"Sort"];
 			}
 			else if ([itemTitle isEqualToString:@"  Movie by Runtime"] || [itemTitle isEqualToString:@"Runtime"]) {
 				[[NSUserDefaults standardUserDefaults] setObject:@"Runtime" forKey:MBDefaultsKeyMoviesSort];
 				[gAppDelegate updateMoviesHeaderLabel];
 				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"duration" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
 				[gAppDelegate updateMoviesPostSort];
-				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Runtime" inSection:@"Sort"];
+				[gAppDelegate->_movieTableMenu setState:NSOnState forItem:@"  Movie by Runtime" inSection:@"Sort"];
 			}
 			else if ([itemTitle isEqualToString:@"  Movie by Added"] || [itemTitle isEqualToString:@"Added"]) {
 				[[NSUserDefaults standardUserDefaults] setObject:@"Added" forKey:MBDefaultsKeyMoviesSort];
 				[gAppDelegate updateMoviesHeaderLabel];
 				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"mtime" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:FALSE]]];
 				[gAppDelegate updateMoviesPostSort];
-				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Added" inSection:@"Sort"];
+				[gAppDelegate->_movieTableMenu setState:NSOnState forItem:@"  Movie by Added" inSection:@"Sort"];
 			}
 		};
 		
-		[mMovieMenu addSectionWithTitle:@"Sort" mode:MBPopUpMenuSectionModeOne];
-		[mMovieMenu addItemWithTitle:@"  Movie by Title" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
-		[mMovieMenu addItemWithTitle:@"  Movie by Year" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
-		[mMovieMenu addItemWithTitle:@"  Movie by Score" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
-		[mMovieMenu addItemWithTitle:@"  Movie by Runtime" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
-		[mMovieMenu addItemWithTitle:@"  Movie by Added" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[_movieTableMenu addSectionWithTitle:@"Sort" mode:MBPopUpMenuSectionModeOne];
+		[_movieTableMenu addItemWithTitle:@"  Movie by Title" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[_movieTableMenu addItemWithTitle:@"  Movie by Year" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[_movieTableMenu addItemWithTitle:@"  Movie by Score" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[_movieTableMenu addItemWithTitle:@"  Movie by Runtime" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[_movieTableMenu addItemWithTitle:@"  Movie by Added" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
 		
 		((MMScroller *)_movieTableScrollView.verticalScroller).drawsRightRule = FALSE;
 	}
 	
 	//
-	// genre table customizations
+	// genre table menu
 	//
 	{
-		NSTableColumn *column = [self.genreTable tableColumnWithIdentifier:@"Genre"];
-		MBTableHeaderView *headerView = [[MBTableHeaderView alloc] init];
-		MBPopUpButtonCell *headerCell = [[MBPopUpButtonCell alloc] initTextCell:@"GenresCell"];
-		headerCell.label = @"Genre";
+		mGenreMenuMultiHandler = ^ (NSString *itemTitle, NSInteger itemTag, NSInteger state) {
+			if ([itemTitle isEqualToString:@"  Movies in Any"] || [itemTitle isEqualToString:@"Or"]) {
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies in Any" inSection:@"Multi Select"];
+				[[NSUserDefaults standardUserDefaults] setObject:@"Or" forKey:MBDefaultsKeyGenreMulti];
+			}
+			else if ([itemTitle isEqualToString:@"  Movies in All"] || [itemTitle isEqualToString:@"And"]) {
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies in All" inSection:@"Multi Select"];
+				[[NSUserDefaults standardUserDefaults] setObject:@"And" forKey:MBDefaultsKeyGenreMulti];
+			}
+			else if ([itemTitle isEqualToString:@"  Movies not in Any"] || [itemTitle isEqualToString:@"NotOr"]) {
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies not in Any" inSection:@"Multi Select"];
+				[[NSUserDefaults standardUserDefaults] setObject:@"NotOr" forKey:MBDefaultsKeyGenreMulti];
+			}
+			else if ([itemTitle isEqualToString:@"  Movies not in All"] || [itemTitle isEqualToString:@"NotAnd"]) {
+				[gAppDelegate->_genreTableMenu setState:NSOnState forItem:@"  Movies not in All" inSection:@"Multi Select"];
+				[[NSUserDefaults standardUserDefaults] setObject:@"NotAnd" forKey:MBDefaultsKeyGenreMulti];
+			}
+			
+			[gAppDelegate doNotificationGenreSelectionChanged:nil];
+		};
 		
-		NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Genre Menu"];
-		
-		NSRect headerFrame = self.genreTable.headerView.frame;
-		headerFrame.size.height += 10;
-		headerView.frame = headerFrame;
-		
-		[menu addItemWithTitle:@"Multi Select" action:nil keyEquivalent:@""];
-		NSMenuItem *multiOr = [menu addItemWithTitle:@"  Movies in Any" action:@selector(doActionGenresMultiOr:) keyEquivalent:@""];
-		NSMenuItem *multiAnd = [menu addItemWithTitle:@"  Movies in All" action:@selector(doActionGenresMultiAnd:) keyEquivalent:@""];
-		NSMenuItem *multiNotOr = [menu addItemWithTitle:@"  Movies not in Any" action:@selector(doActionGenresMultiNotOr:) keyEquivalent:@""];
-		NSMenuItem *multiNotAnd = [menu addItemWithTitle:@"  Movies not in All" action:@selector(doActionGenresMultiNotAnd:) keyEquivalent:@""];
-		
-		multiOr.target = self;
-		multiAnd.target = self;
-		
-		headerCell.menu = menu;
-		column.headerCell = headerCell;
-		
-		self.genreTable.headerView = headerView;
-		
-		mGenreHeaderCell = headerCell;
-		mGenreHeaderMenu = menu;
-		mGenreHeaderMenuMultiOrItem = multiOr;
-		mGenreHeaderMenuMultiAndItem = multiAnd;
-		mGenreHeaderMenuMultiNotOrItem = multiNotOr;
-		mGenreHeaderMenuMultiNotAndItem = multiNotAnd;
+		[_genreTableMenu addSectionWithTitle:@"Multi Select" mode:MBPopUpMenuSectionModeOne];
+		[_genreTableMenu addItemWithTitle:@"  Movies in Any" toSection:@"Multi Select" withHandler:mGenreMenuMultiHandler];
+		[_genreTableMenu addItemWithTitle:@"  Movies in All" toSection:@"Multi Select" withHandler:mGenreMenuMultiHandler];
+		[_genreTableMenu addItemWithTitle:@"  Movies not in Any" toSection:@"Multi Select" withHandler:mGenreMenuMultiHandler];
+		[_genreTableMenu addItemWithTitle:@"  Movies not in All" toSection:@"Multi Select" withHandler:mGenreMenuMultiHandler];
 		
 		((MMScroller *)_genreTableScrollView.verticalScroller).drawsRightRule = TRUE;
 	}
@@ -383,7 +370,7 @@ static MBAppDelegate *gAppDelegate;
 	[IDSearch setImdbApiKey:[[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyApiImdb]];
 	[IDSearch setRtApiKey:  [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyApiRt  ]];
 	
-	// table selection changed notifications
+	// observers - table selection changed notifications
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doNotificationActorSelectionChanged:) name:NSTableViewSelectionDidChangeNotification object:self.actorTable];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doNotificationGenreSelectionChanged:) name:NSTableViewSelectionDidChangeNotification object:self.genreTable];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doNotificationMovieSelectionChanged:) name:NSTableViewSelectionDidChangeNotification object:self.movieTable];
@@ -392,44 +379,12 @@ static MBAppDelegate *gAppDelegate;
 	self.actorTable.target = self;
 	self.actorTable.doubleAction = @selector(doActionActorDoubleClick:);
 	
-	// set the frame of the movie table menu, which should sit directly above the movie table
-	{
-		NSRect movieMenuFrame = _movieTableScrollView.frame;
-		movieMenuFrame.origin.y += movieMenuFrame.size.height;
-		movieMenuFrame.size.height = 27;
-		mMovieMenu.frame = movieMenuFrame;
-	}
-	
 	//
 	// reinstate genre multi-select behavior
 	//
 	{
 		NSString *multi = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyGenreMulti];
-		
-		if ([multi isEqualToString:@"Or"]) {
-			mGenreHeaderMenuMultiOrItem.state = NSOnState;
-			mGenreHeaderMenuMultiAndItem.state = NSOffState;
-			mGenreHeaderMenuMultiNotOrItem.state = NSOffState;
-			mGenreHeaderMenuMultiNotAndItem.state = NSOffState;
-		}
-		else if ([multi isEqualToString:@"And"]) {
-			mGenreHeaderMenuMultiOrItem.state = NSOffState;
-			mGenreHeaderMenuMultiAndItem.state = NSOnState;
-			mGenreHeaderMenuMultiNotOrItem.state = NSOffState;
-			mGenreHeaderMenuMultiNotAndItem.state = NSOffState;
-		}
-		else if ([multi isEqualToString:@"NotOr"]) {
-			mGenreHeaderMenuMultiOrItem.state = NSOffState;
-			mGenreHeaderMenuMultiAndItem.state = NSOffState;
-			mGenreHeaderMenuMultiNotOrItem.state = NSOnState;
-			mGenreHeaderMenuMultiNotAndItem.state = NSOffState;
-		}
-		else if ([multi isEqualToString:@"NotAnd"]) {
-			mGenreHeaderMenuMultiOrItem.state = NSOffState;
-			mGenreHeaderMenuMultiAndItem.state = NSOffState;
-			mGenreHeaderMenuMultiNotOrItem.state = NSOffState;
-			mGenreHeaderMenuMultiNotAndItem.state = NSOnState;
-		}
+		mGenreMenuMultiHandler(multi, 0, NSOnState);
 	}
 	
 	//
@@ -548,22 +503,21 @@ static MBAppDelegate *gAppDelegate;
 				NSArray *selection = [[NSUserDefaults standardUserDefaults] arrayForKey:MBDefaultsKeyGenreSelection];
 				
 				if (selection.count) {
+					NSMutableArray *genres = [[NSMutableArray alloc] init];
+					
 					[selection enumerateObjectsUsingBlock:^ (id genreKey, NSUInteger genreNdx, BOOL *genreStop) {
 						MBGenre *mbgenre = [mDataManager genreWithKey:genreKey];
 						
 						if (mbgenre)
-							[mGenreSelections addObject:mbgenre];
+							[genres addObject:mbgenre];
 					}];
 					
-					if (mGenreSelections.count == 1)
-						mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections[0]).name];
-					else
-						mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%lu selected)", mGenreSelections.count];
-					
-					[self.genresArrayController setSelectedObjects:mGenreSelections];
+					[self.genresArrayController setSelectedObjects:genres];
+					[self doNotificationGenreSelectionChanged:nil];
+					[self.genreTable scrollColumnToVisible:self.genreTable.selectedRow];
 				}
 				else
-					mGenreHeaderCell.label = @"Genre";
+					_genreTableMenu.label = @"Genre";
 			}
 			
 			//
@@ -830,7 +784,7 @@ static MBAppDelegate *gAppDelegate;
 	[mGenreSelections removeAllObjects];
 	
 	if (selectedObjects.count == 0) {
-		mGenreHeaderCell.label = @"Genre";
+		_genreTableMenu.label = @"Genre";
 		[defaults setObject:@[] forKey:MBDefaultsKeyGenreSelection];
 	}
 	else {
@@ -838,9 +792,9 @@ static MBAppDelegate *gAppDelegate;
 			[mGenreSelections addObject:obj];
 		}];
 		if (selectedObjects.count == 1)
-			mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections[0]).name];
+			_genreTableMenu.label = [NSString stringWithFormat:@"Genre (%@)", ((MBGenre *)mGenreSelections[0]).name];
 		else
-			mGenreHeaderCell.label = [NSString stringWithFormat:@"Genre (%lu selected)", selectedObjects.count];
+			_genreTableMenu.label = [NSString stringWithFormat:@"Genre (%lu selected)", selectedObjects.count];
 		NSMutableArray *genres = [[NSMutableArray alloc] init];
 		[mGenreSelections enumerateObjectsUsingBlock:^ (id genreObj, NSUInteger genreNdx, BOOL *genreStop) {
 			[genres addObject:((MBGenre *)genreObj).name];
@@ -953,7 +907,7 @@ static MBAppDelegate *gAppDelegate;
 	else
 		label = prefix;
 	
-	mMovieMenu.label = label;
+	_movieTableMenu.label = label;
 }
 
 /**
@@ -969,7 +923,7 @@ static MBAppDelegate *gAppDelegate;
 	mLanguagesDirty = FALSE;
 	
 	// remove any language-related menu items
-	[mMovieMenu removeSectionWithTitle:@"Languages"];
+	[_movieTableMenu removeSectionWithTitle:@"Languages"];
 	
 	// tally the count for each language
 	{
@@ -994,7 +948,7 @@ static MBAppDelegate *gAppDelegate;
 	
 	// insert the language-related menu items (if any)
 	if (mLanguagesSorted.count) {
-		[mMovieMenu addSectionWithTitle:@"Languages" mode:MBPopUpMenuSectionModeOne];
+		[_movieTableMenu addSectionWithTitle:@"Languages" mode:MBPopUpMenuSectionModeOne];
 		
 		MBPopUpMenuItemHandler handler = ^ (NSString *_title, NSInteger _tag, NSInteger _state) {
 			mLanguageSelection = _state ? mLanguagesSorted[_tag] : nil;
@@ -1005,7 +959,7 @@ static MBAppDelegate *gAppDelegate;
 		
 		[mLanguagesSorted enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
 			NSString *title = [NSString stringWithFormat:@"  %@ (%@)", languageObj, mLanguagesByName[languageObj]];
-			[mMovieMenu addItemWithTitle:title andTag:languageNdx toSection:@"Languages" withHandler:handler];
+			[_movieTableMenu addItemWithTitle:title andTag:languageNdx toSection:@"Languages" withHandler:handler];
 		}];
 	}
 	
@@ -1018,7 +972,7 @@ static MBAppDelegate *gAppDelegate;
 			[self updateMoviesHeaderLabel];
 		}
 		else
-			[mMovieMenu setState:NSOnState forItem:mLanguageSelection inSection:@"Languages"];
+			[_movieTableMenu setState:NSOnState forItem:mLanguageSelection inSection:@"Languages"];
 	}
 }
 
@@ -1035,7 +989,7 @@ static MBAppDelegate *gAppDelegate;
 	mRatingsDirty = FALSE;
 	
 	// remove any rating-related menu items
-	[mMovieMenu removeSectionWithTitle:@"Ratings"];
+	[_movieTableMenu removeSectionWithTitle:@"Ratings"];
 	
 	// tally the count for each rating
 	{
@@ -1061,7 +1015,7 @@ static MBAppDelegate *gAppDelegate;
 	
 	// insert the rating-related menu items (if any)
 	if (mRatingsSorted.count) {
-		[mMovieMenu addSectionWithTitle:@"Ratings" mode:MBPopUpMenuSectionModeOne];
+		[_movieTableMenu addSectionWithTitle:@"Ratings" mode:MBPopUpMenuSectionModeOne];
 		
 		MBPopUpMenuItemHandler handler = ^ (NSString *_title, NSInteger _tag, NSInteger _state) {
 			mRatingSelection = _state ? mRatingsSorted[_tag] : nil;
@@ -1072,7 +1026,7 @@ static MBAppDelegate *gAppDelegate;
 		
 		[mRatingsSorted enumerateObjectsUsingBlock:^ (id ratingObj, NSUInteger ratingNdx, BOOL *ratingStop) {
 			NSString *title = [NSString stringWithFormat:@"  %@ (%@)", ratingObj, mRatingsByName[ratingObj]];
-			[mMovieMenu addItemWithTitle:title andTag:ratingNdx toSection:@"Ratings" withHandler:handler];
+			[_movieTableMenu addItemWithTitle:title andTag:ratingNdx toSection:@"Ratings" withHandler:handler];
 		}];
 	}
 	
@@ -1085,7 +1039,7 @@ static MBAppDelegate *gAppDelegate;
 			[self updateMoviesHeaderLabel];
 		}
 		else
-			[mMovieMenu setState:NSOnState forItem:mRatingSelection inSection:@"Ratings"];
+			[_movieTableMenu setState:NSOnState forItem:mRatingSelection inSection:@"Ratings"];
 	}
 }
 
@@ -1105,80 +1059,6 @@ static MBAppDelegate *gAppDelegate;
 	// our find state is now invalid for doing "find next"
 	if ([mFindType isEqualToString:@"Movies"])
 		mFindIndex = NSNotFound;
-}
-
-
-
-
-
-#pragma mark - Genres Header Menu
-
-/**
- *
- *
- */
-- (void)doActionGenresMultiOr:(id)sender
-{
-	mGenreHeaderMenuMultiOrItem.state = NSOnState;
-	mGenreHeaderMenuMultiAndItem.state = NSOffState;
-	mGenreHeaderMenuMultiNotOrItem.state = NSOffState;
-	mGenreHeaderMenuMultiNotAndItem.state = NSOffState;
-	[self.genreTable.headerView setNeedsDisplay:TRUE];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"Or" forKey:MBDefaultsKeyGenreMulti];
-	
-	[self doNotificationGenreSelectionChanged:nil];
-}
-
-/**
- *
- *
- */
-- (void)doActionGenresMultiAnd:(id)sender
-{
-	mGenreHeaderMenuMultiOrItem.state = NSOffState;
-	mGenreHeaderMenuMultiAndItem.state = NSOnState;
-	mGenreHeaderMenuMultiNotOrItem.state = NSOffState;
-	mGenreHeaderMenuMultiNotAndItem.state = NSOffState;
-	[self.genreTable.headerView setNeedsDisplay:TRUE];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"And" forKey:MBDefaultsKeyGenreMulti];
-	
-	[self doNotificationGenreSelectionChanged:nil];
-}
-
-/**
- *
- *
- */
-- (void)doActionGenresMultiNotOr:(id)sender
-{
-	mGenreHeaderMenuMultiOrItem.state = NSOffState;
-	mGenreHeaderMenuMultiAndItem.state = NSOffState;
-	mGenreHeaderMenuMultiNotOrItem.state = NSOnState;
-	mGenreHeaderMenuMultiNotAndItem.state = NSOffState;
-	[self.genreTable.headerView setNeedsDisplay:TRUE];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"NotOr" forKey:MBDefaultsKeyGenreMulti];
-	
-	[self doNotificationGenreSelectionChanged:nil];
-}
-
-/**
- *
- *
- */
-- (void)doActionGenresMultiNotAnd:(id)sender
-{
-	mGenreHeaderMenuMultiOrItem.state = NSOffState;
-	mGenreHeaderMenuMultiAndItem.state = NSOffState;
-	mGenreHeaderMenuMultiNotOrItem.state = NSOffState;
-	mGenreHeaderMenuMultiNotAndItem.state = NSOnState;
-	[self.genreTable.headerView setNeedsDisplay:TRUE];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"NotAnd" forKey:MBDefaultsKeyGenreMulti];
-	
-	[self doNotificationGenreSelectionChanged:nil];
 }
 
 
@@ -1668,10 +1548,11 @@ static MBAppDelegate *gAppDelegate;
 	NSPredicate *predicate = nil;
 	BOOL (^genreMatches)(id) = nil;
 	NSUInteger genreSelectionCount = mGenreSelections.count;
+	NSString *genreMode = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyGenreMulti];
 	
 	if (genreSelectionCount == 1) {
 		MBGenre *mbgenre = mGenreSelections[0];
-		BOOL x = ((NSOnState == mGenreHeaderMenuMultiOrItem.state) | (NSOnState == mGenreHeaderMenuMultiAndItem.state));
+		BOOL x = [genreMode isEqualToString:@"Or"] || [genreMode isEqualToString:@"And"];
 		genreMatches = ^ BOOL (id movie) {
 			return x == [mDataManager doesMovie:movie haveGenre:mbgenre];
 		};
@@ -1680,9 +1561,8 @@ static MBAppDelegate *gAppDelegate;
 		//
 		// OR / NOT OR
 		//
-		if (NSOnState == mGenreHeaderMenuMultiOrItem.state || NSOnState == mGenreHeaderMenuMultiNotOrItem.state) {
-			BOOL x = (NSOnState == mGenreHeaderMenuMultiOrItem.state);
-			
+		if ([genreMode isEqualToString:@"Or"] || [genreMode isEqualToString:@"NotOr"]) {
+			BOOL x = [genreMode isEqualToString:@"Or"];
 			genreMatches = ^ BOOL (id movie) {
 				__block BOOL match = FALSE;
 				[mGenreSelections enumerateObjectsUsingBlock:^ (id mbgenre, NSUInteger ndx, BOOL *stop) {
@@ -1697,9 +1577,8 @@ static MBAppDelegate *gAppDelegate;
 		//
 		// AND / NOT AND
 		//
-		else if (NSOnState == mGenreHeaderMenuMultiAndItem.state || NSOnState == mGenreHeaderMenuMultiNotAndItem.state) {
-			BOOL x = (NSOnState == mGenreHeaderMenuMultiAndItem.state);
-			
+		else if ([genreMode isEqualToString:@"And"] || [genreMode isEqualToString:@"NotAnd"]) {
+			BOOL x = [genreMode isEqualToString:@"And"];
 			genreMatches = ^ BOOL (id movie) {
 				__block BOOL match = TRUE;
 				[mGenreSelections enumerateObjectsUsingBlock:^ (id genre, NSUInteger ndx, BOOL *stop) {

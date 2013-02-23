@@ -28,7 +28,9 @@
 {
 	self = [super initWithFrame:frameRect];
 	
-	_oldValue = -1;
+	if (self) {
+		_oldValue = -1;
+	}
 	
 	return self;
 }
@@ -66,7 +68,7 @@
 	}
 }
 
-- (void) drawRect:(NSRect)rect
+- (void)drawRect:(NSRect)rect
 {
 	if (_shouldClearBackground) {
 		NSEraseRect([self bounds]);
