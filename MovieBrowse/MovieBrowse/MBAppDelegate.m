@@ -15,6 +15,7 @@
 #import "MBDataManager.h"
 #import "MBActorMovieView.h"
 #import "MBImageCache.h"
+#import "MBPopUpMenu.h"
 #import "MBTableHeaderView.h"
 #import "MBPopUpButtonCell.h"
 #import "MBTableHeaderCell.h"
@@ -119,21 +120,8 @@ static MBAppDelegate *gAppDelegate;
 	/**
 	 * Movie Table
 	 */
-	MBPopUpButtonCell *mMovieHeaderCell;
-	NSMenu *mMovieHeaderMenu;
-	NSMenuItem *mMovieHeaderMenuSortByTitleItem;
-	NSMenuItem *mMovieHeaderMenuSortByYearItem;
-	NSMenuItem *mMovieHeaderMenuSortByScoreItem;
-	NSMenuItem *mMovieHeaderMenuSortByAddedItem;
-	NSMenuItem *mMovieHeaderMenuSortByRuntimeItem;
-	NSMenuItem *mMovieHeaderMenuShowHidden;
-	NSMenuItem *mMovieHeaderMenuLanguageSeparatorItem;
-	NSMenuItem *mMovieHeaderMenuLanguageHeadingItem;
-	NSMutableArray *mMovieHeaderMenuLanguageItems;
-	NSMenuItem *mMovieHeaderMenuRatingSeparatorItem;
-	NSMenuItem *mMovieHeaderMenuRatingHeadingItem;
-	NSMutableArray *mMovieHeaderMenuRatingItems;
-	BOOL mShowHiddenMovies;
+	MBPopUpMenu *mMovieMenu;
+	MBPopUpMenuItemHandler mMovieMenuSortHandler;
 	
 	/**
 	 * Genre Table
@@ -173,7 +161,6 @@ static MBAppDelegate *gAppDelegate;
 	[_splashWin makeKeyAndOrderFront:nil];
 	
 	gAppDelegate = self;
-	mShowHiddenMovies = FALSE;
 	mIsDoneLoading = FALSE;
 	
 	mDataManager = [[MBDataManager alloc] init];
@@ -238,56 +225,59 @@ static MBAppDelegate *gAppDelegate;
 	// movie table customizations
 	//
 	{
-		NSTableColumn *column = [self.movieTable tableColumnWithIdentifier:@"Movies"];
-		MBTableHeaderView *headerView = [[MBTableHeaderView alloc] init];
-		MBPopUpButtonCell *headerCell = [[MBPopUpButtonCell alloc] initTextCell:@"MoviesCell"];
+		[self.window.contentView addSubview:(mMovieMenu = [[MBPopUpMenu alloc] initWithFrame:NSZeroRect])];
 		
-		NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Movie Menu"];
+		mMovieMenu.label = @"My Label (Something)";
 		
-		NSRect headerFrame = self.movieTable.headerView.frame;
-		headerFrame.size.height += 10;
-		headerView.frame = headerFrame;
-		headerCell.willDisplayHandler = ^{
-			[self updateMoviesHeaderLanguages:TRUE];
-			[self updateMoviesHeaderRating:TRUE];
+		mMovieMenu.willDisplayHandler = ^{
+			[gAppDelegate updateMoviesHeaderLanguages:TRUE];
+			[gAppDelegate updateMoviesHeaderRating:TRUE];
 		};
 		
-		[menu addItemWithTitle:@"Sort" action:nil keyEquivalent:@""];
-		NSMenuItem *sortByTitle = [menu addItemWithTitle:@"  Movie by Title" action:@selector(doActionMoviesSortByTitle:) keyEquivalent:@""];
-		NSMenuItem *sortByYear = [menu addItemWithTitle:@"  Movie by Year" action:@selector(doActionMoviesSortByYear:) keyEquivalent:@""];
-		NSMenuItem *sortByScore = [menu addItemWithTitle:@"  Movie by Score" action:@selector(doActionMoviesSortByScore:) keyEquivalent:@""];
-		NSMenuItem *sortByRuntime = [menu addItemWithTitle:@"  Movie by Runtime" action:@selector(doActionMoviesSortByRuntime:) keyEquivalent:@""];
-		NSMenuItem *sortByAdded = [menu addItemWithTitle:@"  Movie by Added" action:@selector(doActionMoviesSortByAdded:) keyEquivalent:@""];
-		[menu addItem:[NSMenuItem separatorItem]];
-		[menu addItemWithTitle:@"Options" action:nil keyEquivalent:@""];
-		NSMenuItem *showHidden = [menu addItemWithTitle:@"  Show Hidden" action:@selector(doActionMoviesShowHidden:) keyEquivalent:@""];
+		mMovieMenuSortHandler = ^ (NSString *itemTitle, NSInteger itemTag, NSInteger state) {
+			if ([itemTitle isEqualToString:@"  Movie by Title"] || [itemTitle isEqualToString:@"Title"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Title" forKey:MBDefaultsKeyMoviesSort];
+				[gAppDelegate updateMoviesHeaderLabel];
+				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
+				[gAppDelegate updateMoviesPostSort];
+				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Title" inSection:@"Sort"];
+			}
+			else if ([itemTitle isEqualToString:@"  Movie by Year"] || [itemTitle isEqualToString:@"Year"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Year" forKey:MBDefaultsKeyMoviesSort];
+				[gAppDelegate updateMoviesHeaderLabel];
+				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"year" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
+				[gAppDelegate updateMoviesPostSort];
+				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Year" inSection:@"Sort"];
+			}
+			else if ([itemTitle isEqualToString:@"  Movie by Score"] || [itemTitle isEqualToString:@"Score"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Score" forKey:MBDefaultsKeyMoviesSort];
+				[gAppDelegate updateMoviesHeaderLabel];
+				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"score" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
+				[gAppDelegate updateMoviesPostSort];
+				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Score" inSection:@"Sort"];
+			}
+			else if ([itemTitle isEqualToString:@"  Movie by Runtime"] || [itemTitle isEqualToString:@"Runtime"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Runtime" forKey:MBDefaultsKeyMoviesSort];
+				[gAppDelegate updateMoviesHeaderLabel];
+				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"duration" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
+				[gAppDelegate updateMoviesPostSort];
+				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Runtime" inSection:@"Sort"];
+			}
+			else if ([itemTitle isEqualToString:@"  Movie by Added"] || [itemTitle isEqualToString:@"Added"]) {
+				[[NSUserDefaults standardUserDefaults] setObject:@"Added" forKey:MBDefaultsKeyMoviesSort];
+				[gAppDelegate updateMoviesHeaderLabel];
+				[gAppDelegate.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"mtime" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:FALSE]]];
+				[gAppDelegate updateMoviesPostSort];
+				[gAppDelegate->mMovieMenu setState:NSOnState forItem:@"  Movie by Added" inSection:@"Sort"];
+			}
+		};
 		
-		sortByTitle.target = self;
-		sortByYear.target = self;
-		sortByScore.target = self;
-		sortByRuntime.target = self;
-		sortByAdded.target = self;
-		showHidden.target = self;
-		
-		headerCell.menu = menu;
-		column.headerCell = headerCell;
-		
-		self.movieTable.headerView = headerView;
-		
-		mMovieHeaderCell = headerCell;
-		mMovieHeaderMenu = menu;
-		mMovieHeaderMenuSortByTitleItem = sortByTitle;
-		mMovieHeaderMenuSortByYearItem = sortByYear;
-		mMovieHeaderMenuSortByScoreItem = sortByScore;
-		mMovieHeaderMenuSortByRuntimeItem = sortByRuntime;
-		mMovieHeaderMenuSortByAddedItem = sortByAdded;
-		mMovieHeaderMenuShowHidden = showHidden;
-		mMovieHeaderMenuLanguageSeparatorItem = [NSMenuItem separatorItem];
-		mMovieHeaderMenuLanguageHeadingItem = [[NSMenuItem alloc] initWithTitle:@"Languages" action:nil keyEquivalent:@""];
-		mMovieHeaderMenuLanguageItems = [[NSMutableArray alloc] init];
-		mMovieHeaderMenuRatingSeparatorItem = [NSMenuItem separatorItem];
-		mMovieHeaderMenuRatingHeadingItem = [[NSMenuItem alloc] initWithTitle:@"Ratings" action:nil keyEquivalent:@""];
-		mMovieHeaderMenuRatingItems = [[NSMutableArray alloc] init];
+		[mMovieMenu addSectionWithTitle:@"Sort" mode:MBPopUpMenuSectionModeOne];
+		[mMovieMenu addItemWithTitle:@"  Movie by Title" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[mMovieMenu addItemWithTitle:@"  Movie by Year" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[mMovieMenu addItemWithTitle:@"  Movie by Score" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[mMovieMenu addItemWithTitle:@"  Movie by Runtime" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
+		[mMovieMenu addItemWithTitle:@"  Movie by Added" toSection:@"Sort" withHandler:mMovieMenuSortHandler];
 		
 		((MMScroller *)_movieTableScrollView.verticalScroller).drawsRightRule = FALSE;
 	}
@@ -402,13 +392,12 @@ static MBAppDelegate *gAppDelegate;
 	self.actorTable.target = self;
 	self.actorTable.doubleAction = @selector(doActionActorDoubleClick:);
 	
-	//
-	// reinstate "show hidden" state
-	//
+	// set the frame of the movie table menu, which should sit directly above the movie table
 	{
-		BOOL showHidden = [[NSUserDefaults standardUserDefaults] boolForKey:MBDefaultsKeyMoviesShowHidden];
-		mShowHiddenMovies = showHidden;
-		mMovieHeaderMenuShowHidden.state = showHidden ? NSOnState : NSOffState;
+		NSRect movieMenuFrame = _movieTableScrollView.frame;
+		movieMenuFrame.origin.y += movieMenuFrame.size.height;
+		movieMenuFrame.size.height = 27;
+		mMovieMenu.frame = movieMenuFrame;
 	}
 	
 	//
@@ -480,17 +469,7 @@ static MBAppDelegate *gAppDelegate;
 		// movies
 		{
 			NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyMoviesSort];
-			
-			if ([sort isEqualToString:@"Title"])
-				[self doActionMoviesSortByTitle:mMovieHeaderMenuSortByTitleItem];
-			else if ([sort isEqualToString:@"Year"])
-				[self doActionMoviesSortByYear:mMovieHeaderMenuSortByYearItem];
-			else if ([sort isEqualToString:@"Score"])
-				[self doActionMoviesSortByScore:mMovieHeaderMenuSortByScoreItem];
-			else if ([sort isEqualToString:@"Runtime"])
-				[self doActionMoviesSortByRuntime:mMovieHeaderMenuSortByRuntimeItem];
-			else if ([sort isEqualToString:@"Added"])
-				[self doActionMoviesSortByAdded:mMovieHeaderMenuSortByAddedItem];
+			mMovieMenuSortHandler(sort, 0, NSOnState);
 		}
 	}
 	
@@ -947,39 +926,34 @@ static MBAppDelegate *gAppDelegate;
  */
 - (void)updateMoviesHeaderLabel
 {
-	NSString *prefix = @"";
+	NSString *prefix=@"", *label=@"";
+	NSString *sort = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyMoviesSort];
 	
-	if (mMovieHeaderMenuSortByTitleItem.state == NSOnState)
+	if (sort)
+		prefix = [@"Movie by " stringByAppendingString:sort];
+	else
 		prefix = @"Movie by Title";
-	else if (mMovieHeaderMenuSortByYearItem.state == NSOnState)
-		prefix = @"Movie by Year";
-	else if (mMovieHeaderMenuSortByScoreItem.state == NSOnState)
-		prefix = @"Movie by Score";
-	else if (mMovieHeaderMenuSortByRuntimeItem.state == NSOnState)
-		prefix = @"Movie by Runtime";
-	else if (mMovieHeaderMenuSortByAddedItem.state == NSOnState)
-		prefix = @"Movie by Added";
 	
 	if (mMovieSelection && mLanguageSelection && mRatingSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@, %@) - %@", prefix, mLanguageSelection, mRatingSelection, mMovieSelection.title];
+		label = [NSString stringWithFormat:@"%@ (%@, %@) - %@", prefix, mLanguageSelection, mRatingSelection, mMovieSelection.title];
 	
 	else if (mMovieSelection && mLanguageSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@) - %@", prefix, mLanguageSelection, mMovieSelection.title];
+		label = [NSString stringWithFormat:@"%@ (%@) - %@", prefix, mLanguageSelection, mMovieSelection.title];
 	else if (mMovieSelection && mRatingSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@) - %@", prefix, mRatingSelection, mMovieSelection.title];
+		label = [NSString stringWithFormat:@"%@ (%@) - %@", prefix, mRatingSelection, mMovieSelection.title];
 	else if (mLanguageSelection && mRatingSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@, %@)", prefix, mLanguageSelection, mRatingSelection];
+		label = [NSString stringWithFormat:@"%@ (%@, %@)", prefix, mLanguageSelection, mRatingSelection];
 	
 	else if (mMovieSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ - %@", prefix, mMovieSelection.title];
+		label = [NSString stringWithFormat:@"%@ - %@", prefix, mMovieSelection.title];
 	else if (mLanguageSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mLanguageSelection];
+		label = [NSString stringWithFormat:@"%@ (%@)", prefix, mLanguageSelection];
 	else if (mRatingSelection)
-		mMovieHeaderCell.label = [NSString stringWithFormat:@"%@ (%@)", prefix, mRatingSelection];
+		label = [NSString stringWithFormat:@"%@ (%@)", prefix, mRatingSelection];
 	else
-		mMovieHeaderCell.label = prefix;
+		label = prefix;
 	
-	[self.movieTable.headerView setNeedsDisplay:TRUE];
+	mMovieMenu.label = label;
 }
 
 /**
@@ -995,22 +969,10 @@ static MBAppDelegate *gAppDelegate;
 	mLanguagesDirty = FALSE;
 	
 	// remove any language-related menu items
-	if (mLanguagesSorted.count) {
-		[mMovieHeaderMenu removeItem:mMovieHeaderMenuLanguageSeparatorItem];
-		[mMovieHeaderMenu removeItem:mMovieHeaderMenuLanguageHeadingItem];
-		
-		[mMovieHeaderMenuLanguageItems enumerateObjectsUsingBlock:^ (id menuObj, NSUInteger menuNdx, BOOL *menuStop) {
-			[mMovieHeaderMenu removeItem:menuObj];
-		}];
-		
-		[mLanguagesByName removeAllObjects];
-		[mLanguagesSorted removeAllObjects];
-		[mMovieHeaderMenuLanguageItems removeAllObjects];
-	}
+	[mMovieMenu removeSectionWithTitle:@"Languages"];
 	
 	// tally the count for each language
 	{
-//	NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
 		NSArray *objects = _moviesArrayController.arrangedObjects;
 		
 		[objects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
@@ -1032,15 +994,18 @@ static MBAppDelegate *gAppDelegate;
 	
 	// insert the language-related menu items (if any)
 	if (mLanguagesSorted.count) {
-		[mMovieHeaderMenu addItem:mMovieHeaderMenuLanguageSeparatorItem];
-		[mMovieHeaderMenu addItem:mMovieHeaderMenuLanguageHeadingItem];
+		[mMovieMenu addSectionWithTitle:@"Languages" mode:MBPopUpMenuSectionModeOne];
+		
+		MBPopUpMenuItemHandler handler = ^ (NSString *_title, NSInteger _tag, NSInteger _state) {
+			mLanguageSelection = _state ? mLanguagesSorted[_tag] : nil;
+			[self updateMovieFilter];
+			[self updateActorFilter];
+			[self updateMoviesHeaderLabel];
+		};
 		
 		[mLanguagesSorted enumerateObjectsUsingBlock:^ (id languageObj, NSUInteger languageNdx, BOOL *languageStop) {
 			NSString *title = [NSString stringWithFormat:@"  %@ (%@)", languageObj, mLanguagesByName[languageObj]];
-			NSMenuItem *item = [mMovieHeaderMenu addItemWithTitle:title action:@selector(doActionMoviesFilterByLanguage:) keyEquivalent:@""];
-			item.target = self;
-			item.tag = languageNdx;
-			[mMovieHeaderMenuLanguageItems addObject:item];
+			[mMovieMenu addItemWithTitle:title andTag:languageNdx toSection:@"Languages" withHandler:handler];
 		}];
 	}
 	
@@ -1053,7 +1018,7 @@ static MBAppDelegate *gAppDelegate;
 			[self updateMoviesHeaderLabel];
 		}
 		else
-			((NSMenuItem *)mMovieHeaderMenuLanguageItems[index]).state = NSOnState;
+			[mMovieMenu setState:NSOnState forItem:mLanguageSelection inSection:@"Languages"];
 	}
 }
 
@@ -1070,22 +1035,10 @@ static MBAppDelegate *gAppDelegate;
 	mRatingsDirty = FALSE;
 	
 	// remove any rating-related menu items
-	if (mRatingsSorted.count) {
-		[mMovieHeaderMenu removeItem:mMovieHeaderMenuRatingSeparatorItem];
-		[mMovieHeaderMenu removeItem:mMovieHeaderMenuRatingHeadingItem];
-		
-		[mMovieHeaderMenuRatingItems enumerateObjectsUsingBlock:^ (id menuObj, NSUInteger menuNdx, BOOL *menuStop) {
-			[mMovieHeaderMenu removeItem:menuObj];
-		}];
-		
-		[mRatingsByName removeAllObjects];
-		[mRatingsSorted removeAllObjects];
-		[mMovieHeaderMenuRatingItems removeAllObjects];
-	}
+	[mMovieMenu removeSectionWithTitle:@"Ratings"];
 	
 	// tally the count for each rating
 	{
-//	NSArray *objects = visibleOnly ? _moviesArrayController.arrangedObjects : _moviesArray;
 		NSArray *objects = _moviesArrayController.arrangedObjects;
 		
 		[objects enumerateObjectsUsingBlock:^ (id movieObj, NSUInteger movieNdx, BOOL *movieStop) {
@@ -1108,15 +1061,18 @@ static MBAppDelegate *gAppDelegate;
 	
 	// insert the rating-related menu items (if any)
 	if (mRatingsSorted.count) {
-		[mMovieHeaderMenu addItem:mMovieHeaderMenuRatingSeparatorItem];
-		[mMovieHeaderMenu addItem:mMovieHeaderMenuRatingHeadingItem];
+		[mMovieMenu addSectionWithTitle:@"Ratings" mode:MBPopUpMenuSectionModeOne];
+		
+		MBPopUpMenuItemHandler handler = ^ (NSString *_title, NSInteger _tag, NSInteger _state) {
+			mRatingSelection = _state ? mRatingsSorted[_tag] : nil;
+			[self updateMovieFilter];
+			[self updateActorFilter];
+			[self updateMoviesHeaderLabel];
+		};
 		
 		[mRatingsSorted enumerateObjectsUsingBlock:^ (id ratingObj, NSUInteger ratingNdx, BOOL *ratingStop) {
 			NSString *title = [NSString stringWithFormat:@"  %@ (%@)", ratingObj, mRatingsByName[ratingObj]];
-			NSMenuItem *item = [mMovieHeaderMenu addItemWithTitle:title action:@selector(doActionMoviesFilterByRating:) keyEquivalent:@""];
-			item.target = self;
-			item.tag = ratingNdx;
-			[mMovieHeaderMenuRatingItems addObject:item];
+			[mMovieMenu addItemWithTitle:title andTag:ratingNdx toSection:@"Ratings" withHandler:handler];
 		}];
 	}
 	
@@ -1129,7 +1085,7 @@ static MBAppDelegate *gAppDelegate;
 			[self updateMoviesHeaderLabel];
 		}
 		else
-			((NSMenuItem *)mMovieHeaderMenuRatingItems[index]).state = NSOnState;
+			[mMovieMenu setState:NSOnState forItem:mRatingSelection inSection:@"Ratings"];
 	}
 }
 
@@ -1149,176 +1105,6 @@ static MBAppDelegate *gAppDelegate;
 	// our find state is now invalid for doing "find next"
 	if ([mFindType isEqualToString:@"Movies"])
 		mFindIndex = NSNotFound;
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesSortByTitle:(id)sender
-{
-	mMovieHeaderMenuSortByTitleItem.state = NSOnState;
-	mMovieHeaderMenuSortByYearItem.state = NSOffState;
-	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
-	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
-	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"Title" forKey:MBDefaultsKeyMoviesSort];
-	
-	[self updateMoviesHeaderLabel];
-	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	[self updateMoviesPostSort];
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesSortByYear:(id)sender
-{
-	mMovieHeaderMenuSortByTitleItem.state = NSOffState;
-	mMovieHeaderMenuSortByYearItem.state = NSOnState;
-	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
-	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
-	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"Year" forKey:MBDefaultsKeyMoviesSort];
-	
-	[self updateMoviesHeaderLabel];
-	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"year" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	[self updateMoviesPostSort];
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesSortByScore:(id)sender
-{
-	mMovieHeaderMenuSortByTitleItem.state = NSOffState;
-	mMovieHeaderMenuSortByYearItem.state = NSOffState;
-	mMovieHeaderMenuSortByScoreItem.state = NSOnState;
-	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
-	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"Score" forKey:MBDefaultsKeyMoviesSort];
-	
-	[self updateMoviesHeaderLabel];
-	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"score" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	[self updateMoviesPostSort];
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesSortByRuntime:(id)sender
-{
-	mMovieHeaderMenuSortByTitleItem.state = NSOffState;
-	mMovieHeaderMenuSortByYearItem.state = NSOffState;
-	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
-	mMovieHeaderMenuSortByRuntimeItem.state = NSOnState;
-	mMovieHeaderMenuSortByAddedItem.state = NSOffState;
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"Runtime" forKey:MBDefaultsKeyMoviesSort];
-	
-	[self updateMoviesHeaderLabel];
-	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"duration" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:TRUE]]];
-	[self updateMoviesPostSort];
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesSortByAdded:(id)sender
-{
-	mMovieHeaderMenuSortByTitleItem.state = NSOffState;
-	mMovieHeaderMenuSortByYearItem.state = NSOffState;
-	mMovieHeaderMenuSortByScoreItem.state = NSOffState;
-	mMovieHeaderMenuSortByRuntimeItem.state = NSOffState;
-	mMovieHeaderMenuSortByAddedItem.state = NSOnState;
-	
-	[[NSUserDefaults standardUserDefaults] setObject:@"Added" forKey:MBDefaultsKeyMoviesSort];
-	
-	[self updateMoviesHeaderLabel];
-	[self.moviesArrayController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"mtime" ascending:FALSE], [NSSortDescriptor sortDescriptorWithKey:@"sortTitle" ascending:FALSE]]];
-	[self updateMoviesPostSort];
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesShowHidden:(id)sender
-{
-	NSMenuItem *showHidden = (NSMenuItem *)sender;
-	NSInteger state = showHidden.state;
-	
-	if (state == NSOnState) {
-		showHidden.state = NSOffState;
-		mShowHiddenMovies = FALSE;
-	}
-	else {
-		showHidden.state = NSOnState;
-		mShowHiddenMovies = TRUE;
-	}
-	
-	[[NSUserDefaults standardUserDefaults] setBool:mShowHiddenMovies forKey:MBDefaultsKeyMoviesShowHidden];
-	
-	[self.movieTable reloadData];
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesFilterByLanguage:(id)sender
-{
-	NSMenuItem *item = sender;
-	
-	if (item.state) {
-		item.state = NSOffState;
-		mLanguageSelection = nil;
-	}
-	else {
-		[mMovieHeaderMenuLanguageItems enumerateObjectsUsingBlock:^ (id itemObj, NSUInteger itemNdx, BOOL *itemStop) {
-			((NSMenuItem *)itemObj).state = NSOffState;
-		}];
-		
-		item.state = NSOnState;
-		mLanguageSelection = mLanguagesSorted[item.tag];
-	}
-	
-	[self updateMovieFilter];
-	[self updateActorFilter];
-	[self updateMoviesHeaderLabel];
-}
-
-/**
- *
- *
- */
-- (void)doActionMoviesFilterByRating:(id)sender
-{
-	NSMenuItem *item = sender;
-	
-	if (item.state) {
-		item.state = NSOffState;
-		mRatingSelection = nil;
-	}
-	else {
-		[mMovieHeaderMenuRatingItems enumerateObjectsUsingBlock:^ (id itemObj, NSUInteger itemNdx, BOOL *itemStop) {
-			((NSMenuItem *)itemObj).state = NSOffState;
-		}];
-		
-		item.state = NSOnState;
-		mRatingSelection = mRatingsSorted[item.tag];
-	}
-	
-	[self updateMovieFilter];
-	[self updateActorFilter];
-	[self updateMoviesHeaderLabel];
 }
 
 
@@ -1934,8 +1720,7 @@ static MBAppDelegate *gAppDelegate;
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
-						 [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+						 [mRatingSelection isEqualToString:((MBMovie *)object).rating] && genreMatches(object);
 		}];
 	}
 	
@@ -1950,8 +1735,7 @@ static MBAppDelegate *gAppDelegate;
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
 			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
-			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating];
 		}];
 	}
 	
@@ -1961,8 +1745,7 @@ static MBAppDelegate *gAppDelegate;
 	if (mActorSelection && mLanguageSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
-			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] && genreMatches(object);
 		}];
 	}
 	
@@ -1972,8 +1755,7 @@ static MBAppDelegate *gAppDelegate;
 	if (mActorSelection && mRatingSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
-			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] && genreMatches(object);
 		}];
 	}
 	
@@ -1983,8 +1765,7 @@ static MBAppDelegate *gAppDelegate;
 	if (mLanguageSelection && mRatingSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
-			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] && genreMatches(object);
 		}];
 	}
 	
@@ -1998,8 +1779,7 @@ static MBAppDelegate *gAppDelegate;
 	else if (mActorSelection && mLanguageSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
-						 [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
+			       [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection];
 		}];
 	}
 	
@@ -2009,8 +1789,7 @@ static MBAppDelegate *gAppDelegate;
 	else if (mActorSelection && mRatingSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
-			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating];
 		}];
 	}
 	
@@ -2019,8 +1798,7 @@ static MBAppDelegate *gAppDelegate;
 	//
 	else if (mActorSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] && genreMatches(object);
 		}];
 	}
 	
@@ -2030,8 +1808,7 @@ static MBAppDelegate *gAppDelegate;
 	else if (mLanguageSelection && mRatingSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
 			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
-			       [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			       [mRatingSelection isEqualToString:((MBMovie *)object).rating];
 		}];
 	}
 	
@@ -2040,8 +1817,7 @@ static MBAppDelegate *gAppDelegate;
 	//
 	else if (mLanguageSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			return [mDataManager doesMovie:(MBMovie *)object haveLanguage:mLanguageSelection] && genreMatches(object);
 		}];
 	}
 	
@@ -2050,8 +1826,7 @@ static MBAppDelegate *gAppDelegate;
 	//
 	else if (mRatingSelection && genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mRatingSelection isEqualToString:((MBMovie *)object).rating] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			return [mRatingSelection isEqualToString:((MBMovie *)object).rating] && genreMatches(object);
 		}];
 	}
 	
@@ -2064,7 +1839,7 @@ static MBAppDelegate *gAppDelegate;
 	//
 	else if (genreMatches) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue) && genreMatches(object);
+			return genreMatches(object);
 		}];
 	}
 	
@@ -2073,8 +1848,7 @@ static MBAppDelegate *gAppDelegate;
 	//
 	else if (mActorSelection) {
 		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection] &&
-			       (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
+			return [mDataManager doesMovie:(MBMovie *)object haveActor:mActorSelection];
 		}];
 	}
 	
@@ -2099,11 +1873,8 @@ static MBAppDelegate *gAppDelegate;
 	//
 	// nothing
 	//
-	else {
-		predicate = [NSPredicate predicateWithBlock:^ BOOL (id object, NSDictionary *bindings) {
-			return (mShowHiddenMovies || !((MBMovie *)object).hidden.boolValue);
-		}];
-	}
+	else
+		predicate = nil;
 	
 	_moviesArrayController.filterPredicate = predicate;
 	

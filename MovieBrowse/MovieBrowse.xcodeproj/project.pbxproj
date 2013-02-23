@@ -50,6 +50,7 @@
 		F98A50D2166BE76A00749333 /* MovieID.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
 		F990107B16D861F4007A3F65 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F990107A16D861F4007A3F65 /* CoreMedia.framework */; };
 		F990107E16D861FC007A3F65 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F990107D16D861FC007A3F65 /* AVFoundation.framework */; };
+		F990108116D90FE0007A3F65 /* MBPopUpMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = F990108016D90FE0007A3F65 /* MBPopUpMenu.m */; };
 		F998F27B162F6FEF008AF52D /* MissingMovie.png in Resources */ = {isa = PBXBuildFile; fileRef = F998F27A162F6FEF008AF52D /* MissingMovie.png */; };
 		F998F27E162F7335008AF52D /* MBMovieCastView.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F27D162F7335008AF52D /* MBMovieCastView.m */; };
 		F998F2C2162F85EF008AF52D /* MBMovieCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F2C1162F85EF008AF52D /* MBMovieCellView.m */; };
@@ -187,6 +188,8 @@
 		F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MovieIDFramework.xcodeproj; path = ../MovieIDFramework/MovieIDFramework.xcodeproj; sourceTree = "<group>"; };
 		F990107A16D861F4007A3F65 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		F990107D16D861FC007A3F65 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		F990107F16D90FE0007A3F65 /* MBPopUpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBPopUpMenu.h; sourceTree = "<group>"; };
+		F990108016D90FE0007A3F65 /* MBPopUpMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPopUpMenu.m; sourceTree = "<group>"; };
 		F998F27A162F6FEF008AF52D /* MissingMovie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingMovie.png; sourceTree = "<group>"; };
 		F998F27C162F7335008AF52D /* MBMovieCastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieCastView.h; sourceTree = "<group>"; };
 		F998F27D162F7335008AF52D /* MBMovieCastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieCastView.m; sourceTree = "<group>"; };
@@ -601,6 +604,8 @@
 				F9EA0CFC16B769F50037875F /* MBScrollView.m */,
 				F9D90D4616B8734D0063C0F6 /* MBTableRowView.h */,
 				F9D90D4716B8734D0063C0F6 /* MBTableRowView.m */,
+				F990107F16D90FE0007A3F65 /* MBPopUpMenu.h */,
+				F990108016D90FE0007A3F65 /* MBPopUpMenu.m */,
 			);
 			name = Miscellaneous;
 			sourceTree = "<group>";
@@ -773,6 +778,7 @@
 				F9EBF47C16BC5620008892DF /* MBScreencapsTableView.m in Sources */,
 				F94D323516BF1ABC0004EE39 /* MBURLConnection.m in Sources */,
 				F91AAF6516C0175A001278EC /* MBFileMetadata.m in Sources */,
+				F990108116D90FE0007A3F65 /* MBPopUpMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
