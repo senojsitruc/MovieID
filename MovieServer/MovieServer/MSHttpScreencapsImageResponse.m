@@ -27,7 +27,6 @@
 	
 	if (paramParts.count < 5) {
 		NSLog(@"%s.. invalid params, '%@'", __PRETTY_FUNCTION__, params);
-//	[connection responseDidAbort:response];
 		return nil;
 	}
 	
@@ -36,45 +35,6 @@
 	NSData *imageData = [MSAppDelegate pngDataForTime:offset inMovie:files[0] maxSize:size];
 	
 	return [[HTTPDataResponse alloc] initWithData:imageData];
-	
-	/*
-	MSHttpScreencapsImageResponse *response = [[MSHttpScreencapsImageResponse alloc] init];
-//NSDictionary *args = [response parseCgiParams:filePath];
-	
-	// initialize the response
-	response.filePath = filePath;
-	response.connection = connection;
-	response.theOffset = 0;
-	response.dataBuffer = [[NSMutableData alloc] init];
-	response->mIsDone = FALSE;
-	
-	[NSThread detachNewThreadBlock:^{
-		NSArray *paramParts = [params componentsSeparatedByString:@"--"];
-		
-		if (paramParts.count < 5) {
-			NSLog(@"%s.. invalid params, '%@'", __PRETTY_FUNCTION__, params);
-			response->mIsDone = TRUE;
-			[connection responseDidAbort:response];
-			return;
-		}
-		
-		NSUInteger offset = ((NSString *)paramParts[1]).integerValue;
-		CGSize size = CGSizeMake(((NSString *)paramParts[3]).integerValue, ((NSString *)paramParts[4]).integerValue);
-		NSData *imageData = [MSAppDelegate pngDataForTime:offset inMovie:files[0] maxSize:size];
-		
-		if (!imageData.length) {
-			response->mIsDone = TRUE;
-			[connection responseDidAbort:response];
-			return;
-		}
-		
-		[response.dataBuffer appendData:imageData];
-		response->mIsDone = TRUE;
-		[connection responseHasAvailableData:response];
-	}];
-	*/
-	
-	//return response;
 }
 
 @end

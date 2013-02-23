@@ -8,10 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+@class MBMovie;
+
 @interface MBImageCache : NSObject
 
 + (id)sharedInstance;
 
+/**
+ * Screencaps
+ */
+- (void)screencapInfoForMovie:(MBMovie *)mbmovie duration:(NSUInteger *)duration width:(NSUInteger *)width height:(NSUInteger *)height;
+- (NSImage *)screencapImageForMovie:(MBMovie *)mbmovie offset:(NSUInteger)offset width:(NSUInteger)width height:(NSUInteger)height;
+
+/**
+ * Posters
+ */
 - (NSImage *)actorImageWithId:(NSString *)imageId;
 - (NSImage *)actorImageWithId:(NSString *)imageId width:(NSUInteger)width height:(NSUInteger)height;
 - (NSImage *)movieImageWithId:(NSString *)imageId;

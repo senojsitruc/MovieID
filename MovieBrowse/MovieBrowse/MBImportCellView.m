@@ -21,6 +21,10 @@
 
 @implementation MBImportCellView
 
+/**
+ *
+ *
+ */
 - (void)setObjectValue:(id)obj
 {
 	super.objectValue = obj;
@@ -37,6 +41,7 @@
 	self.info1.stringValue = [self getInfo1Txt];
 	self.info2.stringValue = [self getInfo2Txt];
 }
+
 /**
  * Title, year, duration
  *

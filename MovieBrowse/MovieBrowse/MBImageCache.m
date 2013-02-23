@@ -8,7 +8,16 @@
 
 #import "MBImageCache.h"
 #import "MBAppDelegate.h"
+#import "MBMovie.h"
 #import "NSImage+Additions.h"
+#import "NSThread+Additions.h"
+#import <MovieID/IDMediaInfo.h>
+#import <AVFoundation/AVFoundation.h>
+#import <QTKit/QTKit.h>
+
+static NSString * const MBScreencapsKeyDuration = @"duration";
+static NSString * const MBScreencapsKeyWidth = @"width";
+static NSString * const MBScreencapsKeyHeight = @"height";
 
 static MBImageCache *gSharedInstance;
 
@@ -61,7 +70,7 @@ static MBImageCache *gSharedInstance;
 
 
 
-#pragma mark - Clear
+#pragma mark - Clear On-Disk Cache
 
 /**
  *
@@ -170,7 +179,169 @@ static MBImageCache *gSharedInstance;
 
 
 
-#pragma mark - Disk / Server Cache
+#pragma mark - Disk / Server Screencap Image Cache
+
+/**
+ * Get one or more parameters about a movie. A movie might be chopped into multiple files.
+ *
+ */
+- (void)screencapInfoForMovie:(MBMovie *)mbmovie duration:(NSUInteger *)_duration width:(NSUInteger *)_width height:(NSUInteger *)_height
+{
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	
+	if ([fileManager fileExistsAtPath:mbmovie.dirpath])
+		[self local_screencapInfoForMovie:mbmovie duration:_duration width:_width height:_height];
+	else
+		[self remote_screencapInfoForMovie:mbmovie duration:_duration width:_width height:_height];
+}
+
+/**
+ * Local.
+ *
+ */
+- (void)local_screencapInfoForMovie:(MBMovie *)mbmovie duration:(NSUInteger *)_duration width:(NSUInteger *)_width height:(NSUInteger *)_height
+{
+	NSArray *movieFiles = [self.class getMovieFilesInDir:mbmovie.dirpath];
+	__block NSUInteger duration=0, width=0, height=0;
+	
+	[movieFiles enumerateObjectsUsingBlock:^ (NSString *fileObj, NSUInteger fileNdx, BOOL *fileStop) {
+		IDMediaInfo *mediaInfo = [[IDMediaInfo alloc] initWithFilePath:fileObj];
+		duration += mediaInfo.duration.integerValue;
+		width = mediaInfo.width.integerValue;
+		height = mediaInfo.height.integerValue;
+	}];
+	
+	if (_duration)
+		*_duration = duration;
+	
+	if (_width)
+		*_width = width;
+	
+	if (_height)
+		*_height = height;
+}
+
+/**
+ * Remote.
+ *
+ */
+- (void)remote_screencapInfoForMovie:(MBMovie *)mbmovie duration:(NSUInteger *)_duration width:(NSUInteger *)_width height:(NSUInteger *)_height
+{
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	
+	if (imageHost.length) {
+		NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
+		
+		[urlString appendString:@"/Screencaps/"];
+		[urlString appendString:[mbmovie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		[urlString appendString:@"/info"];
+		
+		NSURL *url = [NSURL URLWithString:urlString];
+		NSData *data = [NSData dataWithContentsOfURL:url];
+		NSDictionary *info = nil;
+		
+		@try {
+			info = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+		}
+		@catch (NSException *e) {
+			NSLog(@"%s.. failed to JSONObjectWithData(), %@", __PRETTY_FUNCTION__, e.reason);
+			NSLog(@"%@", e.callStackSymbols);
+			NSLog(@"%@", url);
+			return;
+		}
+		
+		if (_duration)
+			*_duration = ((NSNumber *)info[MBScreencapsKeyDuration]).integerValue;
+		
+		if (_width)
+			*_width = ((NSNumber *)info[MBScreencapsKeyWidth]).integerValue;
+		
+		if (_height)
+			*_height = ((NSNumber *)info[MBScreencapsKeyHeight]).integerValue;
+	}
+}
+
+/**
+ * The offset is given in seconds.
+ *
+ */
+- (NSImage *)screencapImageForMovie:(MBMovie *)mbmovie offset:(NSUInteger)offset width:(NSUInteger)width height:(NSUInteger)height
+{
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	
+	if ([fileManager fileExistsAtPath:mbmovie.dirpath])
+		return [self local_screencapImageForMovie:mbmovie offset:offset width:width height:height];
+	else
+		return [self remote_screencapImageForMovie:mbmovie offset:offset width:width height:height];
+}
+
+/**
+ *
+ *
+ */
+- (NSImage *)local_screencapImageForMovie:(MBMovie *)mbmovie offset:(NSUInteger)offset width:(NSUInteger)width height:(NSUInteger)height
+{
+	__block NSString *movieFile = nil;
+	
+	// a movie can be chopped up into multiple files. we assume that the movie progresses through the
+	// files alphabetically. find which file applies to the given offset and adjust the offset to the
+	// appropriate point within its target file. from an outsider's perspective, a movie is just one
+	// big file - the way it should be.
+	{
+		NSArray *movieFiles = [self.class getMovieFilesInDir:mbmovie.dirpath];
+		__block NSUInteger tmpOffset = 0;
+		
+		if (!movieFiles.count) {
+			NSLog(@"%s.. no movie files found for movie [%@]", __PRETTY_FUNCTION__, mbmovie.dirpath);
+			return nil;
+		}
+		
+		[movieFiles enumerateObjectsUsingBlock:^ (NSString *fileObj, NSUInteger fileNdx, BOOL *fileStop) {
+			IDMediaInfo *mediaInfo = [[IDMediaInfo alloc] initWithFilePath:fileObj];
+			NSUInteger duration = mediaInfo.duration.integerValue;
+			
+			if (tmpOffset + duration >= offset)
+				*fileStop = TRUE;
+			else
+				tmpOffset += duration;
+		 
+		 movieFile = fileObj;
+		}];
+		
+		offset -= tmpOffset;
+	}
+	
+	return [self.class imageFromMovie:movieFile atTime:offset maxSize:CGSizeMake(width,height)];
+}
+
+/**
+ *
+ *
+ */
+- (NSImage *)remote_screencapImageForMovie:(MBMovie *)mbmovie offset:(NSUInteger)offset width:(NSUInteger)width height:(NSUInteger)height
+{
+	NSString *key = [NSString stringWithFormat:@"%lu--png--%d--%d", offset, (int)width, (int)height];
+	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	
+	if (imageHost.length) {
+		NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
+		
+		[urlString appendString:@"/Screencaps/"];
+		[urlString appendString:[mbmovie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		[urlString appendString:@"/image--"];
+		[urlString appendString:key];
+		
+		return [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
+	}
+	
+	return nil;
+}
+
+
+
+
+
+#pragma mark - Disk / Server Poster Image Cache
 
 /**
  *
@@ -414,6 +585,160 @@ static MBImageCache *gSharedInstance;
 	CFRelease(idRef);
 	
 	return imageData;
+}
+
+/**
+ *
+ *
+ */
++ (NSArray *)getMovieFilesInDir:(NSString *)dirPath
+{
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	NSArray *files = [fileManager contentsOfDirectoryAtPath:dirPath error:nil];
+	NSMutableArray *movieFiles = [[NSMutableArray alloc] init];
+	
+	[files enumerateObjectsUsingBlock:^ (id obj2, NSUInteger ndx2, BOOL *stop2) {
+		NSString *file = [(NSString *)obj2 lowercaseString];
+		
+		if ([file hasSuffix:@".mp4"] ||
+				[file hasSuffix:@".m4v"] ||
+				[file hasSuffix:@".mpg"] ||
+				[file hasSuffix:@".mov"] ||
+				[file hasSuffix:@".wmv"] ||
+				[file hasSuffix:@".avi"] ||
+				[file hasSuffix:@".mkv"])
+			[movieFiles addObject:[dirPath stringByAppendingPathComponent:obj2]];
+	}];
+	
+	return movieFiles;
+}
+
+/**
+ *
+ *
+ */
++ (NSImage *)imageFromMovie:(NSString *)moviePath atTime:(NSTimeInterval)timeInSeconds maxSize:(CGSize)size
+{
+	CGImageRef cgimage = NULL;
+	NSImage *image = nil;
+	
+	if ([moviePath hasSuffix:@".mkv"])
+		return nil;
+	
+	if ([moviePath hasSuffix:@".m4v"] ||
+			[moviePath hasSuffix:@".mp4"] ||
+			[moviePath hasSuffix:@".mov"])
+		cgimage = [self avf_CGImageForTime:timeInSeconds inMovie:moviePath maxSize:size];
+	
+	if (!cgimage)
+		cgimage = [self qtkit_CGImageForTime:timeInSeconds inMovie:moviePath maxSize:size];
+	
+	if (cgimage) {
+		image = [[NSImage alloc] initWithCGImage:cgimage size:size];
+		CFRelease(cgimage);
+	}
+	
+	return image;
+}
+
+/**
+ *
+ *
+ */
++ (NSData *)pngDataFromMovie:(NSString *)moviePath atTime:(NSTimeInterval)timeInSeconds maxSize:(CGSize)size
+{
+	CGImageRef cgimage = NULL;
+	NSData *imageData = nil;
+	
+	if ([moviePath hasSuffix:@".mkv"])
+		return nil;
+	
+	if ([moviePath hasSuffix:@".m4v"] ||
+			[moviePath hasSuffix:@".mp4"] ||
+			[moviePath hasSuffix:@".mov"])
+		cgimage = [self avf_CGImageForTime:timeInSeconds inMovie:moviePath maxSize:size];
+	
+	if (!cgimage)
+		cgimage = [self qtkit_CGImageForTime:timeInSeconds inMovie:moviePath maxSize:size];
+	
+	if (cgimage) {
+		imageData = [self pngDataFromCGImage:cgimage];
+		CFRelease(cgimage);
+	}
+	
+	return imageData;
+}
+
+/**
+ *
+ *
+ */
++ (CGImageRef)avf_CGImageForTime:(NSTimeInterval)timeInSeconds inMovie:(NSString *)moviePath maxSize:(CGSize)size
+{
+	AVAsset *avasset = [AVAsset assetWithURL:[NSURL fileURLWithPath:moviePath]];
+	
+	if (!avasset || !avasset.tracks.count) {
+		NSLog(@"%s.. failed to create AVAsset [%@]", __PRETTY_FUNCTION__, moviePath.lastPathComponent);
+		return nil;
+	}
+	
+	AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:avasset];
+	
+	if (!generator) {
+		NSLog(@"%s.. failed to create AVAssetImageGenerator() [%@]", __PRETTY_FUNCTION__, moviePath.lastPathComponent);
+		return nil;
+	}
+	
+	generator.maximumSize = size;
+	
+	return [generator copyCGImageAtTime:CMTimeMake(timeInSeconds,1) actualTime:NULL error:nil];
+}
+
+/**
+ *
+ *
+ */
++ (CGImageRef)qtkit_CGImageForTime:(NSTimeInterval)timeInSeconds inMovie:(NSString *)moviePath maxSize:(CGSize)size
+{
+	__block NSError *error = nil;
+	__block QTMovie *qtmovie = nil;
+	
+	if (!moviePath.length)
+		return nil;
+	
+	[[NSThread mainThread] performBlock:^{
+		qtmovie = [[QTMovie alloc] initWithURL:[NSURL fileURLWithPath:moviePath] error:&error];
+		[qtmovie detachFromCurrentThread];
+	} waitUntilDone:TRUE];
+	
+	if (!qtmovie) {
+		NSLog(@"%s.. failed to QTMovie::initWithURL(%@), %@", __PRETTY_FUNCTION__, moviePath, error.localizedDescription);
+		return nil;
+	}
+	
+	[QTMovie enterQTKitOnThread];
+	
+	if (![qtmovie attachToCurrentThread]) {
+		NSLog(@"%s.. failed to QTMovie::attachToCurrentThread() [%@]", __PRETTY_FUNCTION__, moviePath);
+		[QTMovie exitQTKitOnThread];
+		return nil;
+	}
+	
+	[qtmovie setIdling:FALSE];
+	
+	NSDictionary *attrs = @{QTMovieFrameImageType: QTMovieFrameImageTypeCGImageRef,
+												 QTMovieFrameImageSize: [NSValue valueWithSize:NSSizeFromCGSize(size)] };
+	CGImageRef cgimage = [qtmovie frameImageAtTime:QTMakeTime(timeInSeconds,1) withAttributes:attrs error:&error];
+	
+	if (!cgimage)
+		NSLog(@"%s.. failed to QTMovie::frameAtImageTime(), because %@ [%@]", __PRETTY_FUNCTION__, error.localizedDescription, moviePath);
+	else
+		CFRetain(cgimage);
+	
+	[qtmovie detachFromCurrentThread];
+	[QTMovie exitQTKitOnThread];
+	
+	return cgimage;
 }
 
 @end

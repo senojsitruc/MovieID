@@ -51,6 +51,7 @@ static NSImage *gMissingImg;
 			NSString *imageId = mMovie.posterId;
 			CGFloat height = self.movieImg.frame.size.height;
 			
+			// if there is no image id for this movie, use the "missing" image
 			if (!imageId.length) {
 				NSImage *image = [[MBImageCache sharedInstance] cachedImageWithId:@"missing-movie" andHeight:height];
 				
@@ -61,6 +62,8 @@ static NSImage *gMissingImg;
 				}
 				self.movieImg.image = image;
 			}
+			
+			// there is an image id for this movie, so try to load it
 			else {
 				self.movieImg.image = nil;
 				

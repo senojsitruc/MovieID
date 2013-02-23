@@ -48,6 +48,8 @@
 		F97BF37D15F9C20200444926 /* MBGenre.m in Sources */ = {isa = PBXBuildFile; fileRef = F97BF37C15F9C20200444926 /* MBGenre.m */; };
 		F98A50D1166BE76400749333 /* MovieID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
 		F98A50D2166BE76A00749333 /* MovieID.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F98A50D0166BE75300749333 /* MovieID.framework */; };
+		F990107B16D861F4007A3F65 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F990107A16D861F4007A3F65 /* CoreMedia.framework */; };
+		F990107E16D861FC007A3F65 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F990107D16D861FC007A3F65 /* AVFoundation.framework */; };
 		F998F27B162F6FEF008AF52D /* MissingMovie.png in Resources */ = {isa = PBXBuildFile; fileRef = F998F27A162F6FEF008AF52D /* MissingMovie.png */; };
 		F998F27E162F7335008AF52D /* MBMovieCastView.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F27D162F7335008AF52D /* MBMovieCastView.m */; };
 		F998F2C2162F85EF008AF52D /* MBMovieCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F998F2C1162F85EF008AF52D /* MBMovieCellView.m */; };
@@ -183,6 +185,8 @@
 		F97BF37B15F9C20100444926 /* MBGenre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBGenre.h; sourceTree = "<group>"; };
 		F97BF37C15F9C20200444926 /* MBGenre.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBGenre.m; sourceTree = "<group>"; };
 		F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MovieIDFramework.xcodeproj; path = ../MovieIDFramework/MovieIDFramework.xcodeproj; sourceTree = "<group>"; };
+		F990107A16D861F4007A3F65 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		F990107D16D861FC007A3F65 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F998F27A162F6FEF008AF52D /* MissingMovie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MissingMovie.png; sourceTree = "<group>"; };
 		F998F27C162F7335008AF52D /* MBMovieCastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMovieCastView.h; sourceTree = "<group>"; };
 		F998F27D162F7335008AF52D /* MBMovieCastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMovieCastView.m; sourceTree = "<group>"; };
@@ -257,6 +261,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F990107E16D861FC007A3F65 /* AVFoundation.framework in Frameworks */,
+				F990107B16D861F4007A3F65 /* CoreMedia.framework in Frameworks */,
 				F98A50D1166BE76400749333 /* MovieID.framework in Frameworks */,
 				F998F2C4162F8E40008AF52D /* QuartzCore.framework in Frameworks */,
 				F9B902A115F7915E0089BB17 /* libicucore.dylib in Frameworks */,
@@ -309,11 +315,11 @@
 		F923206E167E60DA00D14519 /* Screencaps */ = {
 			isa = PBXGroup;
 			children = (
+				F923207A167E623A00D14519 /* MBScreencapsWindowController.xib */,
 				F9232078167E623A00D14519 /* MBScreencapsWindowController.h */,
 				F9232079167E623A00D14519 /* MBScreencapsWindowController.m */,
 				F923206F167E611F00D14519 /* MBScreencapsThumbnailCellView.h */,
 				F9232070167E611F00D14519 /* MBScreencapsThumbnailCellView.m */,
-				F923207A167E623A00D14519 /* MBScreencapsWindowController.xib */,
 				F9EBF47A16BC5620008892DF /* MBScreencapsTableView.h */,
 				F9EBF47B16BC5620008892DF /* MBScreencapsTableView.m */,
 			);
@@ -464,6 +470,8 @@
 		F9B9027E15F791320089BB17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F990107D16D861FC007A3F65 /* AVFoundation.framework */,
+				F990107A16D861F4007A3F65 /* CoreMedia.framework */,
 				F9DA1F5016B47F480055DFF1 /* Sparkle.framework */,
 				F98A50CB166BE75200749333 /* MovieIDFramework.xcodeproj */,
 				F91FD3121653E85E0060E4FC /* MovieID.framework */,

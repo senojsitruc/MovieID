@@ -14,13 +14,14 @@
 #import "MBMovie.h"
 #import "MBDownloadQueue.h"
 #import "MBFileMetadata.h"
+#import "MBImageCache.h"
 #import "NSThread+Additions.h"
 #import "NSProgress.h"
 #import <QuartzCore/QuartzCore.h>
 
-NSString * const MBScreencapsKeyDuration = @"duration";
-NSString * const MBScreencapsKeyWidth = @"width";
-NSString * const MBScreencapsKeyHeight = @"height";
+static NSString * const MBScreencapsKeyDuration = @"duration";
+static NSString * const MBScreencapsKeyWidth = @"width";
+static NSString * const MBScreencapsKeyHeight = @"height";
 
 @interface MBScreencapsWindowController ()
 {
@@ -94,11 +95,12 @@ NSString * const MBScreencapsKeyHeight = @"height";
 		mNumOfImages = 0;
 		[mImageCache removeAllObjects];
 		[self clearThumbnails];
+		[_tableView reloadData];
 		((NSScrollView *)_tableView.superview.superview).verticalScroller.floatValue = 0;
 		[((NSScrollView *)_tableView.superview.superview).contentView scrollToPoint:NSMakePoint(0,0)];
 		
 		[NSThread performBlockInBackground:^{
-			[self serverGetScreencapsInfo];
+			[self getScreencapsInfo];
 		}];
 	}
 	
@@ -177,50 +179,22 @@ NSString * const MBScreencapsKeyHeight = @"height";
 
 
 
-#pragma mark - Server
+#pragma mark - Screencaps
 
 /**
- * Run this in a background thread because it calls the server and can block for a long time.
+ *
  *
  */
-- (void)serverGetScreencapsInfo
+- (void)getScreencapsInfo
 {
-	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	NSUInteger duration=0, width=0, height=0;
 	
-	if (imageHost.length) {
-		NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
-		
-		[urlString appendString:@"/Screencaps/"];
-		[urlString appendString:[mMovie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-		[urlString appendString:@"/info"];
-		
-		NSURL *url = [NSURL URLWithString:urlString];
-		NSData *data = [NSData dataWithContentsOfURL:url];
-		NSDictionary *info = nil;
-		
-		@try {
-			info = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-		}
-		@catch (NSException *e) {
-			NSLog(@"%s.. failed to JSONObjectWithData(), %@", __PRETTY_FUNCTION__, e.reason);
-			NSLog(@"%@", e.callStackSymbols);
-			NSLog(@"%@", url);
-			return;
-		}
-		
-		mInfoDuration = ((NSNumber *)info[MBScreencapsKeyDuration]).integerValue;
-		mInfoWidth = ((NSNumber *)info[MBScreencapsKeyWidth]).integerValue;
-		mInfoHeight = ((NSNumber *)info[MBScreencapsKeyHeight]).integerValue;
-		
-		mNumOfImages = mInfoDuration / mGranularity;
-	}
-	else {
-		mInfoDuration = 0;
-		mInfoWidth = 0;
-		mInfoHeight = 0;
-		
-		mNumOfImages = 0;
-	}
+	[[MBImageCache sharedInstance] screencapInfoForMovie:mMovie duration:&duration width:&width height:&height];
+	
+	mInfoDuration = duration;
+	mInfoWidth = width;
+	mInfoHeight = height;
+	mNumOfImages = mInfoDuration / mGranularity;
 	
 	[[NSThread mainThread] performBlock:^{
 		[_tableView reloadData];
@@ -231,7 +205,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
  * Offset is expressed in seconds.
  *
  */
-- (NSImage *)serverGetImageAtOffset:(NSUInteger)offset withSize:(NSSize)size
+- (NSImage *)getImageAtOffset:(NSUInteger)offset withSize:(NSSize)size
 {
 	NSImage *image = nil;
 	NSString *key = [NSString stringWithFormat:@"%lu--png--%d--%d", offset, (int)size.width, (int)size.height];
@@ -241,22 +215,11 @@ NSString * const MBScreencapsKeyHeight = @"height";
 			return image;
 	}
 	
-	NSString *imageHost = [[NSUserDefaults standardUserDefaults] stringForKey:MBDefaultsKeyImageHost];
+	image = [[MBImageCache sharedInstance] screencapImageForMovie:mMovie offset:offset width:size.width height:size.height];
 	
-	if (imageHost.length) {
-		NSMutableString *urlString = [[NSMutableString alloc] initWithString:imageHost];
-		
-		[urlString appendString:@"/Screencaps/"];
-		[urlString appendString:[mMovie.dirpath.lastPathComponent stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-		[urlString appendString:@"/image--"];
-		[urlString appendString:key];
-		
-		image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
-		
-		if (image) {
-			@synchronized (self) {
-				mImageCache[key] = image;
-			}
+	if (image) {
+		@synchronized (self) {
+			mImageCache[key] = image;
 		}
 	}
 	
@@ -490,7 +453,7 @@ NSString * const MBScreencapsKeyHeight = @"height";
 	
 	view.imageView.image = nil;
 	view.loadImage = ^ NSImage* () {
-		return [self serverGetImageAtOffset:timeOffset withSize:NSMakeSize(210,150)];
+		return [self getImageAtOffset:timeOffset withSize:NSMakeSize(210,150)];
 	};
 	view.toolTip = [self humanReadableCode:timeOffset];
 	view.objectValue = @(imageIndex);
