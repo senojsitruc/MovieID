@@ -195,7 +195,9 @@ static MBAppDelegate *gAppDelegate;
 	mActorsByName = [[NSMutableDictionary alloc] init];
 	mActorsSorted = [[NSMutableArray alloc] init];
 	
-	// user defaults
+	// user defaults - we have two sets of user defaults data: the stuff that I'm willing to hard-code
+	//                 and commit to GitHub, and the stuff just for me (like my personal api keys).
+	//                 and that's where MovieBrowseConfig.plist comes in.
 	{
 		NSData *settingsData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"MovieBrowseConfig" ofType:@"plist"]];
 		NSDictionary *settings = nil;
