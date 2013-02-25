@@ -282,6 +282,7 @@ static MBImageCache *gSharedInstance;
 - (NSImage *)local_screencapImageForMovie:(MBMovie *)mbmovie offset:(NSUInteger)offset width:(NSUInteger)width height:(NSUInteger)height
 {
 	__block NSString *movieFile = nil;
+	__block double nativeWidth=0, nativeHeight=0;
 	
 	// a movie can be chopped up into multiple files. we assume that the movie progresses through the
 	// files alphabetically. find which file applies to the given offset and adjust the offset to the
@@ -305,10 +306,33 @@ static MBImageCache *gSharedInstance;
 			else
 				tmpOffset += duration;
 		 
-		 movieFile = fileObj;
+			nativeWidth = mediaInfo.width.doubleValue;
+			nativeHeight = mediaInfo.height.doubleValue;
+			movieFile = fileObj;
 		}];
 		
 		offset -= tmpOffset;
+	}
+	
+	// adjust the max image size to maintain the aspect ratio of the image while fitting it within
+	// the max image size.
+	{
+		if (!width && !height) {
+			width = nativeWidth;
+			height = nativeHeight;
+		}
+		else if (!width)
+			width = nativeWidth * ((double)height / nativeHeight);
+		else if (!height)
+			height = nativeHeight * ((double)width / nativeWidth);
+		
+		double ratioWidth = (double)width / nativeWidth;
+		double ratioHeight = (double)height / nativeHeight;
+		
+		if (ratioWidth < ratioHeight)
+			height = nativeHeight * ratioWidth;
+		else if (ratioHeight < ratioWidth)
+			width = nativeWidth * ratioHeight;
 	}
 	
 	return [self.class imageFromMovie:movieFile atTime:offset maxSize:CGSizeMake(width,height)];
